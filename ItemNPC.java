@@ -25,7 +25,7 @@ public class ItemNPC extends NPC {
 	
 	// ------------그 외 메소드------------ \\
 	
-	// 퀘스트 활성화 여부 판단
+	// 퀘스트 활성화 여부 판단 (스크립트 분별)
 	// 퀘스트 스크립트의 인덱스 값 반환
 	public int playQuest(Player player)
 	{
