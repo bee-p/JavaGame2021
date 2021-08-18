@@ -43,7 +43,7 @@ public class SkillNPC extends NPC {
 					return super.getQuestScriptCount() + 1;
 				}
 				// 스크립트 인덱스 값 < [questScripts 배열 길이 - 2]이라면
-				else (super.getQuestScriptCount() < super.getQuestScripts().length - 2)
+				else if (super.getQuestScriptCount() < super.getQuestScripts().length - 2)
 				{
 					// 스크립트 인덱스 증가
 					super.setQuestScriptCount(getQuestScriptCount() + 1);
