@@ -1,91 +1,123 @@
-package UML;
+package TurningCorp;
 
 public class Player {
 
-	//ÇÊµå
-	boolean[] skill; //½ºÅ³¿¡ ´ëÇÑ º¯¼ö
-	int hp; //»ı¸í(ÇÏÆ®°³¼ö) = °ø°İ·Â(enemy) - ¹æ¾î·Â(player)
-	int attackPower; //°ø°İ·Â
-	int defensivePower; //¹æ¾î·Â
-	int reputation; //ÆòÆÇµµ - ÀÏÁ¤ ÆòÆÇµµ°¡ ÃæÁ·µÉ °æ¿ì 
-	                //Áø±Ş NPC¿¡°Ô Áø±Ş °¡´É ¿©ºÎ¸¦ È®ÀÎÇÑ ÈÄ Áø±Ş °¡´É
-	char[] rank = {'D', 'C', 'B', 'A', 'S'}; //Á÷±Ş(D~Sµî±Ş) - Á÷±Ş¿¡ µû¶ó ¿£µù(³ë¸Ö/ÇØÇÇ/Æ®·ç)ÀÌ ¹Ù²ñ.
-	char currentRank;
-	int currentRankIndex; //ÇöÀç Á÷±ŞÀÇ ÀÎµ¦½º
-	Item[50] inventory; //ÀÎº¥Åä¸® - ¾ÆÀÌÅÛÀ» ÀúÀåÇÏ´Â °÷
-	int inventoryLength; //ÀÎº¥Åä¸®°¡ ±æÀÌ
+	//í•„ë“œ
+	String name; //í”Œë ˆì´ì–´ ì´ë¦„
+	char rank; //ë­í¬
+	boolean[] skill; //ìŠ¤í‚¬ì— ëŒ€í•œ ë³€ìˆ˜
+	int hp; //ìƒëª…(í•˜íŠ¸ê°œìˆ˜) = ê³µê²©ë ¥(enemy) - ë°©ì–´ë ¥(player)
+	int attackPower; //ê³µê²©ë ¥
+	int defensivePower; //ë°©ì–´ë ¥
+	int reputation; //í‰íŒë„ - ì¼ì • í‰íŒë„ê°€ ì¶©ì¡±ë  ê²½ìš° 
+	                //ì§„ê¸‰ NPCì—ê²Œ ì§„ê¸‰ ê°€ëŠ¥ ì—¬ë¶€ë¥¼ í™•ì¸í•œ í›„ ì§„ê¸‰ ê°€ëŠ¥
+	char[] rankArray = {'D', 'C', 'B', 'A', 'S'}; //ì§ê¸‰(D~Së“±ê¸‰) - ì§ê¸‰ì— ë”°ë¼ ì—”ë”©(ë…¸ë©€/í•´í”¼/íŠ¸ë£¨)ì´ ë°”ë€œ.'
+	String[] nameArray = {"í‰ë²”í•œì‚¬ì›", "ë˜‘ë˜‘í•œì‚¬ì›", "ìš©ê°í•œì¸ê°„", "ì•…ë§ˆì™•í‡´ë§ˆì‚¬", "ëª…ë§ìˆëŠ”ì‚¬ì¥"};
+	int currentIndex = 0; //í˜„ì¬ ì§ê¸‰ì˜ ì¸ë±ìŠ¤
+	Item[] inventory; //ì¸ë²¤í† ë¦¬ - ì•„ì´í…œì„ ì €ì¥í•˜ëŠ” ê³³
+	int inventoryLength; //ì¸ë²¤í† ë¦¬ê°€ ê¸¸ì´
+	int inventoryIndex; //ì¸ë²¤í† ë¦¬ì¸ë±ìŠ¤
 	
-	//ÇÔ¼ö
+	//ê°ì²´
+	NPC npc = new NPC();
+	Item item = new Item();
+	
+	//í•¨ìˆ˜
+	Player () //ìƒì„±ì
+	{
+		currentIndex = 0;
+		hp = 5;
+		attackPower = 10;
+		defensivePower = 10;
+		reputation = 0;
+		name = nameArray[currentIndex];
+		rank = rankArray[currentIndex];
+	}
 	
 	//getter & setter
     char getCurrentRank() 
     {
-    	return rank[currentRankIndex];
-    } //·©Å© °¡Á®¿À±â - ¹èÆ² ¸Å´ÏÁö¸ÕÆ® Å¬·¡½º¿¡¼­ µµ¸Á°¡±â ½ºÅ³¿¡¼­ »ç¿ë(È®·ü¿¡ µû¶ó...)
-      //           - °ÔÀÓ ¸Å´ÏÁö¸ÕÆ® Å¬·¡½º¿¡¼­ »ç¿ëÀÚ°¡ ·©Å©¸¦ È®ÀÎÇÒ ¶§ »ç¿ë
+    	return rankArray[currentIndex];
+    }
+    
     int getReputation() 
     {
     	return reputation;
-    } //ÆòÆÇµµ °¡Á®¿À±â - °ÔÀÓ¸Å´ÏÁö¸ÕÆ® Å¬·¡½º¿¡¼­ »ç¿ë
+    }
     
-    void upgradeReputation() //ÆòÆÇµµ¿¡ µû¶ó Á÷±Ş ¿Ã¸®±â
+    int upgradeReputation()
     {
-    	if(reputation < 100)
+    	if(npc.isUpgradePossible())
     	{
-    		currentRankIndex = 0;
+    		currentIndex++;
+    		return currentIndex;
     	}
-    	else if(reputation < 200)
+    	else
     	{
-    		currentRankIndex = 1;
+    		return currentIndex;
     	}
-    	else if(reputation < 300)
-    	{
-    		currentRankIndex = 2;
-    	}
-    	else if(reputation < 400)
-    	{
-    		currentRankIndex = 3;
-    	}
-    	else if(reputation >= 400)
-    	{
-    		currentRankIndex = 4;
-    	}
-    	
-    	currentRank = rank[currentRankIndex];
-    };
+    }; //ë©”ì¸ì—ì„œ ë°›ì•„ì„œ ìˆ«ìê°€ ì¦ê°€í–ˆìœ¼ë©´ ë³€ê²½ëœ ì¹­í˜¸ì™€ ë­í¬ ë³´ì—¬ì£¼ê¸°,
+       //ìˆ«ìê°€ ê·¸ëŒ€ë¡œë©´ "í‰íŒë„ê°€ ë¶€ì¡±í•˜ì—¬ ì§ê¸‰ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤"ë¬¸ì ë„ìš°ê¸°.
     
-	boolean attacked(int attackedPower) //ÇÃ·¹ÀÌ¾î°¡ °ø°İ ¹Ş´Â ÇÔ¼ö - ¹èÆ²¸Å´ÏÁö¸ÕÆ® Å¬·¡½º¿¡¼­ »ç¿ë
+	void beAttacked (int damage)
 	{
-		//°ø°İ'¹Ş´Â'°É·Î ÇÑ ÀÌÀ¯°¡ °ø°İ'ÇÏ´Â'°É·Î ÇÏ¸é PlayerÅ¬·¡½º ³»¿¡¼­ Enemy°ªÀ» º¯°æÇÏ´Â °ÍÀÌ µÇ±â ¶§¹®ÀÎ°¡?
+		damage = damage/100 * defensivePower;
+		hp -= damage; //hpê°€ 5??????
 	}
 	
-	void saveInventory(Item item) //ÀúÀåÇÒ ¾ÆÀÌÅÛÀ» ¸Å°³º¯¼ö·Î ³Ñ°Ü¼­ ºñ¾îÀÖ´Â ÀÎº¥Åä¸® ¹è¿­¿¡ ¾ÆÀÌÅÛ ÀúÀå
+	boolean saveInventory(Item item)
 	{
+		int postInventoryLength = 0;
 		inventoryLength = inventory.length;
 		for(int i=0; i<inventoryLength; i++)
 		{
-			if(Item[i]==null) //ÀÎº¥Åä¸®°¡ ºñ¾îÀÖ´Â ºÎºĞ
+			if(inventory[i]==null) //ì¸ë²¤í† ë¦¬ê°€ ë¹„ì–´ìˆëŠ” ë¶€ë¶„
 			{
-				Item[i] = item;
-				return 0;
+				inventory[i] = item;
+				postInventoryLength = inventory.length;
+				break;
 			}
+		}
+		
+		if(inventoryLength < postInventoryLength)
+		{
+			return true;
+		}
+		else
+			return false; //ì¸ë²¤í† ë¦¬ì— ê³µê°„ì´ ì—†ìŒ.
+	}
+	
+	boolean deleteInventory(int inventoryNum) //ì¸ë²¤í† ë¦¬ì—ì„œ ì•„ì´í…œ ë²„ë¦¬ê¸° - ì¸ë²¤í† ë¦¬ ìë™ìœ¼ë¡œ ì—´ê¸° -> ë²„ë¦´ ì•„ì´í…œ ì„ íƒ -> ì‚­ì œ
+	{
+		if(inventory[inventoryNum] != null)
+		{
+			inventory[inventoryNum] = null;
+			return true;
+		}
+		else
+		{
+			return false; //í•´ë‹¹ ì¸ë±ìŠ¤ê°€ ë¹„ì–´ ì‚­ì œí•  í•­ëª©ì´ ì—†ìŒ.
 		}
 	}
 	
-	void deleteInventory(int inventoryNum) //ÀÎº¥Åä¸®¿¡¼­ ¾ÆÀÌÅÛ ¹ö¸®±â - ÀÎº¥Åä¸® ÀÚµ¿À¸·Î ¿­±â -> ¹ö¸± ¾ÆÀÌÅÛ ¼±ÅÃ -> »èÁ¦
+	void useInventory(int inventoryNum) //ì¸ë²¤í† ë¦¬ì— ìˆëŠ” ì•„ì´í…œ ì‚¬ìš© - ì¸ë²¤í† ë¦¬ ìë™ìœ¼ë¡œ ì—´ê¸° -> ì‚¬ìš©í•  ì•„ì´í…œ ì„ íƒ -> ì‚¬ìš©
 	{
-		Item[inventoryNum] = null;
+		item.useItem(inventory[inventoryNum]); //ìˆ˜ì •í•„ìš”
 	}
 	
-	void useInventory(int inventoryNum) //ÀÎº¥Åä¸®¿¡ ÀÖ´Â ¾ÆÀÌÅÛ »ç¿ë - ÀÎº¥Åä¸® ÀÚµ¿À¸·Î ¿­±â -> »ç¿ëÇÒ ¾ÆÀÌÅÛ ¼±ÅÃ -> »ç¿ë
+	public String toString(int inventoryIndex)
 	{
-		Item itemToUse = inventory[inventoryNum];
-		itemToUse.use~~ //¾ÆÀÌÅÛ Å¬·¡½º ³»¿¡ »ç¿ëÇÏ´Â ÇÔ¼ö È£Ãâ
+		return inventory[inventoryIndex].name + inventory.[inventoryIndex].num;
 	}
 	
-	void showInventory() //»ç¿ëÀÚ¿¡°Ô ÀÎº¥Åä¸® º¸¿©ÁÖ±â
+	void showInventory() //ì‚¬ìš©ìì—ê²Œ ì¸ë²¤í† ë¦¬ ë³´ì—¬ì£¼ê¸°
 	{
-		//Ãâ·ÂÀ» °ÔÀÓ¸Å´ÏÁö¸ÕÆ®..?
+		System.out.println("[ì¸ë²¤í† ë¦¬]\n ==============================");
+		System.out.println("ì´ë¦„\t ê°œìˆ˜\t");
+		for(inventoryIndex = 0; inventoryIndex <= inventoryLength; inventoryIndex++)
+		{
+			toString(inventoryIndex);
+		}
 	}; 
 	
 }
