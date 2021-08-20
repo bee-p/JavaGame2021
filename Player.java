@@ -1,29 +1,27 @@
-package TurningCorp;
 
 public class Player {
 
-	//í•„ë“œ
-	String name; //í”Œë ˆì´ì–´ ì´ë¦„
-	char rank; //ë­í¬
-	boolean[] skill; //ìŠ¤í‚¬ì— ëŒ€í•œ ë³€ìˆ˜
-	int hp; //ìƒëª…(í•˜íŠ¸ê°œìˆ˜) = ê³µê²©ë ¥(enemy) - ë°©ì–´ë ¥(player)
-	int attackPower; //ê³µê²©ë ¥
-	int defensivePower; //ë°©ì–´ë ¥
-	int reputation; //í‰íŒë„ - ì¼ì • í‰íŒë„ê°€ ì¶©ì¡±ë  ê²½ìš° 
-	                //ì§„ê¸‰ NPCì—ê²Œ ì§„ê¸‰ ê°€ëŠ¥ ì—¬ë¶€ë¥¼ í™•ì¸í•œ í›„ ì§„ê¸‰ ê°€ëŠ¥
-	char[] rankArray = {'D', 'C', 'B', 'A', 'S'}; //ì§ê¸‰(D~Së“±ê¸‰) - ì§ê¸‰ì— ë”°ë¼ ì—”ë”©(ë…¸ë©€/í•´í”¼/íŠ¸ë£¨)ì´ ë°”ë€œ.'
-	String[] nameArray = {"í‰ë²”í•œì‚¬ì›", "ë˜‘ë˜‘í•œì‚¬ì›", "ìš©ê°í•œì¸ê°„", "ì•…ë§ˆì™•í‡´ë§ˆì‚¬", "ëª…ë§ìˆëŠ”ì‚¬ì¥"};
-	int currentIndex = 0; //í˜„ì¬ ì§ê¸‰ì˜ ì¸ë±ìŠ¤
-	Item[] inventory; //ì¸ë²¤í† ë¦¬ - ì•„ì´í…œì„ ì €ì¥í•˜ëŠ” ê³³
-	int inventoryLength; //ì¸ë²¤í† ë¦¬ê°€ ê¸¸ì´
-	int inventoryIndex; //ì¸ë²¤í† ë¦¬ì¸ë±ìŠ¤
+	//ÇÊµå
+	String name; //ÇÃ·¹ÀÌ¾î ÀÌ¸§
+	char rank; //·©Å©
+	boolean[] skill; //½ºÅ³¿¡ ´ëÇÑ º¯¼ö
+	int hp; //»ı¸í(ÇÏÆ®°³¼ö) = °ø°İ·Â(enemy) - ¹æ¾î·Â(player)
+	int attackPower; //°ø°İ·Â
+	int defensivePower; //¹æ¾î·Â
+	int reputation; //ÆòÆÇµµ - ÀÏÁ¤ ÆòÆÇµµ°¡ ÃæÁ·µÉ °æ¿ì 
+	                //Áø±Ş NPC¿¡°Ô Áø±Ş °¡´É ¿©ºÎ¸¦ È®ÀÎÇÑ ÈÄ Áø±Ş °¡´É
+	char[] rankArray = {'D', 'C', 'B', 'A', 'S'}; //Á÷±Ş(D~Sµî±Ş) - Á÷±Ş¿¡ µû¶ó ¿£µù(³ë¸Ö/ÇØÇÇ/Æ®·ç)ÀÌ ¹Ù²ñ.'
+	String[] nameArray = {"Æò¹üÇÑ»ç¿ø", "¶È¶ÈÇÑ»ç¿ø", "¿ë°¨ÇÑÀÎ°£", "¾Ç¸¶¿ÕÅğ¸¶»ç", "¸í¸ÁÀÖ´Â»çÀå"};
+	int currentIndex = 0; //ÇöÀç Á÷±ŞÀÇ ÀÎµ¦½º
+	Item[] inventory; //ÀÎº¥Åä¸® - ¾ÆÀÌÅÛÀ» ÀúÀåÇÏ´Â °÷
+	int inventoryLength; //ÀÎº¥Åä¸®°¡ ±æÀÌ
+	int inventoryIndex; //ÀÎº¥Åä¸®ÀÎµ¦½º
 	
-	//ê°ì²´
-	NPC npc = new NPC();
-	Item item = new Item();
+	//°´Ã¼
+	SkillNPC npc = new SkillNPC();
 	
-	//í•¨ìˆ˜
-	Player () //ìƒì„±ì
+	//ÇÔ¼ö
+	Player () //»ı¼ºÀÚ => **GameManager¿¡¼­ ÇÊµå °ªÀ» ¹Ù²Ù¸é »ı¼ºÀÚ¿¡ °ª ¹Ş¾Æ¿Í¼­ Àû¿ëÇÏ´Â ¹æ½ÄÀ¸·Î ¼öÁ¤ÇÏ±â => ?
 	{
 		currentIndex = 0;
 		hp = 5;
@@ -31,11 +29,22 @@ public class Player {
 		defensivePower = 10;
 		reputation = 0;
 		name = nameArray[currentIndex];
+		this.name = nameArray[0] + this.name;
 		rank = rankArray[currentIndex];
 	}
 	
+	Player (String name) {
+		this.name = name;
+		
+		// print(name + " " + nameArray[0]); //UI¿¡¼­ ÀÌ¸§ ¶ç¿ì±â ÇÔ¼ö
+	}
+	
 	//getter & setter
-    char getCurrentRank() 
+	String getName(){
+		   return nameArray[currentIndex] + " " + name;
+	}
+	
+	char getCurrentRank() 
     {
     	return rankArray[currentIndex];
     }
@@ -47,31 +56,32 @@ public class Player {
     
     int upgradeReputation()
     {
-    	if(npc.isUpgradePossible())
-    	{
-    		currentIndex++;
-    		return currentIndex;
-    	}
-    	else
-    	{
-    		return currentIndex;
-    	}
-    }; //ë©”ì¸ì—ì„œ ë°›ì•„ì„œ ìˆ«ìê°€ ì¦ê°€í–ˆìœ¼ë©´ ë³€ê²½ëœ ì¹­í˜¸ì™€ ë­í¬ ë³´ì—¬ì£¼ê¸°,
-       //ìˆ«ìê°€ ê·¸ëŒ€ë¡œë©´ "í‰íŒë„ê°€ ë¶€ì¡±í•˜ì—¬ ì§ê¸‰ì„ ì˜¬ë¦´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤"ë¬¸ì ë„ìš°ê¸°.
+    	currentIndex++;
+    	
+    	return currentIndex;
+    }; //¸ŞÀÎ¿¡¼­ ¹Ş¾Æ¼­ ¼ıÀÚ°¡ Áõ°¡ÇßÀ¸¸é º¯°æµÈ ÄªÈ£¿Í ·©Å© º¸¿©ÁÖ±â,
+       //¼ıÀÚ°¡ ±×´ë·Î¸é "ÆòÆÇµµ°¡ ºÎÁ·ÇÏ¿© Á÷±ŞÀ» ¿Ã¸± ¼ö ¾ø½À´Ï´Ù"¹®ÀÚ ¶ç¿ì±â.
     
 	void beAttacked (int damage)
 	{
 		damage = damage/100 * defensivePower;
-		hp -= damage; //hpê°€ 5??????
+		hp -= damage; //hp°¡ 5??????
 	}
 	
+	// **ItemNPCÅ¬·¡½º¿¡ ÀÖ´Â ³»¿ë°ú ¿¬°è
+	public void plusReputation(int num)
+	{
+		
+	}
+	
+	// **ItemNpcÅ¬·¡½º¿¡ ÀÖ´Â ¿À·ù·Î ÀÎÇØ ÇØ´ç ÇÔ¼ö ¿À¹ö¶óÀÌµù ÇÏ±â!
 	boolean saveInventory(Item item)
 	{
 		int postInventoryLength = 0;
 		inventoryLength = inventory.length;
 		for(int i=0; i<inventoryLength; i++)
 		{
-			if(inventory[i]==null) //ì¸ë²¤í† ë¦¬ê°€ ë¹„ì–´ìˆëŠ” ë¶€ë¶„
+			if(inventory[i]==null) //ÀÎº¥Åä¸®°¡ ºñ¾îÀÖ´Â ºÎºĞ
 			{
 				inventory[i] = item;
 				postInventoryLength = inventory.length;
@@ -84,10 +94,10 @@ public class Player {
 			return true;
 		}
 		else
-			return false; //ì¸ë²¤í† ë¦¬ì— ê³µê°„ì´ ì—†ìŒ.
+			return false; //ÀÎº¥Åä¸®¿¡ °ø°£ÀÌ ¾øÀ½.
 	}
 	
-	boolean deleteInventory(int inventoryNum) //ì¸ë²¤í† ë¦¬ì—ì„œ ì•„ì´í…œ ë²„ë¦¬ê¸° - ì¸ë²¤í† ë¦¬ ìë™ìœ¼ë¡œ ì—´ê¸° -> ë²„ë¦´ ì•„ì´í…œ ì„ íƒ -> ì‚­ì œ
+	boolean deleteInventory(int inventoryNum) //ÀÎº¥Åä¸®¿¡¼­ ¾ÆÀÌÅÛ ¹ö¸®±â - ÀÎº¥Åä¸® ÀÚµ¿À¸·Î ¿­±â -> ¹ö¸± ¾ÆÀÌÅÛ ¼±ÅÃ -> »èÁ¦
 	{
 		if(inventory[inventoryNum] != null)
 		{
@@ -96,28 +106,49 @@ public class Player {
 		}
 		else
 		{
-			return false; //í•´ë‹¹ ì¸ë±ìŠ¤ê°€ ë¹„ì–´ ì‚­ì œí•  í•­ëª©ì´ ì—†ìŒ.
+			return false; //ÇØ´ç ÀÎµ¦½º°¡ ºñ¾î »èÁ¦ÇÒ Ç×¸ñÀÌ ¾øÀ½.
 		}
 	}
 	
-	void useInventory(int inventoryNum) //ì¸ë²¤í† ë¦¬ì— ìˆëŠ” ì•„ì´í…œ ì‚¬ìš© - ì¸ë²¤í† ë¦¬ ìë™ìœ¼ë¡œ ì—´ê¸° -> ì‚¬ìš©í•  ì•„ì´í…œ ì„ íƒ -> ì‚¬ìš©
+	void useInventory(int inventoryNum) //ÀÎº¥Åä¸®¿¡ ÀÖ´Â ¾ÆÀÌÅÛ »ç¿ë - ÀÎº¥Åä¸® ÀÚµ¿À¸·Î ¿­±â -> »ç¿ëÇÒ ¾ÆÀÌÅÛ ¼±ÅÃ -> »ç¿ë
 	{
-		item.useItem(inventory[inventoryNum]); //ìˆ˜ì •í•„ìš”
+		inventory[inventoryNum].useItem(); //¼öÁ¤ÇÊ¿ä**
 	}
 	
 	public String toString(int inventoryIndex)
 	{
-		return inventory[inventoryIndex].name + inventory.[inventoryIndex].num;
+		return null;
+		//return inventory[inventoryIndex].getName() + inventory[inventoryIndex].num; //**¾ÆÀÌÅÛ °³¼ö Ã³¸®´Â playerÀÎº¥Åä¸®¿¡ µû¶ó¼­ ¹Ù²î¹Ç·Î pairÅ¬·¡½º·Î Ã³¸®
 	}
 	
-	void showInventory() //ì‚¬ìš©ìì—ê²Œ ì¸ë²¤í† ë¦¬ ë³´ì—¬ì£¼ê¸°
+	void showInventory() //»ç¿ëÀÚ¿¡°Ô ÀÎº¥Åä¸® º¸¿©ÁÖ±â
 	{
-		System.out.println("[ì¸ë²¤í† ë¦¬]\n ==============================");
-		System.out.println("ì´ë¦„\t ê°œìˆ˜\t");
+		System.out.println("[ÀÎº¥Åä¸®]\n ==============================");
+		System.out.println("ÀÌ¸§\t °³¼ö\t");
 		for(inventoryIndex = 0; inventoryIndex <= inventoryLength; inventoryIndex++)
 		{
 			toString(inventoryIndex);
 		}
 	}; 
+	
+	// Ãß°¡ÇØ¾ßÇÒ »çÇ×
+	// ÇÃ·¹ÀÌ¾î°¡ °ø°İ·Â Æ÷¼ÇÀ» ¸¶½Ã¸é, °ø°İ·Â Áõ°¡
+	public void increaseAttack(int attackPower) {
+		this.attackPower += attackPower;
+	}
+	
+	// ÇÃ·¹ÀÌ¾î°¡ ¹æ¾î·Â Æ÷¼ÇÀ» ¸¶½Ã¸é, ¹æ¾î·Â Áõ°¡
+	public void increaseDefense(int defensivePower) {
+		this.defensivePower += defensivePower;
+	}
+	
+	// ÇÃ·¹ÀÌ¾î°¡ hp Æ÷¼ÇÀ» ¸¶½Ã¸é, hp Áõ°¡
+	public void increaseHP(int hp) {
+		this.hp += hp;
+	}
+	
+	// Pair Å¬·¡½º Ãß°¡! => µ¶¸³ ÀÚ¹ÙÆÄÀÏ·Î Á¦ÀÛÇÏ±â
+	class Pair {
+	}
 	
 }
