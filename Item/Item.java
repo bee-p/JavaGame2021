@@ -36,4 +36,10 @@ public class Item { // 모든 아이템에 대한 기본 아이템 클래스
 		
 		return info;
 	}
+	
+	// useItem함수 작성하기
+	public void useItem()
+	{
+		
+	}
 }
