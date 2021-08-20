@@ -1,14 +1,21 @@
 
 public class DebuffSkill extends Skill{
-	int debuffRate;
+	int defenseDebuffRate;
+	int AttackDebuffRate;
 	
-	DebuffSkill(String skillName, int debuffRate) {
+	DebuffSkill(String skillName, int defenseDebuff, int AttackDebuff) {
 		super(skillName);
 		// TODO Auto-generated constructor stub
+		this.defenseDebuffRate = defenseDebuff;
+		this.AttackDebuffRate = AttackDebuff;
 	}
 
-	int debuff(int playerDefense) {
-		return playerDefense / 100 * (100 - debuffRate);
+	int DefenseDebuff(int playerDefense) {
+		return playerDefense / 100 * (100 - defenseDebuffRate);
+	}
+	
+	int AttackDebuff(int playerAttackPower) {
+		return playerAttackPower / 100 * ( 100 - AttackDebuffRate);
 	}
 
 }

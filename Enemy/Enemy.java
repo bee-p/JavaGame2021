@@ -3,16 +3,16 @@ import java.util.Random;
 
 public class Enemy {
 	
-	String name;	//이름
-	char rank;	//직급
-	int heart; //생명
-	int attackPower; //공격력
-	int defensePower; //방어력
-	int reputation; //주는 평판도
-	int runAwayPercentage; //도망치기 확률
-	int dropPercentage; //아이템 드랍 확률
-	Item dropItem; //드랍하는 아이템
-	String Script[]; //스트립트
+	protected String name;	//이름
+	protected char rank;	//직급
+	protected int heart; //생명
+	protected int attackPower; //공격력
+	protected int defensePower; //방어력
+	protected int reputation; //주는 평판도
+	protected int runAwayPercentage; //도망치기 확률
+	protected int dropPercentage; //아이템 드랍 확률
+	protected Item dropItem; //드랍하는 아이템
+	protected String Script[]; //스트립트
 	
 	Enemy(String name, char rank, int heart, int attackPower, 
 			int defensePower, int reputation, int runAwayPercentage, 
@@ -89,31 +89,29 @@ public class Enemy {
 	}
 	
 	//공격 받기
-	boolean beAttacked(int damage) {
+	void beAttacked(int damage) {
 		damage = damage/100 * defensePower;
 		heart -= damage;
-		return heart <= 0;
 	}
 	//상호작용
-	boolean interaction(int skillCode, char playerRank) {
+	Item interaction(int skillCode, char playerRank) {
 		if(playerRank >= rank) {
 			if(skillCode == 1) {
-				death();
-			} else  if(skillCode == 2) {
-				disappear();
+				return death();
+			} else {
+				return disappear();
 			}
-			return true;
 		}
-		else 
-			return false;
+		else
+			return null;
 	}
 	
 	Item death() {
 		heart = 0;
-		return (new Random().nextInt(100) < dropPercentage) ? dropItem : null;
+		return (new Random().nextInt(100) < dropPercentage) ? null:dropItem;
 	}
 	
 	Item disappear() {
-		return (new Random().nextInt(100) < dropPercentage) ? dropItem : null;
+		return (new Random().nextInt(100) < dropPercentage) ? null:dropItem;
 	}
 }
