@@ -18,7 +18,6 @@ public class GameManager {
 		Map maps[][] = new Map[5][4];
 		int happyEndingPoint = 0; // 엔딩 판별할 때 사용하는 포인트 값
 		File endingFiles[] = new File[3]; // **엑셀로 파일의 데이터 가져오기&저장하기
-//		int currentFloor = 1; // 플레이어의 위치
 		
 		PlayEvent playEvent = new PlayEvent();		// 이벤트 객체 생성
 		Scanner scan = new Scanner(System.in);		// 스캐너 객체 생성
@@ -182,41 +181,41 @@ public class GameManager {
 	// -------------------------------------------------------------------------------- \\
 	
 	
-	private boolean isPlay = true;
+//	private boolean isPlay = true;
+//	
+//	public GameManager() {
+//		random = new Random();
+//	}
+//	
+//	public void startGame() {
+//		intro(); // 게임 인트로
+//		for (; isPlay;) {
+//			play();
+//		}
+//	}
+//	
+//	// 플레이어의 정보 생성
+//	private void intro() {
+//		player = new Player("감자"); // 플레이어 생성
+//		player.saveInventory(itemManager.getItem(0)); // 초기 아이템 인벤토리에 저장
+//	}
+//	
+//	private void play() {
+//		// 게임 플레이~~
+//		// switch-case문으로 map의 어떤 목적지에 달성했다면 클리어! or 사물보기..? => 이건 map에서 하는건가
+//	}
+//	
+//	private void checkPlay(int num) {
+//		// 1. 이동, 2. 플레이어 정보 보기, 3. 인벤토리, 4. 아이템 사용, 5. 아이템 정보 보기, 6. 게임 종료 => 퀘스트 보기...?
+//	}
 	
-	public GameManager() {
-		random = new Random();
-	}
-	
-	public void startGame() {
-		intro(); // 게임 인트로
-		for (; isPlay;) {
-			play();
-		}
-	}
-	
-	// 플레이어의 정보 생성
-	private void intro() {
-		player = new Player("감자"); // 플레이어 생성
-		player.saveInventory(itemManager.getItem(0)); // 초기 아이템 인벤토리에 저장
-	}
-	
-	private void play() {
-		// 게임 플레이~~
-		// switch-case문으로 map의 어떤 목적지에 달성했다면 클리어! or 사물보기..? => 이건 map에서 하는건가
-	}
-	
-	private void checkPlay(int num) {
-		// 1. 이동, 2. 플레이어 정보 보기, 3. 인벤토리, 4. 아이템 사용, 5. 아이템 정보 보기, 6. 게임 종료 => 퀘스트 보기...?
-	}
-	
-	// 평상시에 아이템 사용
-	private void useItem(Player player) {
-		
-	}
-	
-	// 배틀시 아이템 사용
-	private void useItem(Player player, BattleManager battle) {
-		
-	}
+//	// 평상시에 아이템 사용
+//	private void useItem(Player player) {
+//		
+//	}
+//	
+//	// 배틀시 아이템 사용
+//	private void useItem(Player player, BattleManager battle) {
+//		
+//	}
 }
