@@ -44,7 +44,7 @@ public class ItemNPC extends NPC {
 					super.getQuest(getQuestCount()).setCompletion(true);
 					
 					// 플레이어에게 보상 아이템 지급 => **npc/quest 팀원과 이야기해서 바꾸기!
-					// player.saveInventory(super.getQuest(getQuestCount()).getReward());
+					player.saveInventory(super.getQuest(getQuestCount()).getReward());
 					
 					// 만일 몬스터 NPC일 경우
 					if (isMonster == true)
