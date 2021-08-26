@@ -2,7 +2,7 @@
 
 public class Player {
 
-		//ÇÊµå
+		//í•„ë“œ
 		String name;
 		String title;
 		char rank;
@@ -12,20 +12,20 @@ public class Player {
 		int defensivePower;
 		int reputation;
 		char[] rankArray = {'D', 'C', 'B', 'A', 'S'};
-		String[] titleArray = {"Æò¹üÇÑ»ç¿ø", "¶È¶ÈÇÑ»ç¿ø", "¿ë°¨ÇÑÀÎ°£", "¾Ç¸¶¿ÕÅğ¸¶»ç", "¸í¸ÁÀÖ´Â»çÀå"};
+		String[] titleArray = {"í‰ë²”í•œì‚¬ì›", "ë˜‘ë˜‘í•œì‚¬ì›", "ìš©ê°í•œì¸ê°„", "ì•…ë§ˆì™•í‡´ë§ˆì‚¬", "ëª…ë§ìˆëŠ”ì‚¬ì¥"};
 		int currentIndex = 0;
 		ItemPair[] inventory;
 		int inventoryLength;
 		int inventoryIndex;
 		
-		private int posID;			// ÇöÀç À§Ä¡ ¾ÆÀÌµğ
-									// ex) 1Ãş 3¹ø¹æ¿¡ µé¾î°¡ ÀÖ´Â °æ¿ì: 13
+		private int posID;			// í˜„ì¬ ìœ„ì¹˜ ì•„ì´ë””
+									// ex) 1ì¸µ 3ë²ˆë°©ì— ë“¤ì–´ê°€ ìˆëŠ” ê²½ìš°: 13
 		
-		//°´Ã¼
+		//ê°ì²´
 		SkillNPC npc = new SkillNPC();
 		
-		//ÇÔ¼ö
-		//»ı¼ºÀÚ
+		//í•¨ìˆ˜
+		//ìƒì„±ì
 		Player()
 		{
 			
@@ -51,7 +51,7 @@ public class Player {
 		{
 			return posID;
 		}
-		public void setPosID(int posID)		// ÇÃ·¹ÀÌ¾î ÀÌµ¿½Ã È°¿ë
+		public void setPosID(int posID)		// í”Œë ˆì´ì–´ ì´ë™ì‹œ í™œìš©
 		{
 			this.posID = posID;
 		}
@@ -97,12 +97,12 @@ public class Player {
 			int itemIndex = 0;
 			for(int i=0; i<inventoryLength; i++)
 			{
-				if(inventory[i].item.getName() == item[itemIndex].getName()) //ÀÎº¥Åä¸®¿¡ itemÀÌ Á¸ÀçÇÏ´Â °æ¿ì
+				if(inventory[i].item.getName().equals(item[itemIndex].getName())) //ì¸ë²¤í† ë¦¬ì— itemì´ ì¡´ì¬í•˜ëŠ” ê²½ìš°
 				{
 					inventory[i].count++;
 				}
 				
-				else //ÀÎº¥Åä¸®¿¡ itemÀÌ Á¸ÀçÇÏÁö ¾Ê´Â °æ¿ì
+				else //ì¸ë²¤í† ë¦¬ì— itemì´ ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ê²½ìš°
 					if (inventory[i]==null)
 					{
 						inventory[i].item = item[itemIndex];
@@ -128,13 +128,13 @@ public class Player {
 			}
 			else
 			{
-				return false; //ÇØ´ç ÀÎµ¦½º°¡ ºñ¾î »èÁ¦ÇÒ Ç×¸ñÀÌ ¾øÀ½.
+				return false; //í•´ë‹¹ ì¸ë±ìŠ¤ê°€ ë¹„ì–´ ì‚­ì œí•  í•­ëª©ì´ ì—†ìŒ.
 			}
 		}
 		
 		void useInventory(int inventoryNum)
 		{
-			inventory[inventoryNum].item.useItem(); //¼öÁ¤ÇÊ¿ä**
+			inventory[inventoryNum].item.useItem(); //ìˆ˜ì •í•„ìš”**
 		}
 		
 		public String toString(int inventoryIndex)
@@ -143,27 +143,27 @@ public class Player {
 					+ inventory[inventoryIndex].item.getDescription();
 		}
 		
-		void showInventory() //»ç¿ëÀÚ¿¡°Ô ÀÎº¥Åä¸® º¸¿©ÁÖ±â
+		void showInventory() //ì‚¬ìš©ìì—ê²Œ ì¸ë²¤í† ë¦¬ ë³´ì—¬ì£¼ê¸°
 		{
-			System.out.println("[ÀÎº¥Åä¸®]\n ==============================");
-			System.out.println("ÀÌ¸§\t ¼³¸í\t");
+			System.out.println("[ì¸ë²¤í† ë¦¬]\n ==============================");
+			System.out.println("ì´ë¦„\t ì„¤ëª…\t");
 			for(inventoryIndex = 0; inventoryIndex <= inventoryLength; inventoryIndex++)
 			{
 				toString(inventoryIndex);
 			}
 		}; 
 	
-		// ÇÃ·¹ÀÌ¾î°¡ °ø°İ·Â Æ÷¼ÇÀ» ¸¶½Ã¸é, °ø°İ·Â Áõ°¡
+		// í”Œë ˆì´ì–´ê°€ ê³µê²©ë ¥ í¬ì…˜ì„ ë§ˆì‹œë©´, ê³µê²©ë ¥ ì¦ê°€
 		public void increaseAttack(int attackPower) {
 			this.attackPower += attackPower;
 		}
 		
-		// ÇÃ·¹ÀÌ¾î°¡ ¹æ¾î·Â Æ÷¼ÇÀ» ¸¶½Ã¸é, ¹æ¾î·Â Áõ°¡
+		// í”Œë ˆì´ì–´ê°€ ë°©ì–´ë ¥ í¬ì…˜ì„ ë§ˆì‹œë©´, ë°©ì–´ë ¥ ì¦ê°€
 		public void increaseDefense(int defensivePower) {
 			this.defensivePower += defensivePower;
 		}
 		
-		// ÇÃ·¹ÀÌ¾î°¡ hp Æ÷¼ÇÀ» ¸¶½Ã¸é, hp Áõ°¡
+		// í”Œë ˆì´ì–´ê°€ hp í¬ì…˜ì„ ë§ˆì‹œë©´, hp ì¦ê°€
 		public void increaseHP(int hp) {
 			this.hp += hp;
 		}
