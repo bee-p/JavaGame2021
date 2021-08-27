@@ -1,13 +1,35 @@
 import java.util.Scanner;
 
+/*
+ * object: 방 내부에 있는 대표적 사물들 (부장 책상, 정돈된 책상 ,,,)
+ * object 안의 item: 실제 아이템... (책상 위의 메모지, 일기장, 사탕 껍데기 ,,,)
+ */
+
+
 public class PlayEvent {
 	// 스캐너 객체, 선택지 변수 생성
-	Scanner scan = new Scanner(System.in);
-	int num;
+	private Scanner scan = new Scanner(System.in);
+	private int num;
 	
 	// 타이틀 이동 판별
 	private boolean goTitle;
 	
+	// Player, Map 객체
+	// -> GameManager 클래스에서 PlayEvent 객체 생성할 때 집어넣기
+	private Map[][] map;
+	private Player player;
+	
+	
+	// 생성자
+	PlayEvent()
+	{
+		// 임시,,
+	}
+	PlayEvent(Map[][] map, Player player)
+	{
+		this.map = map;
+		this.player = player;
+	}
 	
 	// getter, setter 메소드
 	public boolean getGoTitle()
@@ -21,7 +43,7 @@ public class PlayEvent {
 	
 	
 	// 층간 이동 보조 (엘리베이터)
-	private void moveFloor(Player player, Map[][] map)
+	private void moveFloor()
 	{
 		while(true)
 		{
@@ -85,7 +107,7 @@ public class PlayEvent {
 	// ----------------------------------------------------------------- \\
 	
 	// 1층 로비 이벤트 함수
-	public void playFloor1_0(Player player, Map[][] map)
+	public void playFloor1_0()
 	{
 		while(true)
 		{
@@ -154,7 +176,7 @@ public class PlayEvent {
 				// (처치하지 않았다면) 플레이어의 평판도 검사 -> 전투/그냥 물러남
 				
 				// 2. (처치했다면) 층 이동 메소드 수행
-				moveFloor(player, map);
+				moveFloor();
 				break;
 			}
 			else
@@ -165,26 +187,95 @@ public class PlayEvent {
 	}
 	
 	// 1층 영업부(방1) 이벤트 함수
-	public void playFloor1_1(Map map)
+	public void playFloor1_1()
 	{
+		// 1. 배틀....확률 돌리기
+		
+		// 2. 영업부 스크립트 출력...
+		// 영업부다. 내가 일하는 부서라 지긋하리만치 익숙할 만한데, 묘하게 서늘한 기운이 목을 감싼다. 밤이라 그런가.
+		// 앞에는 익숙한 책상 배열들이 보인다. 개중에는 눈에 띄는 책상도 심심찮게 있다.
+
 		while(true)
 		{
-			// 1. 배틀....확률 돌리기
-			
-			// 2. 영업부 스크립트 출력...
-			// 영업부다. 내가 일하는 부서라 지긋하리만치 익숙할 만한데, 묘하게 서늘한 기운이 목을 감싼다. 밤이라 그런가.
-			// 앞에는 익숙한 책상 배열들이 보인다. 개중에는 눈에 띄는 책상도 심심찮게 있다. 어디를 살펴볼까?
+			System.out.println("어디를 살펴볼까?");
 			
 			// for문으로 해당 방의 조사 사물 배열 목록 (숫자와 함께) 출력하기..
-			for (int i = 0; i < map.getAllObject().length; i++)
+			for (int i = 0; i < map[0][1].getAllObject().length; i++)
 			{	// ex) 1. 내 책상
-				System.out.println((i + 1) + ". " + map.getObject(i).getObjectName());
+				System.out.println((i + 1) + ". " + map[0][1].getObject(i).getObjectName());
 			}
+			// [마지막 번호]. 로비로 나간다.
+			System.out.println((map[0][1].getAllObject().length + 1) + ". 로비로 나간다.");
 			System.out.println("(원하는 선택지의 숫자 입력)");
 			
 			num = scan.nextInt();
 			
-			
+			if (num == 1)		// 부장 책상
+			{
+				// 부장님의 책상이다.
+				System.out.println(map[0][1].getObject(0).getObjectName() + "이다.");
+				// 부장 책상 설명 출력
+				System.out.println(map[0][1].getObject(0).getDescription());
+				
+				/* 
+				 * 이 부분을 따로 빼서 만드는 게 좋을지,,고민중
+				 * 만약 빼지 않는다면 그냥 "~가 있다",,의 형식으로 수정 필요
+				 */
+				
+				// 책상 위에는 메모지(이)가 있다.
+				System.out.println("\n책상 위에는 " + map[0][1].getObject(0).getItem(0).getName() + "(이)가 있다.");
+				
+				System.out.println("자세히 볼까?");
+				System.out.println("1. 본다.");
+				System.out.println("2. 안 본다.");
+				
+				num = scan.nextInt();
+				
+				if (num == 1)		// 본다
+				{
+					System.out.println("'" + map[0][1].getObject(0).getItem(0).getName() + "'");
+				}
+				else if (num == 2)	// 안 본다
+				{
+					System.out.println("안 보기로 했다.");
+				}
+				else				// 오기입
+				{
+					System.out.println("그런 선택지는 없다.");
+				}
+				
+				continue;
+			}
+			else if (num == 2)	// 수상한 사원의 책상
+			{
+				
+			}
+			else if (num == 3)	// 어지러운 책상
+			{
+				
+			}
+			else if (num == 4)	// 정돈된 책상
+			{
+				
+			}
+			else if (num == 5)	// 배부른 책상.....?
+			{
+				
+			}
+			else if (num == 6)	// 플레이어의 책상
+			{
+				
+			}
+			else if (num == 7)	// 로비로 나가기
+			{	
+				// 로비로 위치 재조정
+				player.setPosID(10);
+				break;
+			}
+			else 				// 오기입
+			{
+				
+			}
 		}
 	}
 	
@@ -203,7 +294,7 @@ public class PlayEvent {
 	// * * * * * * * * * * * * * \\
 	
 	// 2층 로비 이벤트 함수
-	public void playFloor2_0(Player player, Map[][] map)
+	public void playFloor2_0()
 	{
 		
 	}
@@ -226,7 +317,7 @@ public class PlayEvent {
 	
 	
 	// 3층 로비 이벤트 함수
-	public void playFloor3_0(Player player, Map[][] map)
+	public void playFloor3_0()
 	{
 		
 	}
@@ -254,7 +345,7 @@ public class PlayEvent {
 	
 	
 	// 4층 로비 이벤트 함수
-	public void playFloor4_0(Player player, Map[][] map)
+	public void playFloor4_0()
 	{
 		
 	}
