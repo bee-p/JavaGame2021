@@ -1,6 +1,6 @@
 
 public class Item { // 모든 아이템에 대한 기본 아이템 클래스
-	private String name; // 아이템 종류
+	String name; // 아이템 종류
 	private String description; // 아이템 설명
 	private int value; // 능력치 변경을 위한 수치값
 	
@@ -37,9 +37,4 @@ public class Item { // 모든 아이템에 대한 기본 아이템 클래스
 		return info;
 	}
 	
-	// useItem함수 작성하기
-	public void useItem()
-	{
-		
-	}
 }

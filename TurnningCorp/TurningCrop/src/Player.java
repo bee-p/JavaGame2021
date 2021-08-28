@@ -1,8 +1,10 @@
-
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class Player {
 
-		//í•„ë“œ
+		private static final Readable InputStream = null;
+		//ÇÊµå
 		String name;
 		String title;
 		char rank;
@@ -12,20 +14,21 @@ public class Player {
 		int defensivePower;
 		int reputation;
 		char[] rankArray = {'D', 'C', 'B', 'A', 'S'};
-		String[] titleArray = {"í‰ë²”í•œì‚¬ì›", "ë˜‘ë˜‘í•œì‚¬ì›", "ìš©ê°í•œì¸ê°„", "ì•…ë§ˆì™•í‡´ë§ˆì‚¬", "ëª…ë§ìˆëŠ”ì‚¬ì¥"};
+		String[] titleArray = {"Æò¹üÇÑ»ç¿ø", "¶È¶ÈÇÑ»ç¿ø", "¿ë°¨ÇÑÀÎ°£", "¾Ç¸¶¿ÕÅğ¸¶»ç", "¸í¸ÁÀÖ´Â»çÀå"};
 		int currentIndex = 0;
 		ItemPair[] inventory;
 		int inventoryLength;
 		int inventoryIndex;
+		boolean isBattle; //¹èÆ² ÁßÀÎÁö ¿©ºÎ
 		
-		private int posID;			// í˜„ì¬ ìœ„ì¹˜ ì•„ì´ë””
-									// ex) 1ì¸µ 3ë²ˆë°©ì— ë“¤ì–´ê°€ ìˆëŠ” ê²½ìš°: 13
+		private int posID;			// ÇöÀç À§Ä¡ ¾ÆÀÌµğ
+									// ex) 1Ãş 3¹ø¹æ¿¡ µé¾î°¡ ÀÖ´Â °æ¿ì: 13
 		
-		//ê°ì²´
+		//°´Ã¼
 		SkillNPC npc = new SkillNPC();
+		Scanner sc = new Scanner(System.in);
 		
-		//í•¨ìˆ˜
-		//ìƒì„±ì
+		//»ı¼ºÀÚ
 		Player()
 		{
 			
@@ -40,6 +43,7 @@ public class Player {
 			this.reputation = reputation;
 			this.currentIndex = currentIndex;
 			inventory = new ItemPair[inventorySize];
+			inventoryLength = inventory.length;
 			this.posID = posID;
 			
 			this.title = titleArray[currentIndex];
@@ -51,7 +55,7 @@ public class Player {
 		{
 			return posID;
 		}
-		public void setPosID(int posID)		// í”Œë ˆì´ì–´ ì´ë™ì‹œ í™œìš©
+		public void setPosID(int posID)		// ÇÃ·¹ÀÌ¾î ÀÌµ¿½Ã È°¿ë
 		{
 			this.posID = posID;
 		}
@@ -72,7 +76,7 @@ public class Player {
 	    	return currentIndex;
 	    }
 	    
-	    
+	    //ÇÔ¼ö
 	    int upgradeReputation()
 	    {
 	    	currentIndex++;
@@ -90,24 +94,35 @@ public class Player {
 		{
 			reputation += num;
 		}
-	
-		public void saveInventory(Item[] item)
+
+		/*
+		public void saveInventory(Item item) //ÀúÀåÇÒ ¾ÆÀÌÅÛÀÌ 1°³ÀÎ °æ¿ì
+		{
+			inventoryLength = inventory.length;
+			for(int i=0; i<inventoryLength; i++)
+			{
+				
+			}
+
+		}
+		
+		public void saveInventory(Item[] item) //ÀúÀåÇÒ ¾ÆÀÌÅÛÀÌ 2°³ÀÎ °æ¿ì
 		{
 			inventoryLength = inventory.length;
 			int itemIndex = 0;
 			for(int i=0; i<inventoryLength; i++)
 			{
-				if(inventory[i].item.getName().equals(item[itemIndex].getName())) //ì¸ë²¤í† ë¦¬ì— itemì´ ì¡´ì¬í•˜ëŠ” ê²½ìš°
+				if(inventory[i].item.getName().equals(item[itemIndex].getName())) //ÀÎº¥Åä¸®¿¡ itemÀÌ Á¸ÀçÇÏ´Â °æ¿ì
 				{
 					inventory[i].count++;
 				}
 				
-				else //ì¸ë²¤í† ë¦¬ì— itemì´ ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ê²½ìš°
+				else //ÀÎº¥Åä¸®¿¡ itemÀÌ Á¸ÀçÇÏÁö ¾Ê´Â °æ¿ì
 					if (inventory[i]==null)
 					{
 						inventory[i].item = item[itemIndex];
 						inventory[i].count = 1;
-					}						
+					}
 				
 				itemIndex++;
 				if(item[itemIndex] == null)
@@ -117,7 +132,7 @@ public class Player {
 			}
 			
 		}
-		
+		*/
 		
 		boolean deleteInventory(int inventoryNum)
 		{
@@ -128,13 +143,8 @@ public class Player {
 			}
 			else
 			{
-				return false; //í•´ë‹¹ ì¸ë±ìŠ¤ê°€ ë¹„ì–´ ì‚­ì œí•  í•­ëª©ì´ ì—†ìŒ.
+				return false; //ÇØ´ç ÀÎµ¦½º°¡ ºñ¾î »èÁ¦ÇÒ Ç×¸ñÀÌ ¾øÀ½.
 			}
-		}
-		
-		void useInventory(int inventoryNum)
-		{
-			inventory[inventoryNum].item.useItem(); //ìˆ˜ì •í•„ìš”**
 		}
 		
 		public String toString(int inventoryIndex)
@@ -143,28 +153,96 @@ public class Player {
 					+ inventory[inventoryIndex].item.getDescription();
 		}
 		
-		void showInventory() //ì‚¬ìš©ìì—ê²Œ ì¸ë²¤í† ë¦¬ ë³´ì—¬ì£¼ê¸°
+		void showInventory()
 		{
-			System.out.println("[ì¸ë²¤í† ë¦¬]\n ==============================");
-			System.out.println("ì´ë¦„\t ì„¤ëª…\t");
+			System.out.println("[ÀÎº¥Åä¸®]\n ==============================");
+			System.out.println("ÀÌ¸§\t ¼³¸í\t");
 			for(inventoryIndex = 0; inventoryIndex <= inventoryLength; inventoryIndex++)
 			{
 				toString(inventoryIndex);
 			}
-		}; 
-	
-		// í”Œë ˆì´ì–´ê°€ ê³µê²©ë ¥ í¬ì…˜ì„ ë§ˆì‹œë©´, ê³µê²©ë ¥ ì¦ê°€
-		public void increaseAttack(int attackPower) {
+		};
+
+		void useInventory(int inventoryNum)
+		{
+			Item itemToUse = inventory[inventoryNum].item;
+			useItem(itemToUse);
+		}
+		
+		public void useItem(Item item)
+		{
+			if (item.name.equals("AttackPotion"))
+			{
+				increaseAttackPower(item.getValue());
+			}
+			else if (item.name.equals("DefensePotion"))
+			{
+				increaseDefensePower(item.getValue());
+			}
+			else if (item.name.equals("HealingPotion"))
+			{
+				increaseHpPower(item.getValue());
+			}
+			else if (item.name.equals("SecretPotion")) //¹èÆ²Áß¿¡¸¸ »ç¿ë °¡´É
+			{
+				if(isBattle == true)
+				{
+					System.out.println("¾î¶² ½ºÅÈÀ» ¿Ã¸®½Ã°Ú½À´Ï±î? ");
+					System.out.println("1. AttackPower");
+					System.out.println("2. DefensivePower");
+					System.out.println("3. Hp");
+					try
+					{
+						int selectNum = sc.nextInt();
+						sc.next();
+						
+						switch(selectNum)
+						{
+						case 1: increaseAttackPower(item.getValue());
+						case 2: increaseDefensePower(item.getValue());
+						case 3: increaseHpPower(item.getValue());
+						default : System.out.println("1~3Áß¿¡ ÀÔ·ÂÇÏ¼¼¿ä");
+						}
+					}
+					catch (InputMismatchException ime)
+					{
+						System.out.println("Á¤¼ö¸¦ ÀÔ·ÂÇÏ¼¼¿ä");
+					}
+					
+				}
+				else
+					System.out.println("¹èÆ² Áß¿¡¸¸ »ç¿ëÀÌ °¡´ÉÇÑ ¾ÆÀÌÅÛ ÀÔ´Ï´Ù.");
+			}
+		}
+		
+		public void increaseAttackPower(int attackPower)
+		{
 			this.attackPower += attackPower;
 		}
 		
-		// í”Œë ˆì´ì–´ê°€ ë°©ì–´ë ¥ í¬ì…˜ì„ ë§ˆì‹œë©´, ë°©ì–´ë ¥ ì¦ê°€
-		public void increaseDefense(int defensivePower) {
+		public void increaseDefensePower(int defensivePower)
+		{
 			this.defensivePower += defensivePower;
 		}
 		
-		// í”Œë ˆì´ì–´ê°€ hp í¬ì…˜ì„ ë§ˆì‹œë©´, hp ì¦ê°€
-		public void increaseHP(int hp) {
+		public void increaseHpPower(int hp)
+		{
 			this.hp += hp;
 		}
+		
+		public boolean searchItem(String itemName) //Æ¯Á¤ ¾ÆÀÌÅÛÀÌ ÀÎº¥Åä¸®¿¡ Á¸ÀçÇÏ´ÂÁö È®ÀÎ
+		{
+			for(int i=0; i<inventoryLength; i++)
+			{
+				if(inventory[i].item.name.equals(itemName))
+				{
+					return true;
+				}
+				else
+					continue;
+			}
+			return false;
+		}
+		
+		
 }
