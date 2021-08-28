@@ -6,14 +6,6 @@ public class DefensePotion extends Potion { // 방어력 증가 아이템
 		super(name, description, value);
 	}
 	
-	// 포션 사용 시 방어력 증가, true값 리턴
-	public boolean useDefensePotion(Player player) {
-		int defense = getValue();
-		player.increaseDefense(defense);  // Player클래스에 있는 함수에 %값 전달
-		
-		return true;
-	}
-	
 	// 아이템 정보 내보내는 메소드
 	// 오버로딩
 	public String itemInfo() {
