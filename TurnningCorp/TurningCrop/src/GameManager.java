@@ -15,26 +15,30 @@ public class GameManager {
 		
 		// **아이템은 맵에서 생성하기
 		Player player;
-		Map maps[][] = new Map[5][4];
-		int happyEndingPoint = 0; // 엔딩 판별할 때 사용하는 포인트 값
+		Map maps[][] = new Map[4][5];
+		// 5층, 5개의 방(로비 + 방 3개 + 화장실)로 대부분 구성되어있으나
+		// 5층은 엔딩 진행의 역할만 수행하므로 5층을 제외한 1~4층을 활동 범위로 잡아
+		// Map 객체 배열을 [4][5]의 이차원 배열로 설정함
+		// 5층의 경우는 playEvent.playFloor5() 메소드만을 통해 엔딩 이벤트 진행함
+		
 		File endingFiles[] = new File[3]; // **엑셀로 파일의 데이터 가져오기&저장하기
 		
-		PlayEvent playEvent = new PlayEvent();		// 이벤트 객체 생성
-		Scanner scan = new Scanner(System.in);		// 스캐너 객체 생성
-		int num = 0;								// 선택지 저장
 		
-		
-		// 플레이어 정보 초기화
+		// 플레이어 정보 생성 및 초기화
 		player = new Player();
 		player.setPosID(10);		// 1층 로비로 위치 초기화
 		
-		// 맵 정보 초기화
+		// 맵 정보 생성 및 초기화
 		
 		
 		
-		// 시작화면
-		// 	=> 플레이 하기 or 게임 종료하기
-		// 	파일로 불러오기
+		// 	각 객체 정보 파일로 불러오기(읽어오기)
+		
+		
+		// 플레이시 필요한 객체 생성
+		PlayEvent playEvent = new PlayEvent(maps, player);		// 이벤트 객체 생성
+		Scanner scan = new Scanner(System.in);					// 스캐너 객체 생성
+		int num = 0;											// 선택지 저장
 		
 		
 		// 게임 시작
@@ -71,15 +75,17 @@ public class GameManager {
 				while(!playEvent.getGoTitle())
 				{
 					// 현재 위치 검사, 해당 위치에 따른 이벤트 발동
+					// posID의 첫 번째 숫자(1~5)는 층, 두 번째 숫자(0~4)는 방 위치를 의미함
+					// 방 위치(두 번째 숫자)에서 0은 로비, 1~3은 일반 방, 4는 화장실을 의미
 					switch(player.getPosID())
 					{	// 1층 로비 - 저장, 타이틀로 돌아갈 수 있음
 						case 10:
-							playEvent.playFloor1_0(player, maps);
+							playEvent.playFloor1_0();
 							break;
 						
 						// 1층 첫 번째 방
 						case 11:
-							playEvent.playFloor1_1(maps[0][1]);
+							playEvent.playFloor1_1();
 							break;
 							
 						// 1층 두 번째 방
@@ -91,10 +97,15 @@ public class GameManager {
 						case 13:
 							playEvent.playFloor1_3();
 							break;
+						
+						// 1층 화장실
+						case 14:
+							playEvent.playFloor1_4();
+							break;
 							
 						// 2층 로비 - 저장, 타이틀로 돌아갈 수 있음
 						case 20:
-							playEvent.playFloor2_0(player, maps);
+							playEvent.playFloor2_0();
 							break;
 						
 						// 2층 첫 번째 방
@@ -107,9 +118,14 @@ public class GameManager {
 							playEvent.playFloor2_2();
 							break;
 							
+						// 2층 화장실
+						case 24:
+							playEvent.playFloor2_4();
+							break;
+							
 						// 3층 로비 - 저장, 타이틀로 돌아갈 수 있음
 						case 30:
-							playEvent.playFloor3_0(player, maps);
+							playEvent.playFloor3_0();
 							break;
 						
 						// 3층 첫 번째 방
@@ -126,10 +142,14 @@ public class GameManager {
 						case 33:
 							playEvent.playFloor3_3();
 							break;
+							
+						// 3층 화장실
+						case 34:
+							playEvent.playFloor3_4();
 						
 						// 4층 로비 - 저장, 타이틀로 돌아갈 수 있음
 						case 40:
-							playEvent.playFloor4_0(player, maps);
+							playEvent.playFloor4_0();
 							break;
 						
 						// 4층 첫 번째 방
@@ -145,6 +165,11 @@ public class GameManager {
 						// 4층 세 번째 방
 						case 43:
 							playEvent.playFloor4_3();
+							break;
+							
+						// 4층 화장실
+						case 44:
+							playEvent.playFloor4_4();
 							break;
 						
 						// 5층 엔딩

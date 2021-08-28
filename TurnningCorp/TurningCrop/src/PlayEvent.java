@@ -14,6 +14,9 @@ public class PlayEvent {
 	// 타이틀 이동 판별
 	private boolean goTitle;
 	
+	// 엔딩 판별할 때 사용하는 포인트 값
+	int happyEndingPoint = 0;
+	
 	// Player, Map 객체
 	// -> GameManager 클래스에서 PlayEvent 객체 생성할 때 집어넣기
 	private Map[][] map;
@@ -104,7 +107,9 @@ public class PlayEvent {
 		}
 	}
 	
+	
 	// ----------------------------------------------------------------- \\
+	
 	
 	// 1층 로비 이벤트 함수
 	public void playFloor1_0()
@@ -291,7 +296,15 @@ public class PlayEvent {
 		
 	}
 	
+	// 1층 화장실(posID: 14) 이벤트 함수
+	public void playFloor1_4()
+	{
+		
+	}
+	
+	
 	// * * * * * * * * * * * * * \\
+	
 	
 	// 2층 로비 이벤트 함수
 	public void playFloor2_0()
@@ -308,6 +321,12 @@ public class PlayEvent {
 	// 2층 영양사 사무실(방2) 이벤트 함수
 	// 식당 내부에 영양사 사무실 존재
 	public void playFloor2_2()
+	{
+		
+	}
+	
+	// 2층 화장실(posID: 24) 이벤트 함수
+	public void playFloor2_4()
 	{
 		
 	}
@@ -340,6 +359,12 @@ public class PlayEvent {
 		
 	}
 	
+	// 3층 화장실(posID: 34) 이벤트 함수
+	public void playFloor3_4()
+	{
+		
+	}
+	
 	
 	// * * * * * * * * * * * * * \\
 	
@@ -364,6 +389,12 @@ public class PlayEvent {
 	
 	// 4층 (방3) 이벤트 함수
 	public void playFloor4_3()
+	{
+		
+	}
+	
+	// 4층 화장실(posID: 44) 이벤트 함수
+	public void playFloor4_4()
 	{
 		
 	}
