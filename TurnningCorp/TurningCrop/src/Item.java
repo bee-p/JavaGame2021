@@ -17,7 +17,7 @@ public class Item { // 모든 아이템에 대한 기본 아이템 클래스
 	}
 	
 	// getter 메소드
-	public String getName() {
+	String getName() {
 		return name;
 	}
 	

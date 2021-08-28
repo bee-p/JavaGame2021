@@ -94,41 +94,77 @@ public class Player {
 			reputation += num;
 		}
 	
-		//수정할 부분-----------------------------------------------------------------
 		public void saveInventory(Item item) //저장할 아이템이 1개인 경우
 		{
-			inventoryLength = inventory.length;
-			for(int i=0; i<inventoryLength; i++)
+			
+			if(searchItem(item.getName())) //저장할 아이템이 인벤토리에 존재하는 경우
 			{
-				
+				for(int i=0; i<inventoryLength; i++)
+				{
+					if(inventory[i].item.getName().equals(item.getName()))
+					{
+						inventory[i].count++;
+						break;
+					}
+				}
 			}
+			else  //인벤토리에 없는 아이템인 경우
+			{
+				for(int i=0; i<inventoryLength; i++)
+				{
+					if(inventory[i] == null)
+					{
+						inventory[i].item = item;
+						inventory[i].count = 1;
+						break;
+					}
+					else
+					{
+						continue;
+					}
+				}
+			}
+			
 		}
 		
-		public void saveInventory(Item[] item) //저장할 아이템이 2개인 경우
+		public void saveInventory(Item item1, Item item2) //저장할 아이템이 2개인 경우 (2개는 다른 아이템)
 		{
-			inventoryLength = inventory.length;
-			int itemIndex = 0;
-			for(int i=0; i<inventoryLength; i++)
+			Item item = item1;
+			int saveCount = 0;
+			
+			while(saveCount!=2)
 			{
-				if(inventory[i].item.getName().equals(item[itemIndex].getName())) //인벤토리에 item이 존재하는 경우
+				if(searchItem(item.getName())) //저장할 아이템이 인벤토리에 존재하는 경우
 				{
-					inventory[i].count++;
-				}
-
-				else //인벤토리에 item이 존재하지 않는 경우
-					if (inventory[i]==null)
+					for(int i=0; i<inventoryLength; i++)
 					{
-						inventory[i].item = item[itemIndex];
-						inventory[i].count = 1;
+						if(inventory[i].item.getName().equals(item.getName()))
+						{
+							inventory[i].count++;
+							break;
+						}
 					}
-									
-
-				itemIndex++;
-				if(item[itemIndex] == null)
-			}			
-
+				}
+				else  //인벤토리에 없는 아이템인 경우
+				{
+					for(int i=0; i<inventoryLength; i++)
+					{
+						if(inventory[i] == null)
+						{
+							inventory[i].item = item;
+							inventory[i].count = 1;
+							break;
+						}
+						else
+						{
+							continue;
+						}
+					}
+				}
+				item = item2;
+				saveCount++;
+			}
 		}
-		//----------------------------------------------------------
 		
 		boolean deleteInventory(int inventoryNum)
 		{
