@@ -2,7 +2,7 @@
 public class Map {
 	private Enemy[] enemy;
 	private ItemNPC npc;
-	private String[] scripts;		// 방(또는 로비)에 입장했을 때 뜨는 문자열
+//	private String[] scripts;		// 방(또는 로비)에 입장했을 때 뜨는 문자열
 	private boolean active;			// 해당 방(층)이 활성화 되었는지?
 	private int floorLevel;			// 층 표시
 //	private int roomID;				// 방 표시
