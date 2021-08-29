@@ -564,13 +564,380 @@ public class PlayEvent {
 	// 2층 로비 이벤트 함수
 	public void playFloor2_0()
 	{
-		
+
+		while(true)
+		{
+			// 1. 로비 스크립트 출력
+			// 식당인 2층의 로비다.
+			
+			// 2. 선택지 출력
+			System.out.println("1. 출입기에 사원증을 찍자.");	// 저장
+			System.out.println("2. 타이틀로 나가자.");		// 타이틀로 나가는 선택지가 있어야 되는데 지문을 어떻게...적어야 할지 모르겠음..
+			System.out.println("3. 다른 곳을 둘러보자.");		// 다른 방 이동
+			System.out.println("4. 엘리베이터를 타자.");		// 층 이동
+			
+			num = scan.nextInt();
+			
+			if (num == 1)			// 저장
+			{
+				// 현재 게임 데이터 로컬에 저장
+				
+				System.out.println("사원증을 성공적으로 찍었다!\n--저장되었습니다.--");
+			}
+			else if (num == 2)		// 저장 후 타이틀로 나가기
+			{
+				// 1. 현재 데이터 로컬에 저장
+				
+				// 2. 타이틀로 나가기
+				goTitle = true;
+				break;
+			}
+			else if (num == 3)		// 다른 방으로 이동
+			{
+				// 취식실, 영양사 사무실이 보인다. 어디로 들어갈까?
+				System.out.println("1. 취식실로 들어가자.");
+				System.out.println("2. 영양사 사무실로 들어가자.");
+				System.out.println("3. 생각이 달라졌다.");		// 다시 로비 선택지 출력
+				
+				num = scan.nextInt();
+				
+				if (num == 1)		// 취식실 들어가기
+				{
+					player.setPosID(21);
+					break;
+				}
+				else if (num == 2)	// 영양사 사무실 들어가기
+				{
+					player.setPosID(22);
+					break;
+				}
+				else if (num == 3)	// 다른 방으로 가지 않기(로비 스크립트/선택지 다시 출력)
+				{
+					continue;
+				}
+				else
+				{
+					// 그 외 오기입 처리
+				}
+			}
+			else if (num == 4)		// 다른 층으로 이동(엘리베이터 탑승)
+			{
+				moveFloor();
+				break;
+			}
+			else
+			{
+				// 그 외 오기입 처리
+			}
+		}
 	}
 	
-	// 2층 식당(방1) 이벤트 함수
+	// 2층 취식실(방1) 이벤트 함수
 	public void playFloor2_1()
 	{
+		// 1. 배틀 시스템 확률
 		
+		// 2. 취식실 스크립트 출력
+		// 식당의 취식실이다. 사내 식당은 맛이 없기로 유명해서, 사원 대부분이 점심은 밖에서 해결해 원래 인적이 드문 곳이다. 오늘도 별 다를 건 없어 보인다.
+		// 아무도 없는 취식실에는 배식대와 테이블, 식수대가 보인다.
+		
+		while(true)
+		{
+			System.out.println("어디를 살펴볼까?");
+			
+			//조사 가능한 사물 배열 목록 출력
+			for (int i = 0; i < map[1][1].getAllObject().length; i++)
+			{
+				System.out.println((i+1) + ". " + map[1][1].getObject(i).getObjectName());
+			}
+			//마지막 번호. 로비로 나간다.
+			System.out.println((map[1][1].getAllObject().length + 1) + ". 로비로 나간다.");
+			System.out.println("(조사할 선택지의 숫자 입력 : )");
+			
+			num = scan.nextInt():
+				
+			//선택지 외의 번호 입력 시
+			if (!(num >= 1 && num <= map[1][1].getAllObject().length + 1))
+			{
+				System.out.println("그 쪽은 조사가 불가능하다.");
+				continue;
+			}
+		
+			//로비로 나가는 선택지 입력했을 경우
+			if (num == map[1][1].getAllObject().length + 1)
+			{
+				//로비로 이동
+				player.setPosID(20);
+				break;		//반복문 탈출 (메소드 종료)
+			}
+			
+			//조사 가능 선택지를 입력했을 경우 (기본 출력)
+			//1. 현재 오브젝트를 선택한 오브젝트로 설정
+			mapObject = map[1][1].getObject(num - 1);
+			
+			//2. 해당 오브젝트의 이름과 설명 출력
+			objectPrint(mapObject);
+			
+			if (num == 1)			//테이블 조사
+			//2층 1번째 방 획득 아이템 : 빵(2번째 obj의 0), 쉽배악(2번째 obj의 1), 물컵(3번쨰 obj의 0)
+			{
+				while(true)
+				{
+					System.out.println("취식실 한가운데 커다란 테이블이 있다. 어딜 살펴볼까?");
+					System.out.println("1. 테이블 위를 살펴보자.");
+					System.out.println("2. 테이블 아래를 살펴보자.");
+					System.out.println("3. 테이블 옆 의자들을	 살펴보자.");
+					System.out.println("4. 그만 살펴보자.");
+					
+					num = scan.nextInt();
+					
+					if (num == 1) 			//테이블 위를 살펴볼 경우
+					{
+						System.out.println("테이블 위에는 작은 화분들이 간격을 두고 놓여 있다. 조화는 아니고, 살아 있는 식물 같다.");
+
+						//물컵을 얻었는지 확인. 물컵이 있다면~ **NPC 퀘스트
+						if (player.searchItem(map[1][1].getObject(2).getItem(1).getName()))
+						{
+							System.out.println("마침 식수대에서 얻었던 물이 있다. 이걸로 물을 줄까?");
+							System.out.println("1. 물을 준다.");					
+							System.out.println("2. 물을 주지 않는다.");
+							
+							num = scan.nextInt();
+							
+							if (num == 1)
+							{
+								System.out.println("화분들에 물을 줬다. 식물들이 기뻐하듯 반짝거린다.");
+								Player.deleteInventory(map[1][1].getObject(2).getItem(1));		//인벤토리에서 아이템(물컵) 삭제
+								
+								//퀘스트 완료 처리...
+							}
+							else if (num == 2)
+							{
+								System.out.println("다른 곳에 쓸 일이 있을지도 모른다. 넘어가자.");
+							}
+							else
+							{
+								System.out.println("물을 줄지, 주지 않을 지 확실히 정하자.");	
+							}
+						}
+					}
+					else if (num == 2)		//테이블 아래를 살펴볼 경우
+					{
+						// 이미 아이템(빵)을 가져갔는지 검사
+						// 아이템을 이미 가져갔다면 
+						if (player.searchItem(mapObject.getItem(0).getName()))
+						{
+							System.out.println("테이블 아래에 더 이상 특별한 건 보이지 않는다.");
+							continue;
+						}
+						
+						// 아이템(빵)을 가져가지 않았다면
+						else {
+							System.out.println("테이블 아래에 " + mapObject.getItem(0).getName() + " 하나가 놓여 있다.");
+							
+							System.out.println("가져갈까?");
+							System.out.println("1. 가져가자.");
+							System.out.println("2. 가져가지 말자.");
+							
+							num = scan.nextInt();
+							
+							if (num == 1)		//1. 가져간다. 를 선택했을 경우
+							{
+								// 플레이어 인벤토리에 아이템(빵) 저장
+								player.saveInventory(mapObject.getItem(0));
+								
+								System.out.println("혹시 쓸 곳이 있을지도 모른다. 가져가자.\n" + mapObject.getItem(0).getName() + "을 챙겼다.");
+							}
+							else if (num == 2)	//2. 가져가지 않는다. 를 선택했을 경우
+							{
+								System.out.println("그냥 쓰레기 같다. 제자리에 두자.")
+							}
+							else				//선택지 외 번호 입력 시
+							{
+								System.out.println("어떻게 하자는 거지? 확실히 정하자.")
+							}
+						}
+					}
+					else if (num == 3)		//테이블 옆 의자들을 살펴볼 경우
+					{
+						System.out.println("테이블을 기준으로 의자들이 줄지어 놓여져 있다.\n둥근 의자와 네모난 의자가 섞여 놓여 있다.");
+						
+					}
+				}
+			}
+			else if (num == 2)		//배식대 조사
+			{
+				while(true)
+				{
+					System.out.println("배식대를 살펴봤다. \n깨끗하게 정리된 배식대에는 4개의 배식통이 올려져 있다. 열어볼까?");
+					System.out.println("1. 첫 번째 통을 열어보자.");
+					System.out.println("2. 두 번째 통을 열어보자.");
+					System.out.println("3. 세 번째 통을 열어보자.");
+					System.out.println("4. 네 번째 통을 열어보자.");
+					System.out.println("5. 열어보지 말자.");
+					
+					num = scan.nextInt();
+					
+					if (num == 1)		//첫 번째 통 열어보기
+					{
+						System.out.println("첫 번째 통인 밥솥을 열어봤다.\n새하얀 밥이 밥솥에 담겨 있다.");
+					}
+					else if (num == 2)	//두 번째 통 열어보기
+					{
+						System.out.println("두 번째 통을 열어봤다.\n빨간 양념의 김치가 담겨 있다.");
+					}
+					else if (num == 3)	//세 번째 통 열어보기
+					{
+						System.out.println("세 번째 통을 열어봤다.\n까만 콩자반이 담겨 있다.");
+					}
+					else if (num == 4)	//네 번째 통 열어보기
+					{
+						System.out.println("마지막 통인 네 번째 통을 열어봤다.\n푸른 빛깔의 블루베리 샐러드가 담겨 있다.")
+					}
+					else if (num == 5)	//열어보지 않고 배식대 벗어나기
+					{
+						System.out.println("더 이상 살펴볼 건 없는 것 같다.");
+						break;	//반복문 탈출
+					}
+				}
+			}
+			else if (num == 3)		//식수대 조사
+			{
+				int waterNum = 0;	//수도꼭지 돌린 순서 확인용 변수
+				
+				while(true)
+				{
+					System.out.println("식수대를 살펴봤다.\n식수대에는 색깔별로 네 개의 수도꼭지가 있다. 살펴볼까?");
+					System.out.println("1. 붉은 수도꼭지를 살펴보자.");
+					System.out.println("2. 푸른 수도꼭지를 살펴보자.");
+					System.out.println("3. 하얀 수도꼭지를 살펴보자.");
+					System.out.println("4. 까만 수도꼭지를 살펴보자.");
+					System.out.println("5. 식수대 옆을 살펴보자.");
+					System.out.println("6. 그만 살펴보자.");
+					
+					num = scan.nextInt();
+					
+					if (num == 1)		//붉은 수도꼭지 조사
+					{
+						if (waterNum == 1)		//순서가 맞을 경우 (2번째)
+						{
+							System.out.println("붉은 수도꼭지를 돌렸다. 물이 나온다.");
+							waterNum = 2;
+						}
+						else if (waterNum == 0)	//첫 번째로 물을 튼 경우
+						{
+							System.out.println("붉은 수도꼭지를 돌렸다. 물이 나온다.")
+							waterNum = 4;		//순서가 틀린 경우이므로 다음 경우에서 바로 else로 빠질 수 있도록 함.
+						}
+						else					//순서가 틀린 경우
+						{
+							System.out.println("붉은 수도꼭지를 돌리자 모든 수도꼭지에서 물이 끊겼다.");
+							waterNum = 0;
+						}
+					}
+					else if (num == 2)	//푸른 수도꼭지 조사
+					{
+						if (waterNum == 3)		//순서가 맞을 경우 (4번째)
+						{
+							//아이템(쉽배악) 가져갔는지 확인
+							//가져갔을 경우
+							if (player.searchItem(mapObject.getItem(0).getName()))
+							{
+								System.out.println("푸른 수도꼭지를 돌렸다.\n모든 물이 멈췄지만 식수대 아래에는 더 이상 아무것도 떨어지지 않았다.");
+								waterNum = 0;
+								continue;
+							}
+							//가져가지 않았을 경우
+							else
+							{
+								//순서 올바르게 입력 -> 쉽배악 획득
+								System.out.println("푸른 수도꼭지를 돌렸다.\n덜컹 하는 소리와 함께 모든 물이 멈추며 식수대 아래에서 무언가 떨어졌다.");
+								waterNum = 0;
+								player.saveInventory(mapObject.getItem(0));
+								//쉽배악을 챙겼다.
+								System.out.println("식수대 아래를 살펴보니 책 한 권이 떨어져 있다.\n" + mapObject.getItem(0).getName() + "을 챙겼다.");
+							}
+						}
+						else if (waterNum == 0)	//첫 번째로 물을 튼 경우
+						{
+							System.out.println("푸른 수도꼭지를 돌렸다. 물이 나온다.");
+							waterNum = 4;
+						}
+						else					//순서가 틀린 경우
+						{
+							System.out.println("푸른 수도꼭지를 돌리자 모든 수도꼭지에서 물이 끊겼다.");
+							waterNum = 0;
+						}
+					}
+					else if (num == 3)	//하얀 수도꼭지 조사
+					{
+						if (waterNum == 0)		//순서가 맞을 경우 (1번째)
+						{
+							System.out.println("하얀 수도꼭지를 돌렸다. 물이 나온다.");
+							waterNum = 1;
+						}
+						else
+						{
+							System.out.println("하얀 수도꼭지를 돌리자 모든 수도꼭지에서 물이 끊겼다.");
+							waterNum = 0;
+						}
+					}
+					else if (num == 4)	//까만 수도꼭지 조사
+					{
+						if (waterNum == 2)		//순서가 맞을 경우 (3번째)
+						{
+							System.out.println("까만 수도꼭지를 돌렸다. 물이 나온다.");
+							waterNum = 3;
+						}
+						else if (waterNum == 0)	//첫 번째로 물을 튼 경우
+						{
+							System.out.println("까만 수도꼭지를 돌렸다. 물이 나온다.");
+							waterNum = 4;
+						}
+						else					//순서가 틀린 경우
+						{
+							System.out.println("까만 수도꼭지를 돌리자 모든 수도꼭지에서 물이 끊겼다.");
+							waterNum = 0;
+						}
+					}
+					else if (num == 5)	//식수대 옆 조사
+					{
+						System.out.println("식수대 옆에는 컵 소독기가 놓여 있다.");
+						
+						//아이템(물컵) 가져갔는지 확인
+						//가져갔을 경우
+						if (player.searchItem(mapObject.getItem(1).getName()))
+						{
+							System.out.println("더 이상 특별한 건 없어 보인다.");
+							continue;
+						}
+						//가져가지 않았을 경우
+						else
+						{
+							System.out.println("소독기 위에 물이 반쯤 담긴 컵이 놓여 있다. 챙길까?");
+							System.out.println("1. 챙긴다.");
+							System.out.println("2. 챙기지 않는다.");
+							
+							num = scan.nextInt();
+							
+							if (num == 1)		//물컵을 챙긴다
+							{
+								player.saveInventory(mapObject.getItem(1));
+								System.out.println("혹시 필요한 일이 있을지도 모른다.\n" + mapObject.getItem(1).getName() + "을 챙겼다.");
+							}
+							else if (num == 2)	//물컵을 챙기지 않는다
+							{
+								System.out.println("굳이 챙길 필요는 없어 보인다. 그냥 두자.")	;
+							}
+							else				//선택지 외 번호 입력
+							{
+								System.out.println("챙길지 말지를 확실히 정하자.");
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	// 2층 영양사 사무실(방2) 이벤트 함수
