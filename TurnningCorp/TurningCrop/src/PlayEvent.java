@@ -884,6 +884,7 @@ public class PlayEvent {
 				// 취식실, 영양사 사무실이 보인다. 어디로 들어갈까?
 				System.out.println("1. 취식실로 들어가자.");
 				System.out.println("2. 영양사 사무실로 들어가자.");
+				System.out.println("3. 화장실에 가자.");
 				System.out.println("3. 생각이 달라졌다.");		// 다시 로비 선택지 출력
 				
 				num = scan.nextInt();
@@ -896,6 +897,11 @@ public class PlayEvent {
 				else if (num == 2)	// 영양사 사무실 들어가기
 				{
 					player.setPosID(22);
+					break;
+				}
+				else if (num == 2)	// 화장실 가기
+				{
+					player.setPosID(24);
 					break;
 				}
 				else if (num == 3)	// 다른 방으로 가지 않기(로비 스크립트/선택지 다시 출력)
@@ -1034,9 +1040,9 @@ public class PlayEvent {
 						{
 							System.out.println("--식당 취실식 배치도--");
 							//ONTV
-							System.out.println("ㅁㅁㅁㅁㅁ ㅁㅁㅇㅇㅁ ㅁㅁㅁㅁㅁ ㅁㅇㅇㅇㅁ");
-							System.out.println("ㅁㅇㅇㅇㅁ ㅁㅇㅁㅇㅁ ㅇㅇㅁㅇㅇ ㅇㅁㅇㅁㅇ");
-							System.out.println("ㅁㅁㅁㅁㅁ ㅁㅇㅇㅁㅁ ㅇㅇㅁㅇㅇ ㅇㅇㅁㅇㅇ");
+							System.out.println("■■■■■ ■■○○■ ■■■■■ ■○○○■");
+							System.out.println("■○○○■ ■○■○■ ○○■○○ ○■○■○");
+							System.out.println("■■■■■ ■○○■■ ○○■○○ ○○■○○");
 						}
 						else if (num == 2)	//살펴보지 않을 경우
 						{
@@ -1394,7 +1400,7 @@ public class PlayEvent {
 				if (num == 1)		//살펴볼 경우
 				{
 					System.out.println("화분들을 자세히 살펴보았다.");
-					System.out.println("- \n--\n- \n -");
+					System.out.println("■ \n■■\n■ \n ■");
 					System.out.println("이러한 배치로 화분들이 놓여 있다.");
 				}
 				else if (num == 2)	//살펴보지 않을 경우
@@ -1468,7 +1474,74 @@ public class PlayEvent {
 	// 2층 화장실(posID: 24) 이벤트 함수
 	public void playFloor2_4()
 	{
-		
+		while(true)
+		{
+			// 2층의 네 번째(4) 방(화장실)이므로 인수에 2, 4를 집어넣음 (2층은 방이 화장실 포함 3개 뿐이지만, 통일성을 위해 4로 지정)
+			// 방 진입 이벤트 (사물(오브젝트) 출력 및 선택 진행)
+			// enterRoom의 반환값이 false면 현재 방의 이벤트를 종료하도록 함(이동)
+			if (!enterRoom(2, 4))
+			{
+				break;
+			}
+			
+			// enterRoom의 반환값이 true일 경우
+			// -> 정상 진행
+			
+			//System.out.println("깔끔하게 청소된 화장실에서는 방향제 향이 난다.\n어떤 걸 할까?");
+			//System.out.println("1. 거울을 보자");
+			//System.out.println("2. 바닥을 보자");
+			//System.out.println("3. 가방을 보자");
+			//System.out.println("4. 나가자");
+			
+			//num = scan.nextInt();
+			
+			if (num == 1)		// 거울 보기
+			{
+				System.out.println("내 모습이다.");
+				System.out.println("* hp: " + player.getHP());
+				System.out.println("* 공격력: " + player.getAttackPower());
+				System.out.println("* 방어력: " + player.getDefensivePower());
+				System.out.println("* 평판도: " + player.getReputation());
+			}
+			
+			else if (num == 2)	// 바닥 보기
+			{
+				System.out.println("반질반질하게 닦인 하얀 타일에 물기가 남아 있다. 넘어지지 않도록 조심하자.");			
+			}
+			
+			else if (num == 3)	// 내 가방 보기(인벤토리, 현재 진행중인 퀘스트 확인)
+			{
+				System.out.println("어떤 걸 볼까?");
+				System.out.println("1. 물건 위주");	// 인벤토리 확인
+				System.out.println("2. 할 일 목록");	// 퀘스트 목록 확인
+				
+				num = scan.nextInt();
+				
+				if (num == 1)			// 인벤토리 확인
+				{
+					player.showInventory();
+				}
+				else if (num == 2)		// 퀘스트 확인
+				{
+					// 현재 플레이어가 진행 중인 퀘스트 목록 출력
+					player.printQuestList();
+				}
+				else					// 오기입
+				{
+					System.out.println("그건... 잘못된 선택이다.");
+				}
+			}
+			else if (num == 4)	//로비로 나가기
+			{
+				player.setPosID(20);
+				break;
+			}
+			else				//선택지 외의 숫자를 입력한 경우 (오기입)
+			{
+				System.out.println("그건 화장실에서 할 수 없다.");
+				
+			}
+		}
 	}
 	
 	
@@ -1512,19 +1585,498 @@ public class PlayEvent {
 	// 4층 로비 이벤트 함수
 	public void playFloor4_0()
 	{
-		
+		while(true)
+		{
+			// 1. 로비 스크립트 출력
+			// 관리부와 녹화실이 있는 4층의 로비이다.
+			
+			// 2. 선택지 출력
+			System.out.println("1. 출입기에 사원증을 찍자.");	// 저장
+			System.out.println("2. 잠깐 밖에서 쉬고 오자.");	// 타이틀로 나가기 (게임 메뉴)
+			System.out.println("3. 다른 곳을 둘러보자.");		// 다른 방 이동
+			System.out.println("4. 엘리베이터를 타자.");		// 층 이동
+			
+			num = scan.nextInt();
+			
+			if (num == 1)			// 저장
+			{
+				// 현재 게임 데이터 로컬에 저장
+				
+				System.out.println("사원증을 성공적으로 찍었다!\n--저장되었습니다.--");
+			}
+			else if (num == 2)		// 저장 후 타이틀로 나가기
+			{
+				// 1. 현재 데이터 로컬에 저장
+				
+				// 2. 타이틀로 나가기
+				goTitle = true;
+				break;
+			}
+			else if (num == 3)		// 다른 방으로 이동
+			{
+				// 사무실, 회의실, 녹화실이 보인다. 어디로 들어갈까?
+				System.out.println("1. 사무실로 들어가자.");
+				System.out.println("2. 회의실로 들어가자.");
+				System.out.println("3. 녹화실로 들어가자.");
+				System.out.println("4. 생각이 달라졌다.");		// 다시 로비 선택지 출력
+				
+				num = scan.nextInt();
+				
+				if (num == 1)		// 사무실 들어가기
+				{
+					player.setPosID(41);
+					break;
+				}
+				else if (num == 2)	// 회의실 들어가기
+				{
+					player.setPosID(42);
+					break;
+				}
+				else if (num == 3)	// 녹화실 들어가기
+				{
+					player.setPosID(43);
+					break;
+				}
+				else if (num == 4)	// 다른 방으로 가지 않기(로비 스크립트/선택지 다시 출력)
+				{
+					continue;
+				}
+				else
+				{
+					// 그 외 오기입 처리
+				}
+			}
+			else if (num == 4)		// 다른 층으로 이동(엘리베이터 탑승)
+			{
+				moveFloor();
+				break;
+			}
+			else
+			{
+				// 그 외 오기입 처리
+			}
+		}
 	}
 	
-	// 4층 (방1) 이벤트 함수
+	// 4층 사무실(방1) 이벤트 함수
 	public void playFloor4_1()
 	{
+		// 1. 배틀 시스템 확률
 		
+		// 2. 사무실 스크립트 출력
+		// 관리부의 사무실이다. 퇴근을 한 지 꽤 된 듯, 싸늘한 공기가 맴돈다.
+		// 책상들이 방 가운데에 있고, 구석에는 간이 탕비실이 마련되어 있다. 벽에는 게시판이 붙어 있다.
+		
+		while(true)
+		{
+			// 4층의 첫 번째(1) 방이므로 인수에 4, 1을 집어넣음
+			// 방 진입 이벤트 (사물(오브젝트) 출력 및 선택 진행)
+			// enterRoom의 반환값이 false면 현재 방의 이벤트를 종료하도록 함(이동)
+			if (!enterRoom(4, 1))
+			{
+				break;
+			}
+			
+			
+			// enterRoom의 반환값이 true일 경우
+			// -> 정상 진행
+			
+			if (num == 1)		// 책상 조사
+			//4층 1번째 방 획득 아이템 : 쉽배악(1번째 obj의 0), 먹다 남은 커피(2번째 obj의 0)
+			{
+				while(true)
+				{
+					System.out.println("사무실 가운데 있는 책상쪽으로 가보자.\n각각 잘 정돈된 책상들 사이 눈에 띄는 몇 물건들이 보인다.\n어떤 걸 살펴볼까?");
+					System.out.println("1. 파일철을 살펴보자.");
+					System.out.println("2. 지갑을 살펴보자.");
+					System.out.println("3. 핸드폰을 살펴보자.");
+					System.out.println("4. 책을 살펴보자.");
+					System.out.println("5. 그만 살펴보자.");
+					
+					num = scan.nextInt();
+					
+					if (num == 1)		//파일철을 살펴볼 경우
+					{
+						System.out.println("책상 위에 가지런히 놓여 있는 까만 파일철을 열어보았다.");
+						System.out.println("□□거래처와의 거래 결산서다. ...□□ 회사는 처음 듣는 곳인데... 무슨 거래인거지?");
+					}
+					else if (num == 2)	//지갑을 살펴볼 경우
+					{
+						System.out.println("책상 위에 놓여 있던 단정한 디자인의 지갑을 열어보았다. 지갑을 회사에 두고 퇴근한건가?");
+						System.out.println("지갑을 열자마자 지갑 주인으로 보이는 이의 신분증이 보인다.");
+						System.out.println("----------\n마두광\n340823-XXXXXXX\n----------");
+						System.out.println("......34년생이라고??");
+					}
+					else if (num == 3)	//핸드폰을 살펴볼 경우
+					{
+						System.out.println("지갑 옆에 나란히 놓여 있던 핸드폰을 살펴보았다. 핸드폰까지 회사에 두고 퇴근한건가...?");
+						System.out.println("핸드폰 화면을 켜자 누군가의 얼굴이 배경으로 설정된 화면이 보인다.");
+						System.out.println("지갑에서 보았던 신분증의 증명사진과 동일인으로 보인다. 같은 사람의 물건인가보다.");
+						System.out.println("비밀번호가 걸려 있다. 여섯자리 비밀번호다. 풀어볼까?");
+						
+						System.out.println("1. 풀어본다.");
+						System.out.println("2. 풀지 않는다.");
+						
+						num = scan.nextInt();
+						
+						if (num == 1)		//비밀번호를 풀어 볼 경우
+						{
+							System.out.println("비밀번호를 풀어보자.\n비밀번호를 입력하시오 : ");
+							int password = scan.nextInt();
+							
+							if (password == 340823)	//비밀번호를 맞게 입력할 경우
+							{
+								// 아이템(쉽배악)을 가져갔는지 검사
+								// 아이템을 이미 가져갔다면 
+								if (player.searchItem(mapObject.getItem(0).getName()))
+								{
+									System.out.println("핸드폰에 더 이상 특별한 건 보이지 않는다.");
+									continue;
+								}
+								//가져가지 않았다면
+								else {
+									System.out.println("비밀번호가 풀렸다! 생일이 비밀번호라니, 참 단순한 사람이네.");
+									System.out.println("홈 화면에 <Easy to Learn-...> 이라는 바로가기 아이콘이 보인다.");
+									System.out.println("해당 아이콘을 누르자, <쉽게 배우는 악마어> 라는 제목의 문서가 화면에 떠올랐다.")
+									player.saveInventory(mapObject.getItem(0));	//아이템(쉽배악)획득
+								}
+							}
+							else					//잘못된 비밀번호를 입력했을 경우
+							{
+								System.out.println("비밀번호를 잘못 입력했습니다. 이런, 다시 생각해보자.");
+							}
+							
+						}
+						else if (num == 2)	//비밀번호를 풀지 않을 경우
+						{
+							System.out.println("핸드폰은 그만 살펴보자.");
+						}
+						else				//선택지 외의 번호를 입력할 경우
+						{
+							System.out.println("비밀번호 입력 외에 조작할 수 있는 건 없어 보인다.");
+						}
+					}
+					else if (num == 4)	//책을 살펴볼 경우
+					{
+						System.out.println("책상 한켠에 놓여 있는 두꺼운 책들을 살펴보았다.");
+						System.out.println("<도전! 인간처럼 행동하는 5가지 방법>, <이렇게만 하면 당신도 프로 인간!>, <인간과 살아가기, 어렵지 않다> ... 라는 제목의 책들이다.");
+						System.out.println("책 위에는 [사장님이 자주 읽으시던 책... 계속 노력하시는걸까? 대단하다.] 라는 내용이 적힌 포스트잇이 붙어 있다.");
+						System.out.println("......뭐지?");
+					}
+					else if (num == 5)	//그만 살펴볼 경우
+					{
+						System.out.println("책상은 그만 살펴보자.");
+					}
+					else				//선택지 외 숫자 입력한 경우 (오기입)
+					{
+						System.out.println("그쪽은 딱히 살펴볼게 없어 보인다.");
+					}
+				}
+			}
+			else if (num == 2)		//간이탕비실 조사
+			{
+				while(true)
+				{
+					System.out.println("사무실 한켠에 있는 간이탕비실로 가보자. \n마실 수 있는 음료와 간단히 먹을 수 있는 간식류가 보인다.\n어떤 걸 살펴볼까?");
+					System.out.println("1. 싱크대를 살펴보자.");
+					System.out.println("2. 정수기를 살펴보자.");
+					System.out.println("3. 선반을 살펴보자.");
+					System.out.println("4. 서랍을 살펴보자.");
+					System.out.println("5. 그만 살펴보자.");
+					
+					num = scan.nextInt();
+					
+					if (num == 1)		//싱크대를 살펴볼 경우
+					{
+						System.out.println("싱크대를 살펴보았다. 물을 버리고 컵을 씻는 용도로 보인다.");
+						
+						// 이미 아이템(커피)을 가져갔는지 검사
+						// 아이템을 이미 가져갔다면 
+						if (player.searchItem(mapObject.getItem(0).getName()))
+						{
+							System.out.println("싱크대에 더 이상 특별한 건 보이지 않는다.");
+							continue;
+						}
+						//가져가지 않았다면
+						else {
+							System.out.println("싱크대 가장자리에, 누군가 먹다 남은 커피가 놓여있다.");
+							System.out.println("가져갈까?");
+							System.out.println("1. 가져가자.");
+							System.out.println("2. 가져가지 말자.");
+							
+							num = scan.nextInt();
+							
+							if (num == 1)		//1. 가져간다. 를 선택했을 경우
+							{
+								// 플레이어 인벤토리에 아이템(커피) 저장
+								player.saveInventory(mapObject.getItem(0));
+								
+								System.out.println("혹시 쓸 곳이 있을지도 모른다. 가져가자.\n" + mapObject.getItem(0).getName() + "을 챙겼다.");
+							}
+							else if (num == 2)	//2. 가져가지 않는다. 를 선택했을 경우
+							{
+								System.out.println("누가 먹다 남긴 것 같은데... 찝찝하다. 가져가지 말자.");
+							}
+							else				//선택지 외 번호 입력 시
+							{
+								System.out.println("어떻게 하자는 거지? 확실히 정하자.");
+							}
+						}
+					}
+					else if (num == 2)	//정수기를 살펴볼 경우
+					{
+						System.out.println("탕비실 끝쪽에 있는 작은 정수기를 살펴보았다.");
+						System.out.println("거의 바닥을 드러낸 물통이 보인다.");
+						System.out.println("물이 부족하네... 물통을 갈아야할텐데.");
+					}
+					else if (num == 3)	//선반을 살펴볼 경우
+					{
+						System.out.println("벽에 붙어 있는 선반을 살펴보았다.");
+						System.out.println("선반에는 커피가루가 담겨있을 통 여러 개가 놓여 있다. 열어볼까?");
+						System.out.println("1. 열어본다.");
+						System.out.println("2. 열어보지 않는다.");
+						
+						num = scan.nextInt();
+						
+						if (num == 1)		//열어볼 경우
+						{
+							System.out.println("뚜껑을 열어보자 갈색의 커피가루 대신 새하얀 가루들이 가득하다.");
+							System.out.println("...이게 뭐지? 설탕인가?");
+							System.out.println("살짝 덜어 먹어보았지만, 설탕의 단 맛은 나지 않는다.");
+							System.out.println("......뭘까?");
+						}
+						else if (num == 2)	//열어보지 않을 경우
+						{
+							System.out.println("커피통에 커피가루가 아니면 뭐가 있겠나. 굳이 열어볼 필요는 없어보인다.");
+						}
+						else				//오기입
+						{
+							System.out.println("열거나, 열지 않거나를 정하자. 저걸 부숴버릴 수는 없지 않나.");
+						}
+					}
+					else if (num == 4)	//서랍을 살펴볼 경우
+					{
+						System.out.println("탕비실의 서랍을 살펴보았다.");
+						System.out.println("서랍을 열자 잘 포장된 티백들이 가지런히 놓여 있다. 더 자세히 확인해볼까?");
+						System.out.println("1. 확인해본다.");
+						System.out.println("2. 확인하지 않는다.");
+						
+						num = scan.nextInt();
+						
+						if (num == 1)		//확인할 경우
+						{
+							System.out.println("티백 봉투 하나를 집어 포장을 뜯어보았다.");
+							System.out.println("찻잎이 담긴 티백이 보일 줄 알았는데, 포장지 안에서 나온 건 티백이 아니라 하얀 가루가 든 팩이다.");
+							System.out.println("......이게 뭐지?");
+						}
+						else if (num == 2)	//확인하지 않을 경우
+						{
+							System.out.println("티백 봉투에 티백이 있겠지...\n게다가, 우리 사무실 비품도 아닌데 마음대로 뜯어보기 꺼려진다. 그냥 넘어가자.");
+						}
+						else				//오기입
+						{
+							System.out.println("나는 확인 할 지, 확인하지 않을지를 골라야 한다.");
+						}
+					}
+					else if (num == 5)	//그만 살펴볼 경우
+					{
+						System.out.println("간이탕비실은 그만 살펴보자.");
+					}
+					else				//선택지 외 숫자 입력 (오기입)
+					{
+						System.out.println("그쪽은 딱히 살펴볼게 없어 보인다.");
+					}
+				}
+			}
+			else if (num == 3)		//게시판 조사
+			{
+				while(true)
+				{
+					System.out.println("벽면에 붙어 있는 게시판으로 가보자.\n커다란 게시판에는 일정, 공지사항 등이 적혀 있다.\n어떤 걸 살펴볼까?");
+					System.out.println("1. 일정표를 살펴보자.");
+					System.out.println("2. 공지사항을 살펴보자.");
+					System.out.println("3. 포스터를 살펴보자.");
+					System.out.println("4. 그만 살펴보자.");
+					
+					num = scan.nextInt();
+					
+					if (num == 1)		//일정표를 살펴볼 경우
+					{
+						System.out.println("제일 넓은 면적을 차지하고 있는 달력 형태의 일정표를 살펴보았다.");
+						System.out.println("\'X월 X일... 10:00 회의... \nX월 X일... 15:00 미팅...\nX월 X일... T제품 납품일...\'");
+						System.out.println("어...? 방송국에서 뭘 납품한다는거지?");
+					}
+					else if (num == 2)	//공지사항을 살펴볼 경우
+					{
+						System.out.println("게시판 우측에 붙어 있는 공지사항을 살펴보았다.");
+						System.out.println("\'퇴근 전 물건 정리 필수! 제대로 숨기지 않아 들킬 시 사장님과의 1:1 면담\'");
+						System.out.println("...이라고 적혀 있다. 정리는 그렇다 쳐도... 틀킬 시 면담? 이건 무슨 말이지?");
+					}
+					else if (num == 3)	//포스터를 살펴볼 경우
+					{
+						System.out.println("공지사항 아래 붙어 있는 포스터들을 살펴보았다.");
+						System.out.println("화재 예방 포스터, 비상 시 대피사항 등... 다양한 포스터가 붙어 있다.");
+					}
+					else if (num == 4)	//그만 살펴볼 경우
+					{
+						System.out.println("게시판은 그만 살펴보자.");
+					}
+					else				//오기입
+					{
+						System.out.println("그쪽은 딱히 살펴볼게 없어 보인다.");
+					}
+				}
+			}
+		}
 	}
 	
-	// 4층 (방2) 이벤트 함수
+	// 4층 회의실(방2) 이벤트 함수
 	public void playFloor4_2()
 	{
+		// 1. 배틀 시스템 확률
 		
+		// 2. 회의실 스크립트 출력
+		// 4층의 회의실이다. 정면에 스크린과 발표용 단상이 있고, 그 앞으로 책상이 디귿자 모양으로 배치되어 있다.
+		// 뒤편에는 빔 프로젝터와 컴퓨터가 있다. 회의를 진행할 때에는 어두운 상태를 유지하기에, 창문 하나 없이 막힌 분위기가 갑갑하게 느껴진다.
+		
+		while(true)
+		{
+			// 4층의 두번째(2) 방이므로 인수에 4, 2을 집어넣음
+			// 방 진입 이벤트 (사물(오브젝트) 출력 및 선택 진행)
+			// enterRoom의 반환값이 false면 현재 방의 이벤트를 종료하도록 함(이동)
+			if (!enterRoom(4, 2))
+			{
+				break;
+			}
+			
+			// enterRoom의 반환값이 true일 경우
+			// -> 정상 진행
+			
+			if (num == 1)		// 컴퓨터 조사
+			{
+				while(true)
+				{
+					System.out.println("뒤편에 놓여 있는 컴퓨터 쪽으로 가보자. 컴퓨터 모니터에 화면보호기가 띄워져 있다.\n비밀번호는 따로 걸려 있지 않아 보인다.\n어떤 걸 살펴볼까?");
+					System.out.println("1. 바탕화면을 살펴보자.");
+					System.out.println("2. USB를 살펴보자.");
+					System.out.println("3. 케이블을 살펴보자.");
+					System.out.println("4. 나무발발이 폴더를 살펴보자.");
+					System.out.println("5. 그만 살펴보자.");
+					
+					num = scan.nextInt();
+					
+					if (num == 1)		//바탕화면을 살펴볼 경우
+					{
+						System.out.println("컴퓨터의 바탕화면에 '거래처별_실적_현황.pptx'라는 피일이 보인다.");
+						System.out.println("파일을 열어보니, 각 거래처별 판매 실적 발표 내용이 담겨있다.");
+						System.out.println("PPT에는 처음 듣는 이상한 이름의 회사들이 적혀 있다.");
+						System.out.println("...이런 이름의 회사가 있다고...?");
+					}
+					else if (num == 2)	//USB를 살펴볼 경우
+					{
+						System.out.println("컴퓨터에 USB가 꽂혀 있다.");
+						System.out.println("USB 이름이... 이건 내가 알아볼 수 없는 글자다.");
+					}
+					else if (num == 3)	//케이블을 살펴볼 경우
+					{
+						System.out.println("컴퓨터와 빔프로젝터를 연결하는 케이블이다.");
+						System.out.println("컴퓨터 화면이 스크린에 나오고 있다.");
+					}
+					else if (num == 4)	//나무발발이 폴더를 살펴볼 경우
+					{
+						System.out.println("바탕화면에 있는 유일한 폴더인 '나무발발이'폴더를 열어봤다.");
+						System.out.println("안에는 '5월_수입_현황.xlsx' 라는 엑셀 파일 하나가 있다.");
+						System.out.println("파일을 열어보자 낯선 제품들이 수입된 기록이 정리되어있다.");
+						System.out.println("U재료, L재료... 전부 처음 보는 이름의 제품들이다. 이걸 수입해서 어디에 쓰는 걸까. 왜 수입하는 걸까.");
+					}
+					else if (num == 5)	//그만 살펴볼 경우
+					{
+						System.out.println("컴퓨터는 그만 살펴보자.");
+					}
+					else				//오기입
+					{
+						System.out.println("그건 살펴 볼 필요가 없어 보인다.");
+					}
+				}
+			}
+			else if (num == 2)		//단상 조사
+			{
+				while(true)
+				{
+					System.out.println("앞쪽의 단상 쪽으로 가보자.\n단상에는 직전에 누군가 발표 준비를 했던 흔적이 남아 있다.\n어떤 걸 살펴볼까?");
+					System.out.println("1. 종이 묶음을 살펴보자.");
+					System.out.println("2. 레이저포인터를 살펴보자.");
+					System.out.println("3. 마이크를 살펴보자.");
+					System.out.println("4. 그만 살펴보자.");
+					
+					num = scan.nextInt();
+					
+					if (num == 1)		//종이 묶음을 살펴볼 경우
+					{
+						System.out.println("단상 위에 있는 종이 묶음을 살펴봤다.");
+						System.out.println("발표에 사용한 것 같은 대본 자료이다. 아까 보았던 PPT와 내용이 유사하다.");
+						System.out.println("PPT에서 봤던 처음 듣는 낯선 회사 이름이 그대로 적혀 있다. 거래 품목도 죄다 처음 듣는 이름이다.");
+					}
+					else if (num == 2)		//레이저포인터를 살펴볼 경우
+					{
+						System.out.println("단상 위에 있는 작은 레이저포인터를 살펴봤다.");
+						System.out.println("이상 없이 잘 작동한다. 발표할 때 이용한 것 같다.");
+					}
+					else if (num == 3)	//마이크를 살펴볼 경우
+					{
+						System.out.println("단상 위에 있는 마이크를 살펴봤다.");
+						System.out.println("스피커와 연결되어있는 마이크다. 현재는 꺼져 있는지 작동하지 않는다.");
+					}
+					else if (num == 4)	//그만 살펴볼 경우
+					{
+						System.out.println("단상은 그만 살펴보자.");
+					}
+					else				//오기입
+					{
+						System.out.println("그 쪽은 살펴볼 게 없어 보인다.");
+					}
+				}
+			}
+			else if (num == 3)		//책상 조사
+			{
+				while(true)
+				{
+					System.out.println("중앙의 책상을 살펴보자.\n책상은 디귿자로 기다란 구조로, 깔끔하게 정리되어 있어 눈에 띄는 것은 별로 없다.\n어떤 걸 살펴볼까?");
+					System.out.println("1. 종이컵을 살펴보자.");
+					System.out.println("2. 볼펜을 살펴보자.");
+					System.out.println("3. 포스트잇을 살펴보자.");
+					System.out.println("4. 그만 살펴보자.");
+					
+					num = scan.nextInt();
+					
+					if (num == 1)		//종이컴을 살펴볼 경우
+					{
+						System.out.println("책상 구석에 놓여 있는 구겨진 종이컵을 살펴봤다.");
+						System.out.println("무언가를 마시던 건지 종이컵 속 액체가 반쯤 남아 있다.");
+						System.out.println("남은 액체에 이상한 하얀 가루가 둥둥 떠다닌다.");
+						System.out.println("...이건 뭐지? 얼핏 보면 탕비실에서 보았던 하얀 가루와 비슷해 보인다.");
+					}
+					else if (num == 2)		//볼펜을 살펴볼 경우
+					{
+						System.out.println("책상 위에 놓여 있는 검정색 볼펜을 살펴봤다.");
+						System.out.println("상당히 고급스러운 디자인이다. 비싸 보이는데. 이걸 두고 가다니.");
+					}
+					else if (num == 3)	//포스트잇을 살펴볼 경우
+					{
+						System.out.println("책상 아래쪽에 처박혀있던 구겨진 포스트잇을 살펴봤다.");
+						System.out.println("'회의 언제 끝나지...' 같은 별 의미 없는 내용이 적혀 있다.");
+					}
+					else if (num == 4)	//그만 살펴볼 경우
+					{
+						System.out.println("책상은 그만 살펴보자.");
+					}
+					else				//오기입
+					{
+						System.out.println("그 쪽은 살펴볼 게 없어 보인다.");
+					}
+				}
+			}
+		}
 	}
 	
 	// 4층 (방3) 이벤트 함수
@@ -1536,7 +2088,74 @@ public class PlayEvent {
 	// 4층 화장실(posID: 44) 이벤트 함수
 	public void playFloor4_4()
 	{
-		
+		while(true)
+		{
+			// 4층의 네 번째(4) 방(화장실)이므로 인수에 4, 4를 집어넣음
+			// 방 진입 이벤트 (사물(오브젝트) 출력 및 선택 진행)
+			// enterRoom의 반환값이 false면 현재 방의 이벤트를 종료하도록 함(이동)
+			if (!enterRoom(4, 4))
+			{
+				break;
+			}
+			
+			// enterRoom의 반환값이 true일 경우
+			// -> 정상 진행
+			
+			System.out.println("조명이 약하게 깜빡거리는 화장실은 관리가 잘 되지 않은 듯 보인다.\n어떤 걸 할까?");
+			System.out.println("1. 거울을 보자");
+			System.out.println("2. 바닥을 보자");
+			System.out.println("3. 가방을 보자");
+			System.out.println("4. 나가자");
+			
+			num = scan.nextInt();
+			
+			if (num == 1)		// 거울 보기
+			{
+				System.out.println("내 모습이다.");
+				System.out.println("* hp: " + player.getHP());
+				System.out.println("* 공격력: " + player.getAttackPower());
+				System.out.println("* 방어력: " + player.getDefensivePower());
+				System.out.println("* 평판도: " + player.getReputation());
+			}
+			
+			else if (num == 2)	// 바닥 보기
+			{
+				System.out.println("청소가 제대로 되지 않은 것인지 하얀 찌꺼기들이 군데군데 남아 있다.");			
+			}
+			
+			else if (num == 3)	// 내 가방 보기(인벤토리, 현재 진행중인 퀘스트 확인)
+			{
+				System.out.println("어떤 걸 볼까?");
+				System.out.println("1. 물건 위주");	// 인벤토리 확인
+				System.out.println("2. 할 일 목록");	// 퀘스트 목록 확인
+				
+				num = scan.nextInt();
+				
+				if (num == 1)			// 인벤토리 확인
+				{
+					player.showInventory();
+				}
+				else if (num == 2)		// 퀘스트 확인
+				{
+					// 현재 플레이어가 진행 중인 퀘스트 목록 출력
+					player.printQuestList();
+				}
+				else					// 오기입
+				{
+					System.out.println("그건... 잘못된 선택이다.");
+				}
+			}
+			else if (num == 4)	//로비로 나가기
+			{
+				player.setPosID(40);
+				break;
+			}
+			else				//선택지 외의 숫자를 입력한 경우 (오기입)
+			{
+				System.out.println("그건 화장실에서 할 수 없다.");
+				
+			}
+		}
 	}
 	
 	
