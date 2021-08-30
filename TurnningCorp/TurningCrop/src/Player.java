@@ -16,7 +16,7 @@ public class Player {
 		String[] titleArray = {"평범한사원", "똑똑한사원", "용감한인간", "악마왕퇴마사", "명망있는사장"};
 		int currentIndex = 0;
 		ItemPair[] inventory; //인벤토리-아이템저장
-		Quest[] questArray; //퀘스트배열-퀘스트저장
+		Quest[] questArray = new Quest[15]; //퀘스트배열-퀘스트저장
 		int inventoryLength;
 		int inventoryIndex;
 		boolean isBattle; //배틀 중인지 여부
@@ -74,6 +74,18 @@ public class Player {
 	    int getCurrentIndex()
 	    {
 	    	return currentIndex;
+	    }
+	    int getAttackPower()
+	    {
+	    	return attackPower;
+	    }
+	    int getDefensivePower()
+	    {
+	    	return defensivePower;
+	    }
+	    int getHP()
+	    {
+	    	return hp;
 	    }
 	    
 	    //함수
@@ -167,7 +179,7 @@ public class Player {
 			
 		}
 		
-		boolean deleteInventory(int inventoryNum)
+		public boolean deleteInventory(int inventoryNum) //플레이어가 인벤토리를 열어 아이템을 삭제할 때(선택)
 		{
 			if(inventory[inventoryNum] != null)
 			{
@@ -180,24 +192,38 @@ public class Player {
 			}
 		}
 		
-		public String toString(int inventoryIndex)
+		public void deleteInventory(Item item) //사용 후 자동으로 아이템이 삭제될 때(자동)
 		{
-			return inventory[inventoryIndex].item.getName() 
-					+ inventory[inventoryIndex].item.getDescription();
+			for(int i=0; i<inventoryLength; i++)
+			{
+				if(item.getName().equals(inventory[i].item.getName()))
+				{
+					inventory[i]=null;
+					break;
+				}
+			}
 		}
 		
-		void showInventory() //사용자에게 인벤토리 보여주기
+		public void showInventory() //사용자에게 인벤토리 보여주기
 		{
 			System.out.println("[인벤토리]\n ==============================");
-			System.out.println("이름\t 설명\t");
+			System.out.println("이름\t 개수\t 설명\t");
 			
-			for(inventoryIndex = 0; inventoryIndex <= inventoryLength; inventoryIndex++)
+			for(int i=0; i<inventoryLength; i++)
 			{
-				toString(inventoryIndex);
+				if(inventory[i]==null)
+				{
+					continue;
+				}
+				else
+				{
+					System.out.println(inventory[i].item.getName() + "\t" + inventory[i].count 
+							+ "\t" + inventory[i].item.getDescription());
+				}
 			}
 		};
 	
-		void useInventory(int inventoryNum)
+		public void useInventory(int inventoryNum)
 		{
 			Item itemToUse = inventory[inventoryNum].item;
 			useItem(itemToUse);
@@ -278,6 +304,23 @@ public class Player {
 			return false;
 		}
 		
+		public void printQuestList() // 현재 플레이어가 진행 중인 퀘스트 목록 출력
+		{
+			int questArrayLength = questArray.length;
+			for(int i=0; i<questArrayLength; i++)
+			{
+				if(questArray[i].getCompletion()==true)
+				{
+					continue;
+				}
+				else
+				{
+					System.out.println("이름\t 설명");
+					System.out.println(questArray[i].getQuestName() 
+							+ "\t" +questArray[i].getDescription());
+				}
+			}
+		}
 		
 		
 }

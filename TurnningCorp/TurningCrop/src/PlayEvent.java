@@ -976,7 +976,7 @@ public class PlayEvent {
 							if (num == 1)
 							{
 								System.out.println("화분들에 물을 줬다. 식물들이 기뻐하듯 반짝거린다.");
-								Player.deleteInventory(map[1][1].getObject(2).getItem(1));		//인벤토리에서 아이템(물컵) 삭제
+								player.deleteInventory(map[1][1].getObject(2).getItem(1));		//인벤토리에서 아이템(물컵) 삭제
 								
 								//퀘스트 완료 처리...
 							}
