@@ -1,7 +1,13 @@
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.Random;
 import java.util.Scanner;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 public class GameManager {	
 //	private ItemManager itemManager;
@@ -16,6 +22,7 @@ public class GameManager {
 		// **아이템은 맵에서 생성하기
 		Player player;
 		Map maps[][] = new Map[4][5];
+		ItemNPC npc = new ItemNPC(); // ItemNPC 변수
 		// 5층, 5개의 방(로비 + 방 3개 + 화장실)로 대부분 구성되어있으나
 		// 5층은 엔딩 진행의 역할만 수행하므로 5층을 제외한 1~4층을 활동 범위로 잡아
 		// Map 객체 배열을 [4][5]의 이차원 배열로 설정함
@@ -33,7 +40,58 @@ public class GameManager {
 		
 		
 		// 	각 객체 정보 파일로 불러오기(읽어오기)
-		
+			// ItemNPC 객체의 setQuestAll()함수로 플레이어의 인벤토리에 들어갈 퀘스트 정보 저장
+		try {
+				FileInputStream QuestScriptFile = new FileInputStream("Quest Script.xlsx"); // 파일 경로로 파일 읽어오기
+				XSSFWorkbook QuestScriptWB = new XSSFWorkbook(QuestScriptFile);
+				Quest[] quest = new Quest[6]; // Quest Script 저장할 quest 배열 변수
+				
+				int rownum = 0; // 행 인덱스
+				int cellnum = 0; // 열 인덱스
+				int questIndex = 0; // 퀘스트 배열 인덱스
+				
+				XSSFSheet QuestScriptSheet = QuestScriptWB.getSheetAt(0); // 0번째 시트 가져오기
+				
+				int rows = QuestScriptSheet.getPhysicalNumberOfRows(); // 사용자가 입력한 엑셀 row수 가져오기
+				for (rownum = 1; rownum < rows; rownum++) {
+					XSSFRow row = QuestScriptSheet.getRow(rownum); // row
+					if (row != null) {
+						int cells = row.getPhysicalNumberOfCells(); // 해당 row에서 사용자가 입력한 cell수 가져오기
+						for (cellnum = 1; cellnum <= cells; cellnum++) {
+							XSSFCell cell = row.getCell(cellnum); // 사용자가 입력한 cell값 가져오기
+							
+							String description = ""; // Quest Script 내용이 할당될 변수
+							if (cell == null) { // 빈 셀일 경우
+								continue;
+							}
+							else {
+								switch (cell.getCellType()) {
+								case FORMULA:
+									description = cell.getCellFormula();
+									break;
+								case NUMERIC:
+									description = cell.getNumericCellValue() + "";
+									break;
+								case STRING:
+									description = cell.getStringCellValue() + "";
+									break;
+								case BLANK:
+									description = cell.getBooleanCellValue() + "";
+									break;
+								case ERROR:
+									description = cell.getErrorCellValue() + "";
+									break;
+								}
+							}
+							quest[questIndex].setDescription(description);
+							questIndex++;
+						}
+					}
+				}
+				npc.setQuestAll(quest); // ItemNpc 객체에 모든 Quest Script 내용 할당하기 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		
 		// 플레이시 필요한 객체 생성
 		PlayEvent playEvent = new PlayEvent(maps, player);		// 이벤트 객체 생성
