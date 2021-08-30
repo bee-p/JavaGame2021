@@ -20,7 +20,7 @@ public class PlayEvent {
 	private boolean goTitle;
 	
 	// 엔딩 판별할 때 사용하는 포인트 값
-	private int endingPoint = 0;
+//	private int endingPoint = 0;
 	
 	// Player, Map 객체
 	// -> GameManager 클래스에서 PlayEvent 객체 생성할 때 집어넣기
@@ -691,15 +691,157 @@ public class PlayEvent {
 	}
 	
 	// 1층 경비실(방3) 이벤트 함수
-	public void playFloor1_3()
+	public void playFloor1_3(SkillNPC npc)
 	{
+		// 1. 배틀....확률 돌리기
 		
+		// 2. 경비실 스크립트 출력
+		System.out.println("경비실이다.");
+		System.out.println("잔잔한 어둠 사이로 희미한 모니터 불빛이 새어나오고 있다.");
+		System.out.println("그리고 그 불빛 옆에는.. 한 사람이 앉아있다.");
+		
+		while(true)
+		{
+			// 이 방은 스킬 NPC만 존재하는 방이므로 오브젝트(사물)가 따로 존재하지 않음
+			// 따라서 enterRoom() 메소드를 호출하지 않음
+			
+			// ex) "어서오세요, 평범한 사원 @@님."
+			System.out.println("\"어서오세요, " + player.getTitleArray(player.getCurrentIndex()) + "@@님.\"");
+			System.out.println("\"무엇을 하시겠습니까?\"");
+			System.out.println("\"현재 @@님의 진급 여부를 확인할 수 있습니다.\"");
+			
+			System.out.println("1. 진급을 확인하자.");		// 플레이어의 등급 & 스킬 업데이트
+			System.out.println("2. 진급이 뭔데?");			// 진급 설명 듣기
+			System.out.println("3. 나갈래.");				// 로비로 나가기
+			
+			num = scan.nextInt();
+			
+			if (num == 1)			// 진급 여부 확인 & 등급/스킬 업데이트
+			{
+				// 퀘스트(등급) 단계에 따른 NPC의 스크립트 출력
+				System.out.println(npc.playQuestScript(npc.playQuest(player)));
+				
+				// 만약 진급에 성공했다면 (현재 퀘스트를 완료했다면)
+				if (npc.getQuest(npc.getQuestCount()).getCompletion())
+				{
+					// 현재 스킬을 해당 스킬로 교체(player의 메소드 활용)
+					
+					// 플레이어가 확인할 수 있는 문구...(스킬이 교체됨을 알림)
+					// "이제 ooo, ㅁㅁㅁ라고 말씀하시면 됩니다."
+				}
+			}
+			else if (num == 2)		// 진급/스킬에 관한 설명 듣기
+			{
+				// 아직 어떻게 설명을 넣어야 깔끔할지 모르겠음,,고민중
+				// 대략 진급을 하면 더 높은 등급의 말하기 스킬을 쓸 수 있다는 의미,,,
+				System.out.println("\" ~~~ \"");
+			}
+			else if (num == 3)		// 로비로 나가기
+			{
+				player.setPosID(10);
+				break;
+			}
+			else					// 오기입
+			{
+				System.out.println("\"그런 건 하실 수 없습니다.\"");
+			}
+		}
 	}
 	
 	// 1층 화장실(posID: 14) 이벤트 함수
 	public void playFloor1_4()
 	{
+		// 1. 배틀....확률 돌리기
 		
+		// 2. 영업부 스크립트 출력...
+		System.out.println("영업부다.");
+		System.out.println("내가 일하는 부서라 지긋하리만치 익숙할 만한데, 묘하게 서늘한 기운이 목을 감싼다. 밤이라 그런가.");
+		System.out.println("앞에는 익숙한 책상 배열들이 보인다. 개중에는 눈에 띄는 책상도 심심찮게 있다.");
+		
+		while(true)
+		{
+			// 1층의 네 번째(4) 방(화장실)이므로 인수에 1, 4를 집어넣음
+			// 방 진입 이벤트 (사물(오브젝트) 출력 및 선택 진행)
+			// enterRoom의 반환값이 false면 현재 방의 이벤트를 종료하도록 함(이동)
+			if (!enterRoom(1, 4))
+			{
+				break;
+			}
+			
+			
+			// enterRoom의 반환값이 true일 경우
+			// -> 정상 진행
+			if (num == 1)		// 거울 보기
+			{
+				System.out.println("내 모습이다.");
+				System.out.println("* hp: " + player.getHP());
+				System.out.println("* 공격력: " + player.getAttackPower());
+				System.out.println("* 방어력: " + player.getDefensivePower());
+				// 공격력과 방어력의 이름을 좀 더 뭔가... 자연스럽게 바꾸고 싶은데 생각이 안 남(고민중)
+				System.out.println("* 평판도: " + player.getReputation());
+			}
+			else if (num == 2)	// 바닥 보기
+			{
+				// 만약 플레이어가 이미 볼펜을 주웠다면
+				if (player.searchItem(mapObject.getItem(0).getName()))
+				{
+					System.out.println("언제나 그랬듯이 깨끗한 바닥이다.");
+					
+					// 사물(오브젝트) 선택지로 다시 돌아감
+					continue;
+				}
+				
+				// 볼펜을 아직 안 주웠다면
+				System.out.println("바닥에 볼펜 한 개가 떨어져 있다.");
+				System.out.println("정말... 사무적으로 생겼다.");
+				
+				System.out.println("가져갈까?");
+				System.out.println("1. 가져가자");
+				System.out.println("2. 냅두자.");
+				
+				num = scan.nextInt();
+				
+				if (num == 1)		// 가져가기
+				{
+					// 볼펜을 플레이어의 인벤토리에 저장
+					player.saveInventory(mapObject.getItem(0));
+					
+					System.out.println("볼펜을 챙겼다.");
+					System.out.println("볼펜을 주운 손이 살짝 축축한 것 같기도 하다..");
+				}
+				else if (num == 2)	// 냅두기
+				{
+					System.out.println("완전..사무적으로 생긴 볼펜을 바닥에 내버려두었다.");
+					System.out.println("혼자 떨어져 있는 모습이 꽤 처량해 보이기도 하지만 어쩔 수 없다.");
+				}
+				else				// 오기입
+				{
+					System.out.println("선택은 확실히 해야한다.");
+				}
+			}
+			else if (num == 3)	// 내 가방 보기(인벤토리, 현재 진행중인 퀘스트 확인)
+			{
+				System.out.println("어떤 걸 볼까?");
+				System.out.println("1. 물건 위주");		// 인벤토리 확인
+				System.out.println("2. 할 일 목록");	// 퀘스트 목록 확인
+				
+				num = scan.nextInt();
+				
+				if (num == 1)			// 인벤토리 확인
+				{
+					player.showInventory();
+				}
+				else if (num == 2)		// 퀘스트 확인
+				{
+					// 현재 플레이어가 진행 중인 퀘스트 목록 출력
+					player.printQuestList();
+				}
+				else					// 오기입
+				{
+					System.out.println("그건... 잘못된 선택이다.");
+				}
+			}
+		}
 	}
 	
 	
