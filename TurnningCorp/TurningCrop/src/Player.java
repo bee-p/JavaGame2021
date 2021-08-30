@@ -15,7 +15,8 @@ public class Player {
 		char[] rankArray = {'D', 'C', 'B', 'A', 'S'};
 		String[] titleArray = {"평범한사원", "똑똑한사원", "용감한인간", "악마왕퇴마사", "명망있는사장"};
 		int currentIndex = 0;
-		ItemPair[] inventory;
+		ItemPair[] inventory; //인벤토리-아이템저장
+		Quest[] questArray; //퀘스트배열-퀘스트저장
 		int inventoryLength;
 		int inventoryIndex;
 		boolean isBattle; //배틀 중인지 여부
@@ -220,7 +221,7 @@ public class Player {
 			{
 				if(isBattle == true)
 				{
-					System.out.println("어떤 스탯을 올리시겠습니까? ");
+					System.out.println("어떤 스탯을 올리겠는가? ");
 					System.out.println("1. AttackPower");
 					System.out.println("2. DefensivePower");
 					System.out.println("3. Hp");
@@ -234,17 +235,17 @@ public class Player {
 						case 1: increaseAttackPower(item.getValue());
 						case 2: increaseDefensivePower(item.getValue());
 						case 3: increaseHpPower(item.getValue());
-						default : System.out.println("1~3중에 입력하세요");
+						default : System.out.println("1~3중에 입력해야한다.");
 						}
 					}
 					catch (InputMismatchException ime)
 					{
-						System.out.println("정수를 입력하세요");
+						System.out.println("정수를 입력해야한다.");
 					}
 
 				}
 				else
-					System.out.println("배틀 중에만 사용이 가능한 아이템 입니다.");
+					System.out.println("배틀 중에만 사용이 가능한 아이템이다.");
 			}
 		}
 		
