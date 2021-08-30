@@ -112,6 +112,7 @@ public class PlayEvent {
 		}
 	}
 	
+	
 	// 사물(object 출력 템플릿)
 	// 해당 오브젝트를 받아와 출력함
 	public void objectPrint(MapObject mapObject)
@@ -120,6 +121,66 @@ public class PlayEvent {
 		System.out.println(mapObject.getObjectName() + "이다.");
 		// 해당 오브젝트의 설명 출력
 		System.out.println(mapObject.getDescription());
+	}
+	
+	
+	// 일반 방에 진입했을 때 출력/이벤트 진행(반복 출력) - 로비 제외
+	// true 반환: 해당 방 이벤트 메소드에서 그대로 사물 조사 진행
+	// false 반환: 해당 방 이벤트 메소드의 반복문을 탈출, 로비로 나가게 함
+	public boolean enterRoom(int floor, int roomID)
+	{
+		// 배열의 인덱스로 활용하기 위해 1 감소
+		floor--;
+		
+		while(true)
+		{
+			System.out.println("어디를 살펴볼까?");
+			
+			// for문으로 해당 방의 조사 사물 배열 목록 (숫자와 함께) 출력하기..
+			for (int i = 0; i < map[floor][roomID].getAllObject().length; i++)
+			{	// ex) 1. 내 책상
+				System.out.println((i + 1) + ". " + map[floor][roomID].getObject(i).getObjectName());
+			}
+			// [마지막 번호]. 로비로 나간다.
+			System.out.println((map[floor][roomID].getAllObject().length + 1) + ". 로비로 나간다.");
+			System.out.print("* 원하는 선택지의 숫자 입력: ");
+			
+			num = scan.nextInt();
+			
+			// 선택지 안의 번호를 제대로 입력하지 않았을 경우(오기입)
+			if (!(num >= 1 && num <= map[floor][roomID].getAllObject().length + 1))
+			{
+				System.out.println("그쪽은 조사가 불가능하다.");
+				continue;
+			}
+			
+			// 선택지를 제대로 입력했을 경우, 위에서 continue가 걸리지 않으므로 break 가능
+			// 현재 while문 탈출하여 정상 진행하도록 함
+			break;
+		}
+		
+		// 로비로 나가기를 선택했을 경우
+		if (num == map[floor][roomID].getAllObject().length + 1)
+		{
+			// floor가 인덱스로 활용되기 위해 1 감소했었으므로
+			// 다시 1 증가 시킨 후, 수식 계산을 통해 10이나 20 등의 posID 형태로 변환함
+			int id = (floor + 1) * 10 + roomID;
+			
+			// 로비로 위치 재조정
+			player.setPosID(id);
+			// 해당 방 메소드(enterRoom()이 호출되는 곳)의 반복문을 탈출할 수 있도록 함
+			return false;
+		}
+		
+		// 선택지를 제대로 입력했을 경우 (기본 설정)
+		// 1. 현재 오브젝트를 선택한 오브젝트로 설정
+		mapObject = map[floor][roomID].getObject(num - 1);
+		
+		// 2. 해당 오브젝트의 이름 & 설명 출력
+		// ex) 부장님의 책상과 그 책상에 대한 설명 출력..
+		objectPrint(mapObject);
+		
+		return true;
 	}
 	
 	
@@ -132,11 +193,11 @@ public class PlayEvent {
 		while(true)
 		{
 			// 1. 로비 스크립트 출력
-			// 로비다!
+			// 로비다! (스크립트 수정 필요)
 			
 			// 2. 선택지 출력
 			System.out.println("1. 출입기에 사원증을 찍자.");	// 저장
-			System.out.println("2. 타이틀로 나가자.");			// 타이틀로 나가는 선택지가 있어야 되는데 지문을 어떻게...적어야 할지 모르겠음..
+			System.out.println("2. 잠깐 밖에서 쉬고 오자.");	// 타이틀로 나가기 (게임 메뉴)
 			System.out.println("3. 다른 곳을 둘러보자.");		// 다른 방 이동
 			System.out.println("4. 엘리베이터를 타자.");		// 층 이동
 			
@@ -146,7 +207,7 @@ public class PlayEvent {
 			{
 				// 현재 게임 데이터 로컬에 저장
 				
-				System.out.println("사원증을 성공적으로 찍었다!");
+				System.out.println("사원증을 성공적으로 찍었다!\n--저장되었습니다.--");
 			}
 			else if (num == 2)		// 저장 후 타이틀로 나가기
 			{
@@ -212,49 +273,23 @@ public class PlayEvent {
 		// 1. 배틀....확률 돌리기
 		
 		// 2. 영업부 스크립트 출력...
-		// 영업부다. 내가 일하는 부서라 지긋하리만치 익숙할 만한데, 묘하게 서늘한 기운이 목을 감싼다. 밤이라 그런가.
-		// 앞에는 익숙한 책상 배열들이 보인다. 개중에는 눈에 띄는 책상도 심심찮게 있다.
-
+		System.out.println("영업부다.");
+		System.out.println("내가 일하는 부서라 지긋하리만치 익숙할 만한데, 묘하게 서늘한 기운이 목을 감싼다. 밤이라 그런가.");
+		System.out.println("앞에는 익숙한 책상 배열들이 보인다. 개중에는 눈에 띄는 책상도 심심찮게 있다.");
+		
 		while(true)
 		{
-			System.out.println("어디를 살펴볼까?");
-			
-			// for문으로 해당 방의 조사 사물 배열 목록 (숫자와 함께) 출력하기..
-			for (int i = 0; i < map[0][1].getAllObject().length; i++)
-			{	// ex) 1. 내 책상
-				System.out.println((i + 1) + ". " + map[0][1].getObject(i).getObjectName());
-			}
-			// [마지막 번호]. 로비로 나간다.
-			System.out.println((map[0][1].getAllObject().length + 1) + ". 로비로 나간다.");
-			System.out.println("(원하는 선택지의 숫자 입력)");
-			
-			num = scan.nextInt();
-			
-			// 선택지 안의 번호를 제대로 입력하지 않았을 경우(오기입)
-			if (!(num >= 1 && num <= map[0][1].getAllObject().length + 1))
+			// 1층의 첫 번째(1) 방이므로 인수에 1, 1을 집어넣음
+			// 방 진입 이벤트 (사물(오브젝트) 출력 및 선택 진행)
+			// enterRoom의 반환값이 false면 현재 방의 이벤트를 종료하도록 함(이동)
+			if (!enterRoom(1, 1))
 			{
-				System.out.println("그런 선택지는 없다.");
-				continue;
-			}
-			
-			// 로비로 나가기를 선택했을 경우
-			if (num == map[0][1].getAllObject().length + 1)
-			{
-				// 로비로 위치 재조정
-				player.setPosID(10);
-				break;						// 반복문 탈출! (메소드 종료)
+				break;
 			}
 			
 			
-			// 선택지를 제대로 입력했을 경우 (기본 출력)
-			// 1. 현재 오브젝트를 선택한 오브젝트로 설정
-			mapObject = map[0][1].getObject(num - 1);
-			
-			// 2. 해당 오브젝트의 이름 & 설명 출력
-			// ex) 부장님의 책상과 그 책상에 대한 설명 출력..
-			objectPrint(mapObject);
-			
-			
+			// enterRoom의 반환값이 true일 경우
+			// -> 정상 진행
 			if (num == 1)		// 부장 책상
 			{
 				// 책상 위에는 메모지가 있다.
@@ -542,7 +577,117 @@ public class PlayEvent {
 	// 1층 카페(방2) 이벤트 함수
 	public void playFloor1_2()
 	{
+		// 1. 배틀....확률 돌리기
 		
+		// 2. 카페 스크립트 출력...
+		System.out.println("카페다.");
+		System.out.println("낮에는 붐비지는 않더라도 항상 사람 두어명씩은 꼭 있던 곳이었는데");
+		System.out.println("이렇게 한산한 모습을 보니 기분이 묘하다.");
+		System.out.println("잔잔한 커피향만이 코 끝에 맴돈다.");
+		
+		while(true)
+		{
+			// 1층의 두 번째(2) 방이므로 인수에 1, 2를 집어넣음
+			// 방 진입 이벤트 (사물(오브젝트) 출력 및 선택 진행)
+			// enterRoom의 반환값이 false면 현재 방의 이벤트를 종료하도록 함(이동)
+			if (!enterRoom(1, 2))
+			{
+				break;
+			}
+			
+			// enterRoom의 반환값이 true일 경우
+			// -> 정상 진행
+			if (num == 1 || num == 2)			// TV 1, 2 조사
+			{
+				System.out.println("(지직..)");
+				System.out.println("밤에 봐서 그런가..? TV가 묘하게 이상하다.");
+			}
+			else if (num >= 3 && num <= 5)		// 책상 1, 2, 3 조사
+			{
+				System.out.println("아무 것도 없다.");
+			}
+			else if (num == 6)					// 카운터 조사
+			{
+				// 쉽배악2 흭득 가능 장소
+				System.out.println("포스기다.");
+				
+				System.out.println("옆에는 포스트잇이 붙어있다.");
+				System.out.println("무언가 크게 휘갈겨 써 있다.");
+				System.out.println("'비밀번호는 이 방 $&@# 개수다.'");
+				System.out.println("..심한 악필이라 중간 부분은 알아볼 수가 없었다.");
+				
+				System.out.println("아래 쪽에는 비밀번호를 입력하는 곳인 것 같다.");
+				System.out.println("뭐라고 입력하면 될까?");
+				System.out.print("* 한 자리 숫자를 입력해보자: ");
+				
+				num = scan.nextInt();
+				
+				// 현재 방의 책상 개수인 3 입력(정답)
+				if (num == 3)
+				{
+					System.out.println("(철컥)");
+					System.out.println("열렸다! 비밀번호는 책상 개수였다!");
+					
+					// 이미 아이템을 들고 갔다면(갖고 있다면)
+					if (player.searchItem(mapObject.getItem(0).getName()))
+					{
+						System.out.println("그렇지만 더이상 아무 것도 들어있지 않다...");
+						System.out.println("누가 보면 오해할 수 있으니 다시 닫아 놓자.");
+						System.out.println("(다시 잠기는 소리)");
+						
+						// 다시 사물 선택지 출력(처음)으로 되돌아감
+						continue;
+					}
+					
+					while(true)
+					{
+						// 아이템을 아직 습득하지 않았다면
+						System.out.println(mapObject.getItem(0).getName() + "다.");
+						System.out.println("가져갈까?");
+						System.out.println("1. 가져가자.");
+						System.out.println("2. 가져가지 말자.");
+						
+						num = scan.nextInt();
+						
+						if (num == 1)		// 가져가기
+						{
+							// 쉽게 배우는 악마어2 습득
+							player.saveInventory(mapObject.getItem(0));
+							
+							System.out.println(mapObject.getItem(0).getName() + "을 챙겼다.");
+						}
+						else if (num == 2)	// 가져가지 않기
+						{
+							
+						}
+						else				// 오기입
+						{
+							System.out.println("애매한 선택은 하지 말자.");
+							
+							continue;
+						}
+						
+						// 오기입 외의 정상 진행일 경우
+						System.out.println("혹시 모르니 다시 포스기를 닫았다.");
+						System.out.println("(다시 잠기는 소리)");
+						
+						break;
+					}
+				}
+				else if (num >= 10)		// 한 자리수가 아닌 그 이상을 입력했을 경우
+				{
+					System.out.println("..한 자리 숫자라고 하지 않았나?");
+				}
+				else if (num < 0)		// 음수를 입력했을 경우
+				{
+					System.out.println("비밀번호가..마이너스일 리는 없을 것 같다.");
+				}
+				else					// 그 외 오답
+				{
+					System.out.println("아무 일도 일어나지 않았다.");
+				}
+			}
+		}
 	}
 	
 	// 1층 경비실(방3) 이벤트 함수
@@ -572,7 +717,7 @@ public class PlayEvent {
 			
 			// 2. 선택지 출력
 			System.out.println("1. 출입기에 사원증을 찍자.");	// 저장
-			System.out.println("2. 타이틀로 나가자.");		// 타이틀로 나가는 선택지가 있어야 되는데 지문을 어떻게...적어야 할지 모르겠음..
+			System.out.println("2. 잠깐 밖에서 쉬고 오자.");	// 타이틀로 나가기 (게임 메뉴)
 			System.out.println("3. 다른 곳을 둘러보자.");		// 다른 방 이동
 			System.out.println("4. 엘리베이터를 타자.");		// 층 이동
 			
@@ -643,41 +788,17 @@ public class PlayEvent {
 		
 		while(true)
 		{
-			System.out.println("어디를 살펴볼까?");
-			
-			//조사 가능한 사물 배열 목록 출력
-			for (int i = 0; i < map[1][1].getAllObject().length; i++)
+			// 2층의 첫 번째(1) 방이므로 인수에 2, 1을 집어넣음
+			// 방 진입 이벤트 (사물(오브젝트) 출력 및 선택 진행)
+			// enterRoom의 반환값이 false면 현재 방의 이벤트를 종료하도록 함(이동)
+			if (!enterRoom(2, 1))
 			{
-				System.out.println((i+1) + ". " + map[1][1].getObject(i).getObjectName());
-			}
-			//마지막 번호. 로비로 나간다.
-			System.out.println((map[1][1].getAllObject().length + 1) + ". 로비로 나간다.");
-			System.out.println("(조사할 선택지의 숫자 입력 : )");
-			
-			num = scan.nextInt():
-				
-			//선택지 외의 번호 입력 시
-			if (!(num >= 1 && num <= map[1][1].getAllObject().length + 1))
-			{
-				System.out.println("그 쪽은 조사가 불가능하다.");
-				continue;
-			}
-		
-			//로비로 나가는 선택지 입력했을 경우
-			if (num == map[1][1].getAllObject().length + 1)
-			{
-				//로비로 이동
-				player.setPosID(20);
-				break;		//반복문 탈출 (메소드 종료)
+				break;
 			}
 			
-			//조사 가능 선택지를 입력했을 경우 (기본 출력)
-			//1. 현재 오브젝트를 선택한 오브젝트로 설정
-			mapObject = map[1][1].getObject(num - 1);
 			
-			//2. 해당 오브젝트의 이름과 설명 출력
-			objectPrint(mapObject);
-			
+			// enterRoom의 반환값이 true일 경우
+			// -> 정상 진행
 			if (num == 1)			//테이블 조사
 			//2층 1번째 방 획득 아이템 : 빵(2번째 obj의 0), 쉽배악(2번째 obj의 1), 물컵(3번쨰 obj의 0)
 			{
@@ -750,11 +871,11 @@ public class PlayEvent {
 							}
 							else if (num == 2)	//2. 가져가지 않는다. 를 선택했을 경우
 							{
-								System.out.println("그냥 쓰레기 같다. 챙기지 말자.")
+								System.out.println("그냥 쓰레기 같다. 챙기지 말자.");
 							}
 							else				//선택지 외 번호 입력 시
 							{
-								System.out.println("어떻게 하자는 거지? 확실히 정하자.")
+								System.out.println("어떻게 하자는 거지? 확실히 정하자.");
 							}
 						}
 					}
@@ -814,7 +935,7 @@ public class PlayEvent {
 					}
 					else if (num == 4)	//네 번째 통 열어보기
 					{
-						System.out.println("마지막 통인 네 번째 통을 열어봤다.\n푸른 빛깔의 블루베리 샐러드가 담겨 있다.")
+						System.out.println("마지막 통인 네 번째 통을 열어봤다.\n푸른 빛깔의 블루베리 샐러드가 담겨 있다.");
 					}
 					else if (num == 5)	//열어보지 않고 배식대 벗어나기
 					{
@@ -848,7 +969,7 @@ public class PlayEvent {
 						}
 						else if (waterNum == 0)	//첫 번째로 물을 튼 경우
 						{
-							System.out.println("붉은 수도꼭지를 돌렸다. 물이 나온다.")
+							System.out.println("붉은 수도꼭지를 돌렸다. 물이 나온다.");
 							waterNum = 4;		//순서가 틀린 경우이므로 다음 경우에서 바로 else로 빠질 수 있도록 함.
 						}
 						else					//순서가 틀린 경우
@@ -974,41 +1095,17 @@ public class PlayEvent {
 		
 		while(true)
 		{
-			System.out.println("어디를 살펴볼까?");
-			
-			//조사 가능한 사물 배열 목록 출력
-			for (int i = 0; i < map[1][2].getAllObject().length; i++)
+			// 2층의 두 번째(2) 방이므로 인수에 2, 2를 집어넣음
+			// 방 진입 이벤트 (사물(오브젝트) 출력 및 선택 진행)
+			// enterRoom의 반환값이 false면 현재 방의 이벤트를 종료하도록 함(이동)
+			if (!enterRoom(2, 2))
 			{
-				System.out.println((i+1) + ". " + map[1][2].getObject(i).getObjectName());
-			}
-			//마지막 번호. 로비로 나간다.
-			System.out.println((map[1][2].getAllObject().length + 1) + ". 로비로 나간다.");
-			System.out.println("(조사할 선택지의 숫자 입력 : )");
-			
-			num = scan.nextInt():
-				
-			//선택지 외의 번호 입력 시
-			if (!(num >= 1 && num <= map[1][2].getAllObject().length + 1))
-			{
-				System.out.println("그 쪽은 조사가 불가능하다.");
-				continue;
-			}
-		
-			//로비로 나가는 선택지 입력했을 경우
-			if (num == map[1][2].getAllObject().length + 1)
-			{
-				//로비로 이동
-				player.setPosID(20);
-				break;		//반복문 탈출 (메소드 종료)
+				break;
 			}
 			
-			//조사 가능 선택지를 입력했을 경우 (기본 출력)
-			//1. 현재 오브젝트를 선택한 오브젝트로 설정
-			mapObject = map[1][2].getObject(num - 1);
 			
-			//2. 해당 오브젝트의 이름과 설명 출력
-			objectPrint(mapObject);
-			
+			// enterRoom의 반환값이 true일 경우
+			// -> 정상 진행
 			if (num == 1)		//컴퓨터를 살펴볼 경우
 			//2층 2번째 방 획득 아이템 : 쉽배악(0번째 obj의 0), 쉽배악(0번째 obj의 1), 일기장(1번째 obj의 0), 일기장(3번째 obj의 0)
 			{
@@ -1027,12 +1124,12 @@ public class PlayEvent {
 					
 					if (password == 5419)	//비밀번호를 맞게 입력할 경우
 					{
-						System.out.println("비밀번호가 풀렸다.")
+						System.out.println("비밀번호가 풀렸다.");
 						System.out.println("기본 화면의 배경화면이 보인다. 좀 더 살펴볼까?");
 						System.out.println("1. 바탕화면을 살펴보자.");
 						System.out.println("2. 휴지통을 살펴보자.");
 						System.out.println("3. 뻐꾸기 파일을 살펴보자.");
-						System.out.println("4. 그만 살펴보자.")
+						System.out.println("4. 그만 살펴보자.");
 						
 						num = scan.nextInt();
 						
@@ -1084,12 +1181,12 @@ public class PlayEvent {
 					}
 					else					//잘못된 비밀번호를 입력했을 경우
 					{
-						System.out.println("비밀번호가 틀렸습니다.\n다시 생각해보자.")
+						System.out.println("비밀번호가 틀렸습니다.\n다시 생각해보자.");
 					}
 				}
 				else if (num == 2)	//비밀번호를 풀지 않을 경우
 				{
-					System.out.println("컴퓨터는 그만 살펴보자.")
+					System.out.println("컴퓨터는 그만 살펴보자.");
 				}
 				else				//선택지 외의 번호를 입력할 경우
 				{
@@ -1135,7 +1232,7 @@ public class PlayEvent {
 				}
 				else if (num == 2)	//비밀번호를 풀지 않을 경우
 				{
-					System.out.println("서랍장은 그만 살펴보자.")
+					System.out.println("서랍장은 그만 살펴보자.");
 				}
 				else				//선택지 외의 번호를 입력할 경우
 				{
