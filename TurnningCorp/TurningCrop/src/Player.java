@@ -127,32 +127,32 @@ public class Player {
 			
 		}
 		
-		public void saveInventory(Item item1, Item item2) //저장할 아이템이 2개인 경우 (2개는 다른 아이템)
+		public void saveInventory(Item[] items) //저장할 아이템이 2개 이상인 경우
 		{
-			Item item = item1;
-			int saveCount = 0;
-			
-			while(saveCount!=2)
+			int itemsLength = items.length;
+			for(int i=0; i < itemsLength; i++)
 			{
+				Item item = items[i];
+			
 				if(searchItem(item.getName())) //저장할 아이템이 인벤토리에 존재하는 경우
 				{
-					for(int i=0; i<inventoryLength; i++)
+					for(int j=0; j<inventoryLength; j++)
 					{
-						if(inventory[i].item.getName().equals(item.getName()))
+						if(inventory[j].item.getName().equals(item.getName()))
 						{
-							inventory[i].count++;
+							inventory[j].count++;
 							break;
 						}
 					}
 				}
 				else  //인벤토리에 없는 아이템인 경우
 				{
-					for(int i=0; i<inventoryLength; i++)
+					for(int j=0; j<inventoryLength; j++)
 					{
-						if(inventory[i] == null)
+						if(inventory[j] == null)
 						{
-							inventory[i].item = item;
-							inventory[i].count = 1;
+							inventory[j].item = item;
+							inventory[j].count = 1;
 							break;
 						}
 						else
@@ -161,9 +161,9 @@ public class Player {
 						}
 					}
 				}
-				item = item2;
-				saveCount++;
+			
 			}
+			
 		}
 		
 		boolean deleteInventory(int inventoryNum)
