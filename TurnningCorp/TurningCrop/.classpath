@@ -1,10 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="D:/JAVA_dev/JavaGame2021/TurnningCorp/TurningCrop/commons-collections4-4.4.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/JAVA_dev/JavaGame2021/TurnningCorp/TurningCrop/commons-compress-1.20.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/JAVA_dev/JavaGame2021/TurnningCorp/TurningCrop/curvesapi-1.06.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/JAVA_dev/JavaGame2021/TurnningCorp/TurningCrop/poi-5.0.0.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/JAVA_dev/JavaGame2021/TurnningCorp/TurningCrop/poi-examples-5.0.0.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/JAVA_dev/JavaGame2021/TurnningCorp/TurningCrop/poi-excelant-5.0.0.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/JAVA_dev/JavaGame2021/TurnningCorp/TurningCrop/poi-integration-5.0.0.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/JAVA_dev/JavaGame2021/TurnningCorp/TurningCrop/poi-ooxml-5.0.0.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/JAVA_dev/JavaGame2021/TurnningCorp/TurningCrop/poi-ooxml-full-5.0.0.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/JAVA_dev/JavaGame2021/TurnningCorp/TurningCrop/poi-ooxml-lite-5.0.0.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/JAVA_dev/JavaGame2021/TurnningCorp/TurningCrop/poi-scratchpad-5.0.0.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="D:/JAVA_dev/JavaGame2021/TurnningCorp/TurningCrop/xmlbeans-4.0.0.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
