@@ -4,22 +4,22 @@ import java.util.Scanner;
 public class Player {
 
 		//핃드
-		String name;
-		String title;
-		char rank;
-		boolean[] skill;
-		int hp;
-		int attackPower;
-		int defensivePower;
-		int reputation;
-		char[] rankArray = {'D', 'C', 'B', 'A', 'S'};
-		String[] titleArray = {"평범한사원", "똑똑한사원", "용감한인간", "악마왕퇴마사", "명망있는사장"};
-		int currentIndex = 0;
-		ItemPair[] inventory; //인벤토리-아이템저장
-		Quest[] questArray = new Quest[15]; //퀘스트배열-퀘스트저장
-		int inventoryLength;
-		int inventoryIndex;
-		boolean isBattle; //배틀 중인지 여부
+		private String name;
+		private String title;
+		private char rank;
+		private boolean[] skill;
+		private int hp;
+		private int attackPower;
+		private int defensivePower;
+		private int reputation;
+		private char[] rankArray = {'D', 'C', 'B', 'A', 'S'};
+		private String[] titleArray = {"평범한사원", "똑똑한사원", "용감한인간", "악마왕퇴마사", "명망있는사장"};
+		private int currentIndex = 0;
+		private ItemPair[] inventory; //인벤토리-아이템저장
+		private Quest[] questArray = new Quest[15]; //퀘스트배열-퀘스트저장
+		private int inventoryLength;
+		private int inventoryIndex;
+		private boolean isBattle; //배틀 중인지 여부
 		
 		private int posID;			// 현재 위치 아이디
 									// ex) 1층 3번방에 들어가 있는 경우: 13
@@ -51,6 +51,8 @@ public class Player {
 		}
 		
 		//getter & setter
+		
+		
 		public int getPosID()
 		{
 			return posID;
@@ -59,34 +61,119 @@ public class Player {
 		{
 			this.posID = posID;
 		}
-		
-		String getName(){
-			   return title + " " + name;
+		public String getTitle() {
+			return title;
+		}
+		public void setTitle(String title) {
+			this.title = title;
+		}
+		public char getRank() {
+			return rank;
+		}
+		public void setRank(char rank) {
+			this.rank = rank;
+		}
+		public boolean[] getSkill() {
+			return skill;
+		}
+		public void setSkill(boolean[] skill) {
+			this.skill = skill;
+		}
+		public char[] getRankArray() {
+			return rankArray;
+		}
+		public void setRankArray(char[] rankArray) {
+			this.rankArray = rankArray;
+		}
+		public String[] getTitleArray() {
+			return titleArray;
+		}
+		public void setTitleArray(String[] titleArray) {
+			this.titleArray = titleArray;
+		}
+		public ItemPair[] getInventory() {
+			return inventory;
+		}
+		public void setInventory(ItemPair[] inventory) {
+			this.inventory = inventory;
+		}
+		public Quest[] getQuestArray() {
+			return questArray;
+		}
+		public void setQuestArray(Quest[] questArray) {
+			this.questArray = questArray;
+		}
+		public int getInventoryLength() {
+			return inventoryLength;
+		}
+		public void setInventoryLength(int inventoryLength) {
+			this.inventoryLength = inventoryLength;
+		}
+		public int getInventoryIndex() {
+			return inventoryIndex;
+		}
+		public void setInventoryIndex(int inventoryIndex) {
+			this.inventoryIndex = inventoryIndex;
+		}
+		public boolean getIsBattle() {
+			return isBattle;
+		}
+		public void setIsBattle(boolean isBattle) {
+			this.isBattle = isBattle;
+		}
+		String getName()
+		{
+			return title + " " + name;
+		}
+		public void setName(String name) 
+		{
+			this.name = name;
+		}
+		int getAttackPower()
+	    {
+	    	return attackPower;
+	    }
+		public void setAttackPower(int attackPower) 
+		{
+			this.attackPower = attackPower;
+		}
+		 int getDefensivePower()
+		{
+		    	return defensivePower;
+	    }
+		public void setDefensivePower(int defensivePower) 
+		{
+			this.defensivePower = defensivePower;
+		}
+		public int getHp() 
+		{
+			return hp;
+		}
+		public void setHp(int hp) 
+		{
+			this.hp = hp;
+		}
+		int getReputation() 
+	    {
+	    	return reputation;
+	    }
+		public void setReputation(int reputation)
+		{
+			this.reputation = reputation;
 		}
 		char getCurrentRank() 
 	    {
 	    	return rankArray[currentIndex];
 	    }
-	    int getReputation() 
-	    {
-	    	return reputation;
-	    }
 	    int getCurrentIndex()
 	    {
 	    	return currentIndex;
 	    }
-	    int getAttackPower()
+	    void setCurrentIndex(int currentIndex)
 	    {
-	    	return attackPower;
+	    	this.currentIndex = currentIndex;
 	    }
-	    int getDefensivePower()
-	    {
-	    	return defensivePower;
-	    }
-	    int getHP()
-	    {
-	    	return hp;
-	    }
+
 	    
 	    //함수
 	    int upgradeReputation()
