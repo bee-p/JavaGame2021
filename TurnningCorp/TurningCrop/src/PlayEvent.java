@@ -706,7 +706,7 @@ public class PlayEvent {
 			// 따라서 enterRoom() 메소드를 호출하지 않음
 			
 			// ex) "어서오세요, 평범한 사원 @@님."
-			System.out.println("\"어서오세요, " + player.getTitleArray(player.getCurrentIndex()) + "@@님.\"");
+			System.out.println("\"어서오세요, " + player.getName() + "님.\"");
 			System.out.println("\"무엇을 하시겠습니까?\"");
 			System.out.println("\"현재 @@님의 진급 여부를 확인할 수 있습니다.\"");
 			
@@ -1636,14 +1636,14 @@ public class PlayEvent {
 	{
 		// 1. 배틀....확률 돌리기
 		
-		// 2. 개발실 스크립트 출력...
-		System.out.println("개발실이다.");
+		// 2. 개발실1 스크립트 출력...
+		System.out.println("개발실1이다.");
 		System.out.println("~");
 		System.out.println("~");
 		
 		while(true)
 		{
-			// 3층의 첫 번째(3) 방이므로 인수에 3, 1을 집어넣음
+			// 3층의 첫 번째(1) 방이므로 인수에 3, 1을 집어넣음
 			// 방 진입 이벤트 (사물(오브젝트) 출력 및 선택 진행)
 			// enterRoom의 반환값이 false면 현재 방의 이벤트를 종료하도록 함(이동)
 			if (!enterRoom(3, 1))
@@ -1838,7 +1838,142 @@ public class PlayEvent {
 	// 3층 개발실2(방2) 이벤트 함수
 	public void playFloor3_2()
 	{
+		// 1. 배틀....확률 돌리기
 		
+		// 2. 개발실2 스크립트 출력...
+		System.out.println("개발실2다.");
+		System.out.println("~");
+		System.out.println("~");
+		
+		while(true)
+		{
+			// 3층의 두 번째(2) 방이므로 인수에 3, 2를 집어넣음
+			// 방 진입 이벤트 (사물(오브젝트) 출력 및 선택 진행)
+			// enterRoom의 반환값이 false면 현재 방의 이벤트를 종료하도록 함(이동)
+			if (!enterRoom(3, 2))
+			{
+				break;
+			}
+			
+			
+			// enterRoom의 반환값이 true일 경우
+			// -> 정상 진행
+			if (num == 1)		// 책상 조사
+			{
+				System.out.println("책상 위에는 여러 물건들이 널려 있다.");
+				System.out.println("어떤 것부터 볼까?");
+				// 1. 볼펜 ~ 4. 달력
+				for (int i = 0; i < mapObject.getAllItem().length; i++)
+					System.out.println((i + 1) + ". " + mapObject.getItem(i).getName());
+				
+				num = scan.nextInt();
+				
+				if (num >= 1 && num <= 4)	// 볼펜, 보고서 파일, 시계, 달력 조사
+				{
+					// 해당 아이템 설명 출력
+					System.out.println(mapObject.getItem(num - 1));
+				}
+				else						// 오기입
+				{
+					System.out.println("제대로 선택하자.");
+				}
+			}
+			else if (num == 2)	// 복사기 조사
+			{
+				System.out.println("두 개의 버튼과 용지보관함이 눈에 들어온다.");
+				System.out.println("어떤 것부터 볼까?");
+				// 1. 재출력버튼 ~ 3. 스캔버튼
+				for (int i = 0; i < mapObject.getAllItem().length; i++)
+					System.out.println((i + 1) + ". " + mapObject.getItem(i).getName());
+				
+				num = scan.nextInt();
+				
+				if (num >= 1 && num <= 3)	// 재출력버튼, 용지보관함, 스캔버튼 조사
+				{
+					// 해당 아이템 설명 출력
+					System.out.println(mapObject.getItem(num - 1));
+				}
+				else						// 오기입
+				{
+					System.out.println("그렇게 할 수는 없다.");
+				}
+			}
+			else if (num == 3)	// 책꽂이 조사
+			{
+				System.out.println("어떤 것부터 볼까?");
+				// 1. 소설책 ~ 2. 잡지
+				for (int i = 0; i < mapObject.getAllItem().length - 1; i++)
+					System.out.println((i + 1) + ". " + mapObject.getItem(i).getName());
+				// 3. 금고
+				System.out.println("3. 금고");
+				
+				num = scan.nextInt();
+				
+				/*
+				 * 소설책 관련해서는 수정 및 조율 필요..
+				 * 우선은 임시로 잡지와 동일하게 출력함
+				 */
+				
+				if (num == 1 || num == 2)	// 소설책, 잡지 조사
+				{
+					// 해당 아이템 설명 출력
+					System.out.println(mapObject.getItem(num - 1));
+				}
+				else if (num == 3)			// 금고 조사
+				{
+					// 일기장을 이미 가져갔다면
+					if (player.searchItem(mapObject.getItem(2).getName()))
+					{
+						System.out.println("금고는 열려있는 채로 놓여있다.");
+						System.out.println("안에는 더이상 아무 것도 존재하지 않는다.");
+						
+						continue;
+					}
+					
+					// 아직 가져가지 않았다면
+					System.out.println("잠겨져있어 열리지 않는다.");
+					System.out.println("옆에는 'PASSWORD: This year'이라고 적힌 포스트잇이 있다.");
+					System.out.println("비밀번호를 입력해 보자.");
+					System.out.println("* 비밀번호는 영어 대문자이다.");
+					
+					String str = scan.next();
+					
+					if (str.equals("DRUG"))		// 정답을 입력했을 경우
+					{
+						System.out.println("(철컥)");
+						System.out.println("문이 열렸다!");
+						System.out.println("그 안에는 " + mapObject.getItem(2).getName() + "이 있었다.");
+						
+						System.out.println("가져갈까?");
+						System.out.println("1. 가져가자.");
+						System.out.println("2. 냅두자.");
+						
+						num = scan.nextInt();
+						
+						if (num == 1)			// 가져가기
+						{
+							// 인벤토리에 일기장 저장
+							player.saveInventory(mapObject.getItem(2));
+							
+							System.out.println(mapObject.getItem(2).getName() + "을 챙겼다.");
+						}
+						else if (num == 2)		// 냅두기
+						{
+							System.out.println("건들지 않고 그대로 두었다.");
+						}
+						else					// 오기입
+						{
+							System.out.println("잘못된 선택이다.");
+						}
+					}
+					
+				}
+				else						// 오기입
+				{
+					System.out.println("그렇게 할 수는 없다.");
+				}
+			}
+		}
 	}
 	
 	// 3층 기술부(방3) 이벤트 함수
