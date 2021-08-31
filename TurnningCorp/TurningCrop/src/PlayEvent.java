@@ -885,7 +885,7 @@ public class PlayEvent {
 				System.out.println("1. 취식실로 들어가자.");
 				System.out.println("2. 영양사 사무실로 들어가자.");
 				System.out.println("3. 화장실에 가자.");
-				System.out.println("3. 생각이 달라졌다.");		// 다시 로비 선택지 출력
+				System.out.println("4. 생각이 달라졌다.");		// 다시 로비 선택지 출력
 				
 				num = scan.nextInt();
 				
@@ -899,12 +899,12 @@ public class PlayEvent {
 					player.setPosID(22);
 					break;
 				}
-				else if (num == 2)	// 화장실 가기
+				else if (num == 3)	// 화장실 가기
 				{
 					player.setPosID(24);
 					break;
 				}
-				else if (num == 3)	// 다른 방으로 가지 않기(로비 스크립트/선택지 다시 출력)
+				else if (num == 4)	// 다른 방으로 가지 않기(로비 스크립트/선택지 다시 출력)
 				{
 					continue;
 				}
@@ -955,7 +955,7 @@ public class PlayEvent {
 					System.out.println("취식실 한가운데 커다란 테이블이 있다. 어딜 살펴볼까?");
 					System.out.println("1. 테이블 위를 살펴보자.");
 					System.out.println("2. 테이블 아래를 살펴보자.");
-					System.out.println("3. 테이블 옆 의자들을	 살펴보자.");
+					System.out.println("3. 테이블 옆 의자들을 살펴보자.");
 					System.out.println("4. 그만 살펴보자.");
 					
 					num = scan.nextInt();
@@ -1551,13 +1551,288 @@ public class PlayEvent {
 	// 3층 로비 이벤트 함수
 	public void playFloor3_0()
 	{
-		
+		while(true)
+		{
+			// 1. 로비 스크립트 출력
+			// 로비다! (스크립트 수정 필요)
+			
+			// 2. 선택지 출력
+			System.out.println("1. 출입기에 사원증을 찍자.");	// 저장
+			System.out.println("2. 잠깐 밖에서 쉬고 오자.");	// 타이틀로 나가기 (게임 메뉴)
+			System.out.println("3. 다른 곳을 둘러보자.");		// 다른 방 이동
+			System.out.println("4. 엘리베이터를 타자.");		// 층 이동
+			
+			num = scan.nextInt();
+			
+			if (num == 1)			// 저장
+			{
+				// 현재 게임 데이터 로컬에 저장
+				
+				System.out.println("사원증을 성공적으로 찍었다!\n--저장되었습니다.--");
+			}
+			else if (num == 2)		// 저장 후 타이틀로 나가기
+			{
+				// 1. 현재 데이터 로컬에 저장
+				
+				// 2. 타이틀로 나가기
+				goTitle = true;
+				break;
+			}
+			else if (num == 3)		// 다른 방으로 이동
+			{
+				System.out.println("개발실1, 개발실2, 기술실이 보인다. 어디로 들어갈까?");
+				
+				System.out.println("1. 개발실1에 들어가자.");
+				System.out.println("2. 개발실2에 들어가자.");
+				System.out.println("3. 기술실에 들어가자.");
+				System.out.println("4. 화장실에 들어가자.");
+				System.out.println("5. 생각이 달라졌다.");		// 다시 로비 선택지 출력
+				
+				num = scan.nextInt();
+				
+				if (num == 1)		// 개발실1 들어가기
+				{
+					player.setPosID(31);
+					break;
+				}
+				else if (num == 2)	// 개발실2 들어가기
+				{
+					player.setPosID(32);
+					break;
+				}
+				else if (num == 3)	// 기술실 들어가기
+				{
+					player.setPosID(33);
+					break;
+				}
+				else if (num == 4)	// 화장실 들어가기
+				{
+					player.setPosID(34);
+					break;
+				}
+				else if (num == 5)	// 다른 방으로 가지 않기(로비 스크립트/선택지 다시 출력)
+				{
+					continue;
+				}
+				else
+				{
+					// 그 외 오기입 처리
+				}
+			}
+			else if (num == 4)		// 다른 층으로 이동(엘리베이터 탑승)
+			{
+				moveFloor();
+				break;
+			}
+			else
+			{
+				// 그 외 오기입 처리
+			}
+		}
 	}
 	
 	// 3층 개발실1(방1) 이벤트 함수
 	public void playFloor3_1()
 	{
+		// 1. 배틀....확률 돌리기
 		
+		// 2. 개발실 스크립트 출력...
+		System.out.println("개발실이다.");
+		System.out.println("~");
+		System.out.println("~");
+		
+		while(true)
+		{
+			// 3층의 첫 번째(3) 방이므로 인수에 3, 1을 집어넣음
+			// 방 진입 이벤트 (사물(오브젝트) 출력 및 선택 진행)
+			// enterRoom의 반환값이 false면 현재 방의 이벤트를 종료하도록 함(이동)
+			if (!enterRoom(3, 1))
+			{
+				break;
+			}
+			
+			
+			// enterRoom의 반환값이 true일 경우
+			// -> 정상 진행
+			if (num == 1)			// 책상 조사
+			{
+				// 연필, USB, 종이묶음, 먹다 남은 초코바, 작은 수첩, 서랍(쉽배악6) 조사 가능
+				System.out.println("책상 위에는 잡동사니들이 여럿 있고, 밑에는 서랍이 있다.");
+				System.out.println("무엇을 살펴볼까?");
+				
+				/*
+				 * 구조....수정 필요 *
+				 */
+				
+				// USB와 먹다 남은 초코바를 가져갔는지 검사
+				// 둘 다 가져간 경우
+				if (player.searchItem(mapObject.getItem(1).getName()) && player.searchItem(mapObject.getItem(3).getName()))
+				{
+					System.out.println("1. 연필");
+					System.out.println("2. 종이묶음");
+					System.out.println("3. 작은 수첩");
+					System.out.println("4. 서랍");
+					
+					num = scan.nextInt();
+					
+					if (num == 2)		// 2. 종이묶음 선택
+					{
+						num = 3;	// 기본 출력에서의 선택지 번호로 수정(3. 종이묶음)
+					}
+					else if (num == 3)	// 3. 작은 수첩 선택
+					{
+						num = 5;	// 위와 동일(5. 작은 수첩)
+					}
+					else if (num == 4)	// 4. 서랍 선택
+					{
+						num = 6;	// 위와 동일(6. 서랍)
+					}
+				}
+				// USB만 가져간 경우
+				else if (player.searchItem(mapObject.getItem(1).getName()))
+				{
+					System.out.println("1. 연필");
+					System.out.println("2. 종이묶음");
+					System.out.println("3. 먹다 남은 초코바");
+					System.out.println("4. 작은 수첩");
+					System.out.println("5. 서랍");
+					
+					num = scan.nextInt();
+					
+					if (num >= 2)
+					{	// 기본 출력에서의 선택지 번호로 수정
+						num++;
+					}
+				}
+				// 먹다 남은 초코바만 가져간 경우
+				else if (player.searchItem(mapObject.getItem(3).getName()))
+				{
+					System.out.println("1. 연필");
+					System.out.println("2. USB");
+					System.out.println("3. 종이묶음");
+					System.out.println("4. 작은 수첩");
+					System.out.println("5. 서랍");
+					
+					num = scan.nextInt();
+					
+					if (num >= 4)
+					{	// 기본 출력에서의 선택지 번호로 수정
+						num++;
+					}
+				}
+				// 둘 다 가져가지 않은 경우 (기본 출력)
+				else
+				{
+					// 1. 연필 ~ 5. 작은 수첩 선택지 출력
+					for (int i = 0; i < mapObject.getAllItem().length - 1; i++)
+						System.out.println((i + 1) + ". " + mapObject.getItem(i));
+					// 6. 서랍 출력
+					System.out.println("6. 서랍");
+					
+					num = scan.nextInt();
+				}
+				
+				
+				if (num == 1 || num == 3 || num == 5)		// 연필, 종이묶음, 작은 수첩 조사시
+				{
+					// 해당 선택지 아이템의 설명 출력
+					System.out.println(mapObject.getItem(num - 1).getDescription());
+				}
+				else if (num == 2 || num == 4 || num == 6)	// USB, 먹다 남은 초코바, 서랍 조사시
+				{
+					if (num == 6)	// 서랍 조사
+					{
+						// 쉽배악6을 이미 흭득했다면
+						if (player.searchItem(mapObject.getItem(5).getName()))
+						{
+							System.out.println("이제 아무 것도 들어있지 않다.");
+							
+							continue;	// 오브젝트 출력으로 돌아감(enterRoom)
+						}
+						
+						// 아직 흭득하지 않았다면
+						System.out.println("쉽게 배우는 악마어6이 들어있다.");
+						System.out.println("가져갈까?");
+						System.out.println("1. 가져가자.");
+						System.out.println("2. 냅두자.");
+						
+						num = scan.nextInt();
+						
+						if (num == 1)		// 가져가기
+						{
+							// 인벤토리에 쉽배악6 저장
+							player.saveInventory(mapObject.getItem(5));
+							
+							System.out.println("쉽게 배우는 악마어6을 챙겼다.");
+						}
+						else if (num == 2)	// 냅두기
+						{
+							System.out.println("책을 건들지 않고 제자리에 그대로 두었다.");
+						}
+						else				// 오기입
+						{
+							System.out.println("아무런 선택도 하지 못했다..");
+						}
+					}
+				}
+				else										// 오기입
+				{
+					System.out.println("확실하게 선택하자.");
+				}
+				
+			}
+			else if (num == 2)		// 구형 노트북 조사
+			{
+				// 인터넷, '오목눈이' 폴더, 휴지통, 내 컴퓨터(일기장) 조사 가능
+				System.out.println("화면을 켜 두고 간 것 같다. 그럼 몇 시간 동안이나 켜져있던 거지..?");
+				System.out.println("어디를 살펴볼까?");
+				
+				// 1. 인터넷 ~ 3. 휴지통 선택지 출력
+				for (int i = 0; i < mapObject.getAllItem().length - 1; i++)
+					System.out.println((i + 1) + ". " + mapObject.getItem(i).getName());
+				// [마지막 번호]. 내 컴퓨터 출력
+				System.out.println(mapObject.getAllItem().length + ". 내 컴퓨터");
+				
+				num = scan.nextInt();
+				
+				if (num >= 1 && num <= 3)	// 인터넷~휴지통 선택
+				{	
+					// 각 아이템의 설명 출력
+					System.out.println(mapObject.getItem(num - 1).getDescription());
+				}
+				else if (num == 4)			// 내 컴퓨터 선택
+				{
+					// USB를 갖고 있을 경우
+					if (player.searchItem("USB"))
+					{
+						System.out.println("갖고 있던 USB를 꽂았다.");
+						System.out.println("어떤 내용이 들었는지 확인해 볼까?");
+						System.out.println("1. 확인하자.");
+						System.out.println("2. 확인하지 말자.");
+						
+						num = scan.nextInt();
+						
+						if (num == 1)		// 확인하기
+						{
+							// 일기장이 들어있다.
+							System.out.println(mapObject.getItem(3).getName() + "이 들어있다.");
+							// 일기장의 설명 출력
+							System.out.println(mapObject.getItem(3).getDescription());
+							
+							// 이후 일기장을 출력해서 들고 가는 것인지, 그냥 USB를 들고가는 형태인지 질문 필요
+						}
+						else if (num == 2)	// 확인 안 하기
+						{
+							System.out.println("굳이 열어보진 않았다.");
+						}
+						else				// 오기입
+						{
+							System.out.println("선택은 확실하게 해야한다.");
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	// 3층 개발실2(방2) 이벤트 함수
@@ -1737,7 +2012,7 @@ public class PlayEvent {
 								else {
 									System.out.println("비밀번호가 풀렸다! 생일이 비밀번호라니, 참 단순한 사람이네.");
 									System.out.println("홈 화면에 <Easy to Learn-...> 이라는 바로가기 아이콘이 보인다.");
-									System.out.println("해당 아이콘을 누르자, <쉽게 배우는 악마어> 라는 제목의 문서가 화면에 떠올랐다.")
+									System.out.println("해당 아이콘을 누르자, <쉽게 배우는 악마어> 라는 제목의 문서가 화면에 떠올랐다.");
 									player.saveInventory(mapObject.getItem(0));	//아이템(쉽배악)획득
 								}
 							}
