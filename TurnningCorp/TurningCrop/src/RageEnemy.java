@@ -29,7 +29,7 @@ public class RageEnemy extends Enemy{
 	
 	void rage() {
 		if(this.heart < ragePoint) {
-			attackPower = attackPower / 100 * (100-buffRate);
+			attackPower = attackPower / 100 * (100+buffRate);
 			defensePower = defensePower / 100 * (100 - debuffRate);	
 			isRaged = true;
 		}

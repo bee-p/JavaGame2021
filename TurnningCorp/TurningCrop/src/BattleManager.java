@@ -1,21 +1,23 @@
 import java.util.*;
 
-//enemyAttackCount 추가해서 수정하기
-
-
-
 public class BattleManager {
 	Player player;
 	Enemy[] enemys = new Enemy[5];
 	int enemyCount = 0;
 	int enemyAttackCount;
+	boolean isBattle = false;
 	
-	BattleManager(Player player, Enemy[] enemys){
+	BattleManager(Player player, EnemyPair enemyPair){
+		isBattle = true;
 		this.player = player;
-		for(Enemy enemy : enemys) {
+		for(Enemy enemy : enemyPair.enemySet) {
 			this.enemys[enemyCount++] = enemy;
 		}
 		enemyAttackCount = 0;
+	}
+	
+	boolean getIsBattle() {
+		return isBattle;
 	}
 	
 	//적을 공격
@@ -110,14 +112,16 @@ public class BattleManager {
 			if(runAwayPercentage > enemy.getRunAwayPercentage())
 				runAwayPercentage = enemy.getRunAwayPercentage();
 		}
-		return (new Random().nextInt(100) < runAwayPercentage) ? false: true; 
+		
+		isBattle = (new Random().nextInt(100) < runAwayPercentage) ? false: true;
+		return isBattle;
 	}
 	
 	//배틀 종료 여부(어떤 행동 이후 반드시 이 함수 사용
 	boolean battleEndCheck() {
 		if(player.hp <= 0 || enemyCount == 0)
-			return true;
-		else
-			return false;
+			isBattle = false;
+		
+		return isBattle;
 	}
 }
