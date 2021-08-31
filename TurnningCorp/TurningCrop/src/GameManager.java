@@ -22,11 +22,13 @@ public class GameManager {
 		// **아이템은 맵에서 생성하기
 		Player player;
 		Map maps[][] = new Map[4][5];
-		ItemNPC npc = new ItemNPC(); // ItemNPC 변수
 		// 5층, 5개의 방(로비 + 방 3개 + 화장실)로 대부분 구성되어있으나
 		// 5층은 엔딩 진행의 역할만 수행하므로 5층을 제외한 1~4층을 활동 범위로 잡아
 		// Map 객체 배열을 [4][5]의 이차원 배열로 설정함
 		// 5층의 경우는 playEvent.playFloor5() 메소드만을 통해 엔딩 이벤트 진행함
+		
+		ItemNPC npc = new ItemNPC(); 		// ItemNPC 변수 --> 객체 배열로 수정 필요
+		SkillNPC skillNPC = new SkillNPC();	// 스킬NPC는 한 명이므로 하나만 생성함
 		
 		File endingFiles[] = new File[3]; // **엑셀로 파일의 데이터 가져오기&저장하기
 		
@@ -153,7 +155,7 @@ public class GameManager {
 							
 						// 1층 세 번째 방
 						case 13:
-							playEvent.playFloor1_3();
+							playEvent.playFloor1_3(skillNPC);
 							break;
 						
 						// 1층 화장실
