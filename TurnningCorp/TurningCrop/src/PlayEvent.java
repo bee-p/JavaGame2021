@@ -751,12 +751,10 @@ public class PlayEvent {
 	// 1층 화장실(posID: 14) 이벤트 함수
 	public void playFloor1_4()
 	{
-		// 1. 배틀....확률 돌리기
+		// 화장실 스크립트 출력...
+		System.out.println("화장실에 들어왔다.");
+		System.out.println("~");
 		
-		// 2. 영업부 스크립트 출력...
-		System.out.println("영업부다.");
-		System.out.println("내가 일하는 부서라 지긋하리만치 익숙할 만한데, 묘하게 서늘한 기운이 목을 감싼다. 밤이라 그런가.");
-		System.out.println("앞에는 익숙한 책상 배열들이 보인다. 개중에는 눈에 띄는 책상도 심심찮게 있다.");
 		
 		while(true)
 		{
@@ -1985,7 +1983,61 @@ public class PlayEvent {
 	// 3층 화장실(posID: 34) 이벤트 함수
 	public void playFloor3_4()
 	{
+		// 화장실 스크립트 출력...
+		System.out.println("화장실에 들어왔다.");
+		System.out.println("~");
 		
+		
+		while(true)
+		{
+			// 3층의 네 번째(4) 방(화장실)이므로 인수에 1, 4를 집어넣음
+			// 방 진입 이벤트 (사물(오브젝트) 출력 및 선택 진행)
+			// enterRoom의 반환값이 false면 현재 방의 이벤트를 종료하도록 함(이동)
+			if (!enterRoom(3, 4))
+			{
+				break;
+			}
+			
+			
+			// enterRoom의 반환값이 true일 경우
+			// -> 정상 진행
+			if (num == 1)		// 거울 보기
+			{
+				System.out.println("내 모습이다.");
+				System.out.println("* hp: " + player.getHP());
+				System.out.println("* 공격력: " + player.getAttackPower());
+				System.out.println("* 방어력: " + player.getDefensivePower());
+				System.out.println("* 평판도: " + player.getReputation());
+			}
+			else if (num == 2)	// 바닥 보기
+			{
+				System.out.println("언제나 그랬듯이 깨끗한 바닥이다.");
+				System.out.println("약간 습한 것 같기도.");
+					
+			}
+			else if (num == 3)	// 내 가방 보기(인벤토리, 현재 진행중인 퀘스트 확인)
+			{
+				System.out.println("어떤 걸 볼까?");
+				System.out.println("1. 물건 위주");		// 인벤토리 확인
+				System.out.println("2. 할 일 목록");	// 퀘스트 목록 확인
+				
+				num = scan.nextInt();
+				
+				if (num == 1)			// 인벤토리 확인
+				{
+					player.showInventory();
+				}
+				else if (num == 2)		// 퀘스트 확인
+				{
+					// 현재 플레이어가 진행 중인 퀘스트 목록 출력
+					player.printQuestList();
+				}
+				else					// 오기입
+				{
+					System.out.println("그건... 잘못된 선택이다.");
+				}
+			}
+		}
 	}
 	
 	
