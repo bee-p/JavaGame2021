@@ -772,7 +772,7 @@ public class PlayEvent {
 			if (num == 1)		// 거울 보기
 			{
 				System.out.println("내 모습이다.");
-				System.out.println("* hp: " + player.getHP());
+				System.out.println("* hp: " + player.getHp());
 				System.out.println("* 공격력: " + player.getAttackPower());
 				System.out.println("* 방어력: " + player.getDefensivePower());
 				// 공격력과 방어력의 이름을 좀 더 뭔가... 자연스럽게 바꾸고 싶은데 생각이 안 남(고민중)
@@ -1496,7 +1496,7 @@ public class PlayEvent {
 			if (num == 1)		// 거울 보기
 			{
 				System.out.println("내 모습이다.");
-				System.out.println("* hp: " + player.getHP());
+				System.out.println("* hp: " + player.getHp());
 				System.out.println("* 공격력: " + player.getAttackPower());
 				System.out.println("* 방어력: " + player.getDefensivePower());
 				System.out.println("* 평판도: " + player.getReputation());
@@ -2004,7 +2004,7 @@ public class PlayEvent {
 			if (num == 1)		// 거울 보기
 			{
 				System.out.println("내 모습이다.");
-				System.out.println("* hp: " + player.getHP());
+				System.out.println("* hp: " + player.getHp());
 				System.out.println("* 공격력: " + player.getAttackPower());
 				System.out.println("* 방어력: " + player.getDefensivePower());
 				System.out.println("* 평판도: " + player.getReputation());
@@ -2574,7 +2574,7 @@ public class PlayEvent {
 			if (num == 1)		// 거울 보기
 			{
 				System.out.println("내 모습이다.");
-				System.out.println("* hp: " + player.getHP());
+				System.out.println("* hp: " + player.getHp());
 				System.out.println("* 공격력: " + player.getAttackPower());
 				System.out.println("* 방어력: " + player.getDefensivePower());
 				System.out.println("* 평판도: " + player.getReputation());
