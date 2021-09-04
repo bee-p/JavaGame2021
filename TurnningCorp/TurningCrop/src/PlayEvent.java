@@ -2511,7 +2511,7 @@ public class PlayEvent {
 					
 					num = scan.nextInt();
 					
-					if (num == 1)		//종이컴을 살펴볼 경우
+					if (num == 1)		//종이컵을 살펴볼 경우
 					{
 						System.out.println("책상 구석에 놓여 있는 구겨진 종이컵을 살펴봤다.");
 						System.out.println("무언가를 마시던 건지 종이컵 속 액체가 반쯤 남아 있다.");
@@ -2541,10 +2541,226 @@ public class PlayEvent {
 		}
 	}
 	
-	// 4층 (방3) 이벤트 함수
+	// 4층 녹화실(방3) 이벤트 함수
 	public void playFloor4_3()
 	{
+		// 1. 배틀 시스템 확률
 		
+		// 2. 녹화실 스크립트 출력
+		// 4층의 녹화실이다. 정식 방송을 위한 세트장은 아니고, 간단한 방송을 위해 마련된 공간이다.
+		// 녹화실답게 벽 한 면은 커다란 음향부스로 채워져 있고, 간이 세트장이 마주보고 세팅되어있다.
+		
+		while(true)
+		{
+			// 4층의 세번째(3) 방이므로 인수에 4, 3을 집어넣음
+			// 방 진입 이벤트 (사물(오브젝트) 출력 및 선택 진행)
+			// enterRoom의 반환값이 false면 현재 방의 이벤트를 종료하도록 함(이동)
+			if (!enterRoom(4, 3))
+			{
+				break;
+			}
+			
+			// enterRoom의 반환값이 true일 경우
+			// -> 정상 진행
+			
+			if (num == 1)		// 음향부스 조사
+			{
+				System.out.println("음향부스를 조사해보자.\n음향 장비들로 가득한 음향부스는 전선들로 잔뜩 어질러진 상태이다.\n어떤 걸 살펴볼까?");
+				System.out.println("1. 대본을 살펴보자.");
+				System.out.println("2. 음향기기를 살펴보자.");
+				System.out.println("3. 어댑터를 살펴보자.");
+				System.out.println("4. 모니터를 살펴보자.");
+				System.out.println("5. 그만 살펴보자.");
+				
+				num = scan.nextInt();
+				
+				if (num == 1)		//대본을 살펴볼 경우
+				{
+					System.out.println("음향 기기 앞 책상에 놓인 대본을 살펴봤다.");
+					System.out.println("이번 뉴스 사이 간이로 들어갈 프로그램의 대본으로 보인다.");
+					System.out.println("조명팀 대본인지, 대사에 맞춰 조명 순서가 적혀 있다. 자세히 읽어볼까?");
+					
+					System.out.println("1. 읽어본다.");
+					System.out.println("2. 읽어보지 않는다.");
+					
+					num = scan.nextInt();
+					
+					if (num == 1)		//읽어볼 경우
+					{
+						System.out.println("빼곡하게 적힌 대본들을 자세히 읽어보자, 중요한 부분에 형광펜으로 체크가 되어있는게 보인다.");
+						System.out.println("...오프닝은 푸른 조명으로 진행자 비추기...");
+						System.out.println("......화면이 바뀌면 노란 조명 약하게...");
+						System.out.println("...진행자가 다시 나오면 붉은 조명으로 분위기......");
+						System.out.println("마무리 멘트 때 핀으로 흰 조명 전환...");
+						System.out.println("대략 이 정도의 내용에 체크되어 있다.");
+					}
+					else if (num == 2)	//읽어보지 않을 경우
+					{
+						System.out.println("굳이 자세히 읽어 볼 필요는 없어 보인다.");
+						System.out.println("이 대본은 이제 그만 살펴보자.");
+					}
+					else				//오기입
+					{
+						System.out.println("그렇게는 힘들 것 같다. 다시 정하자.");
+					}
+				}
+				else if (num == 2)	//음향기기를 살펴볼 경우
+				{
+					System.out.println("넓은 음향기기에는 각 버튼에 기기별로 무슨 버튼인지 적혀 있다.");
+					System.out.println("MIC1... MIC2... PC... CAM... DEMON... DEMON? 악마?");
+					System.out.println("장비들 이름이 적힌 라벨들 끝에, 알 수 없는 라벨이 붙어 있다.");
+					System.out.println("......뭐지?");
+				}
+				else if (num == 3)	//어댑터를 살펴볼 경우
+				{
+					
+				}
+				else if (num == 4)	//모니터를 살펴볼 경우
+				{
+					System.out.println("화면이 켜져 있는 모니터가 푸른 빛을 내뿜고 있다.");
+					System.out.println("그 외 이상한 점은 보이지 않는다.");
+				}
+				else if (num == 5)	//그만 살펴볼 경우
+				{
+					System.out.println("음향부스는 그만 살펴보자.");
+				}
+				else				//선택지 외의 숫자를 입력한 경우(오기입)
+				{
+					System.out.println("그건 살펴볼 필요가 없어 보인다.");
+				}
+			}
+			else if (num == 2)	// 세트장 조사
+			{
+				System.out.println("세트장을 조사해보자.\n간이로 간단히 마련된 세트장은 단순한 구조로 되어 있다.\n어떤 걸 살펴볼까?");
+				System.out.println("1. 카메라를 살펴보자.");
+				System.out.println("2. 마이크를 살펴보자.");
+				System.out.println("3. 리모컨을 살펴보자.");
+				System.out.println("4. 그만 살펴보자.");
+				
+				num = scan.nextInt();
+				
+				if (num == 1)		//카메라를 살펴볼 경우
+				{
+					System.out.println("세트장 중앙을 향하고 있는 여러 대의 카메라를 살펴봤다.");
+					System.out.println("각도별로의 장면을 담는 거겠지. 전원은 전부 꺼져 있다.");
+				}
+				else if (num == 2)	//마이크를 살펴볼 경우
+				{
+					System.out.println("세트장 중앙, 단상에 놓여 있는 마이크를 살펴봤다.");
+					System.out.println("마찬가지로 전원은 전부 꺼져 있다.");
+				}
+				else if (num == 3)	//리모컨을 살펴볼 경우
+				{
+					System.out.println("마이크 옆에 놓여 있는 작은 리모컨을 살펴봤다.");
+					System.out.println("까만 리모컨에는 여러 색의 버튼들이 달려 있다.");
+					System.out.println("버튼을 눌러볼까?");
+					
+					int buttonNum = 0;	//버튼 누른 순서 확인용 변수
+					
+					while(true)
+					{
+						//파-노-빨-흰 순서 (3-2-1-4)
+						System.out.println("1. 빨간 버튼을 눌러보자.");
+						System.out.println("2. 노란 버튼을 눌러보자.");
+						System.out.println("3. 파란 버튼을 눌러보자.");
+						System.out.println("4. 흰 버튼을 눌러보자.");
+						System.out.println("5. 그만 살펴보자.");
+						
+						num = scan.nextInt();
+						
+						if (num == 1)		//빨간 버튼 누름
+						{
+							if (buttonNum == 2)		//순서가 맞을 경우 (3번째)
+							{
+								System.out.println("빨간 버튼을 눌렀다. 세트장의 붉은 조명이 켜진다.");
+								buttonNum = 3;
+							}
+							else if (buttonNum == 0)	//첫 번째로 버튼을 누른 경우
+							{
+								System.out.println("빨간 버튼을 눌렀다. 세트장의 붉은 조명이 켜진다.");
+								buttonNum = 4;		//순서가 틀린 경우이므로 다음 경우에서 바로 else로 빠질 수 있도록 함.
+							}
+							else					//순서가 틀린 경우
+							{
+								System.out.println("빨간 버튼을 누르자 세트장의 모든 조명이 꺼졌다.");
+								buttonNum = 0;
+							}
+						}
+						else if (num == 2)	//노란 버튼 누름
+						{
+							if (buttonNum == 1)		//순서가 맞을 경우 (2번째)
+							{
+								System.out.println("노란 버튼을 눌렀다. 세트장의 노란 조명이 켜진다.");
+								buttonNum = 2;
+							}
+							else if (buttonNum == 0)	//첫 번째로 버튼을 누른 경우
+							{
+								System.out.println("노란 버튼을 눌렀다. 세트장의 노란 조명이 켜진다.");
+								buttonNum = 4;		//순서가 틀린 경우이므로 다음 경우에서 바로 else로 빠질 수 있도록 함.
+							}
+							else					//순서가 틀린 경우
+							{
+								System.out.println("노란 버튼을 누르자 세트장의 모든 조명이 꺼졌다.");
+								buttonNum = 0;
+							}
+						}
+						else if (num == 3)	//파란 버튼 누름
+						{
+							if (buttonNum == 0)		//순서가 맞을 경우 (1번째)
+							{
+								System.out.println("파란 버튼을 눌렀다. 세트장의 푸른 조명이 켜진다.");
+								buttonNum = 1;
+							}
+							else
+							{
+								System.out.println("파란 버튼을 누르자 세트장의 모든 조명이 꺼졌다.");
+								buttonNum = 0;
+							}
+						}
+						else if (num == 4)	//흰 버튼 누름
+						{
+							if (buttonNum == 3)		//순서가 맞을 경우 (4번째)
+							{
+								//아이템(쉽배악) 가져갔는지 확인
+								//가져갔을 경우
+								if (player.searchItem(mapObject.getItem(0).getName()))
+								{
+									System.out.println("흰 버튼을 눌렀다.\n세트장의 모든 조명이 꺼졌지만 단상 아래에는 더 이상 아무것도 나타나지 않았다.");
+									buttonNum = 0;
+									continue;
+								}
+								//가져가지 않았을 경우
+								else
+								{
+									//순서 올바르게 입력 -> 쉽배악 획득
+									System.out.println("흰 버튼을 눌렀다.\n덜컹 하는 소리와 함께 모든 조명이 꺼지며 단상 아래에서 무언가 떨어졌다.");
+									buttonNum = 0;
+									player.saveInventory(mapObject.getItem(0));
+									//쉽배악을 챙겼다.
+									System.out.println("단상 아래를 살펴보니 책 한 권이 떨어져 있다.\n" + mapObject.getItem(0).getName() + "을 챙겼다.");
+								}
+							}
+							else if (buttonNum == 0)	//첫 번째로 물을 튼 경우
+							{
+								System.out.println("흰 버튼을 눌렀다. 세트장의 하얀 조명이 켜졌다.");
+								buttonNum = 4;
+							}
+							else					//순서가 틀린 경우
+							{
+								System.out.println("흰 버튼을 누르자 세트장의 모든 조명이 꺼졌다.");
+								buttonNum = 0;
+							}	
+						}
+				}
+				else if (num == 4)	//그만 살펴볼 경우
+				{
+					System.out.println("세트장은 그만 살펴보자.");
+				}
+				else 				//선택지 외의 숫자를 입력할 경우 (오기입)
+				{
+					System.out.println("그건 살펴볼 필요가 없어 보인다.");
+				}
+			}
 	}
 	
 	// 4층 화장실(posID: 44) 이벤트 함수
