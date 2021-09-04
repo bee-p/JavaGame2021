@@ -708,7 +708,7 @@ public class PlayEvent {
 			// ex) "어서오세요, 평범한 사원 @@님."
 			System.out.println("\"어서오세요, " + player.getName() + "님.\"");
 			System.out.println("\"무엇을 하시겠습니까?\"");
-			System.out.println("\"현재 @@님의 진급 여부를 확인할 수 있습니다.\"");
+			System.out.println("\"현재 진급 여부를 확인할 수 있습니다.\"");
 			
 			System.out.println("1. 진급을 확인하자.");		// 플레이어의 등급 & 스킬 업데이트
 			System.out.println("2. 진급이 뭔데?");			// 진급 설명 듣기
@@ -718,16 +718,14 @@ public class PlayEvent {
 			
 			if (num == 1)			// 진급 여부 확인 & 등급/스킬 업데이트
 			{
-				// 퀘스트(등급) 단계에 따른 NPC의 스크립트 출력
+				// 퀘스트(등급) 완료 단계에 따른 NPC의 스크립트 출력
 				System.out.println(npc.playQuestScript(npc.playQuest(player)));
 				
 				// 만약 진급에 성공했다면 (현재 퀘스트를 완료했다면)
 				if (npc.getQuest(npc.getQuestCount()).getCompletion())
 				{
-					// 현재 스킬을 해당 스킬로 교체(player의 메소드 활용)
-					
-					// 플레이어가 확인할 수 있는 문구...(스킬이 교체됨을 알림)
-					// "이제 ooo, ㅁㅁㅁ라고 말씀하시면 됩니다."
+					// 플레이어의 랭크 업
+					player.upgradeReputation();
 				}
 			}
 			else if (num == 2)		// 진급/스킬에 관한 설명 듣기
@@ -1974,10 +1972,103 @@ public class PlayEvent {
 		}
 	}
 	
-	// 3층 기술부(방3) 이벤트 함수
+	// 3층 기술실(방3) 이벤트 함수
 	public void playFloor3_3()
 	{
+		// 1. 배틀....확률 돌리기(NPC몬스터 등장?)
 		
+		// 2. 기술실 스크립트 출력...
+		System.out.println("기술실이다.");
+		System.out.println("~");
+		System.out.println("~");
+		
+		while(true)
+		{
+			// 3층의 세 번째(3) 방이므로 인수에 3, 3을 집어넣음
+			// 방 진입 이벤트 (사물(오브젝트) 출력 및 선택 진행)
+			// enterRoom의 반환값이 false면 현재 방의 이벤트를 종료하도록 함(이동)
+			if (!enterRoom(3, 3))
+			{
+				break;
+			}
+			
+			
+			// enterRoom의 반환값이 true일 경우
+			// -> 정상 진행
+			if (num == 1)		// [사물]책상 선택
+			{
+				// 1. 계량용 스푼 ~ 2. 보고서 선택지 출력
+				for(int i = 0; i < mapObject.getAllItem().length - 1; i++)
+					System.out.println((i + 1) + ". " + mapObject.getItem(i));
+				
+				// 노트(쉽게 배우는 악마어7)를 아직 가져가지 않았다면
+				if (!player.searchItem(mapObject.getItem(2).getName()))
+				{
+					// 원본 선택지 출력(3. 노트)
+					System.out.println("3. " + mapObject.getItem(2).getName());
+				}
+				// 가져갔다면 노트는 출력X
+				
+				// 아이템 선택지 입력 받기
+				num = scan.nextInt();
+				
+				if (num == 1 || num == 2)	// [아이템]계량용 스푼 또는 보고서 선택
+				{
+					System.out.println(mapObject.getItem(num - 1).getDescription());
+				}
+				else if (num == 3)			// [아이템]노트 선택
+				{
+					// 만일 이미 가져간 상태라면
+					if (player.searchItem(mapObject.getItem(2).getName()))
+					{
+						System.out.println("그런 건 존재하지 않는다.");
+						continue;
+					}
+					
+					// 아직 가져가지 않았다면 정상 진행
+					System.out.println("가져갈 수 있을 것 같다.");
+					System.out.println("가져갈까?");
+					System.out.println("1. 가져가자.");
+					System.out.println("2. 가져가지 말자.");
+					
+					num = scan.nextInt();
+					
+					if (num == 1)		// 가져가기
+					{
+						// 노트(쉽배악7) 인벤토리에 저장
+						player.saveInventory(mapObject.getItem(2));
+						
+						System.out.println("내 가방에 바로 넣었다.");
+						System.out.println("자세한 내용은 나중에 가방을 열어 확인해 보자.");
+					}
+					else if (num == 2)	// 냅두기
+					{
+						 System.out.println("그냥 그대로 두었다.");
+					}
+					else				// 오기입
+					{
+						System.out.println("확실하게 선택하는 것이 좋을 것이다.");
+					}
+				}
+				else						// [아이템 선택지 중]오기입
+				{
+					System.out.println("그런 선택지가 있었나?");
+					System.out.println("다시 살펴보자.");
+				}
+			}
+			else if (num == 2)	// [사물]성분 분석 기기 선택
+			{
+				// NPC몬스터를 처리했을 경우
+				// 성분 분석 기기만 존재
+				
+				// NPC몬스터를 처리하지 않고 NPC로 변환 성공했을 경우..
+				// 성분 분석 기기 or NPC로 선택지 나누기
+			}
+			else if (num == 3)	// [사물]선반 선택
+			{
+				
+			}
+		}
 	}
 	
 	// 3층 화장실(posID: 34) 이벤트 함수
@@ -2751,6 +2842,7 @@ public class PlayEvent {
 								buttonNum = 0;
 							}	
 						}
+					}
 				}
 				else if (num == 4)	//그만 살펴볼 경우
 				{
@@ -2761,6 +2853,7 @@ public class PlayEvent {
 					System.out.println("그건 살펴볼 필요가 없어 보인다.");
 				}
 			}
+		}
 	}
 	
 	// 4층 화장실(posID: 44) 이벤트 함수
