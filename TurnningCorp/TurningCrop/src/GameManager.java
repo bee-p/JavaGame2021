@@ -1,9 +1,5 @@
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -155,6 +151,147 @@ public class GameManager {
 		return -1; //찾는 시트가 존재하지 않음
 	}
 	
+	// 출입기에서 사원증을 사용할 경우, 현재까지 진행된 player의 객체 정보, 인벤토리, 퀘스트 저장
+	// 현재 진행 중인 플레이어 시트 확인 필요
+	// playerName Sheet에 정보 저장
+	public static void useEmployeeCard(Player player) {
+		
+		int sheetNum = 0;
+		try {
+			FileInputStream fis = new FileInputStream("saveFile.xlsx"); // 파일 읽어오기
+			XSSFWorkbook Wb = new XSSFWorkbook(fis);
+			// 진행하고 있던 계정 정보가 저장된 시트 찾기
+			sheetNum = findSheet(fis, player.getName());
+			
+			// 진행하고 있던 계정 정보가 저장된 시트를 찾은 경우
+			XSSFSheet sheet = Wb.getSheetAt(sheetNum); // sheet변수에 해당 시트 정보 저장
+			
+			// 플레이어 객체 정보 옮기기
+			int rowIndex = 1;
+			int cellIndex = 0;
+			
+			XSSFRow row = sheet.getRow(rowIndex);
+			XSSFCell cell = row.getCell(cellIndex); // cell변수에 해당 셀 정보 저장
+			
+			// HP 갱신
+			cellIndex++;
+			cell = row.getCell(cellIndex);
+			cell.setCellValue(player.getHp());
+			
+			// AttackPower 갱신
+			cellIndex++;
+			cell = row.getCell(cellIndex);
+			cell.setCellValue(player.getAttackPower());
+			
+			// DefensivePower 갱신
+			cellIndex++;
+			cell = row.getCell(cellIndex);
+			cell.setCellValue(player.getDefensivePower());
+			
+			// Reputation 갱신
+			cellIndex++;
+			cell = row.getCell(cellIndex);
+			cell.setCellValue(player.getReputation());
+			
+			// CurrentIndex 갱신
+			cellIndex++;
+			cell = row.getCell(cellIndex);
+			cell.setCellValue(player.getCurrentIndex());
+			
+			// Inventory Item Name 갱신
+			cellIndex++;
+			int rowsNum = sheet.getPhysicalNumberOfRows(); // 시트 당 행의 개수
+			for (rowIndex = 1; rowIndex < rowsNum; rowIndex++) {
+				row = sheet.getRow(rowIndex);
+				cell = row.getCell(cellIndex);
+				if (cell != null) { // 셀 내용이 있는 경우
+					cell.setCellValue(""); // null값으로 초기화
+				}
+			}
+			int inventoryLength = player.getInventoryLength();
+			for (int i = 1; i < inventoryLength; i++) { // 초기화된 셀에 새로운 정보 넣기
+				cell = row.getCell(cellIndex);
+				cell.setCellValue(player.getInventory()[i - 1].item.getName());
+				row = sheet.getRow(i++);
+			}
+			
+			// Inventory Item Count 갱신
+			cellIndex++;
+			for (rowIndex = 1; rowIndex < rowsNum; rowIndex++) {
+				row = sheet.getRow(rowIndex);
+				cell = row.getCell(cellIndex);
+				if (cell != null) { // 셀 내용이 있는 경우
+					cell.setCellValue(""); // null값으로 초기화
+				}
+			}
+			for (int i = 1; i < inventoryLength; i++) { // 초기화된 셀에 새로운 정보 넣기
+				cell = row.getCell(cellIndex);
+				cell.setCellValue(player.getInventory()[i - 1].count);
+				row = sheet.getRow(i++);
+			}
+			
+			// PosID 갱신
+			cellIndex++;
+			cell = row.getCell(cellIndex);
+			cell.setCellValue(player.getPosID());
+			
+			// Quest Name 갱신
+			cellIndex++;
+			int questArrayLength = player.getQuestArrayLength();
+			for (rowIndex = 1; rowIndex < rowsNum; rowIndex++) {
+				row = sheet.getRow(rowIndex);
+				cell = row.getCell(cellIndex);
+				if (cell != null) { // 셀 내용이 있는 경우
+					cell.setCellValue(""); // null값으로 초기화
+				}
+			}
+			for (int i = 1; i < questArrayLength; i++) { // 초기화된 셀에 새로운 정보 넣기
+				cell = row.getCell(cellIndex);
+				cell.setCellValue(player.getQuestArray()[i - 1].getQuestName());
+				row = sheet.getRow(i++);
+			}
+			
+			// Quest Condition 갱신 (퀘스트 받음 여부)
+			cellIndex++;
+			for (rowIndex = 1; rowIndex < rowsNum; rowIndex++) {
+				row = sheet.getRow(rowIndex);
+				cell = row.getCell(cellIndex);
+				if (cell != null) { // 셀 내용이 있는 경우
+					cell.setCellValue(""); // null값으로 초기화
+				}
+			}
+			for (int i = 1; i < questArrayLength; i++) { // 초기화된 셀에 새로운 정보 넣기
+				cell = row.getCell(cellIndex);
+				cell.setCellValue(player.getQuestArray()[i - 1].getCondition());
+				row = sheet.getRow(i++);
+			}
+			
+			// Quest Complete 갱신 (퀘스트 완료 여부)
+			cellIndex++;
+			for (rowIndex = 1; rowIndex < rowsNum; rowIndex++) {
+				row = sheet.getRow(rowIndex);
+				cell = row.getCell(cellIndex);
+				if (cell != null) { // 셀 내용이 있는 경우
+					cell.setCellValue(""); // null값으로 초기화
+				}
+			}
+			for (int i = 1; i < questArrayLength; i++) { // 초기화된 셀에 새로운 정보 넣기
+				cell = row.getCell(cellIndex);
+				cell.setCellValue(player.getQuestArray()[i - 1].getCompletion());
+				row = sheet.getRow(i++);
+			}
+			
+			// 진행 중이던 시트에 새로운 값 저장시키기
+			FileOutputStream fos = new FileOutputStream("saveFile.xlsx");
+			Wb.write(fos);
+			fos.close(); //엑셀 파일 생성 성공
+			// System.out.println("엑셀 시트 갱신 성공");
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String args[], BorderStyle BorderStyle) throws FileNotFoundException {
 		// **아이템은 맵에서 생성하기
 		//saveFile 저장할 때 플레이어가 가진 아이템 정보가 필요함.
@@ -166,7 +303,7 @@ public class GameManager {
 		// Map 객체 배열을 [4][5]의 이차원 배열로 설정함
 		// 5층의 경우는 playEvent.playFloor5() 메소드만을 통해 엔딩 이벤트 진행함
 		
-		ItemNPC npc = new ItemNPC(); 		// ItemNPC 변수 --> 객체 배열로 수정 필요
+		ItemNPC[] itemNPC = new ItemNPC[6]; 		// 객체 배열로 수정 완료
 		SkillNPC skillNPC = new SkillNPC();	// 스킬NPC는 한 명이므로 하나만 생성함
 		
 		File endingFiles[] = new File[3]; // **엑셀로 파일의 데이터 가져오기&저장하기
@@ -181,7 +318,7 @@ public class GameManager {
 		
 		
 		// 	각 객체 정보 파일로 불러오기(읽어오기)
-			// ItemNPC 객체의 setQuestAll()함수로 플레이어의 인벤토리에 들어갈 퀘스트 정보 저장
+		// ItemNPC 객체의 setQuestAll()함수로 플레이어의 인벤토리에 들어갈 퀘스트 정보 저장
 		try {
 				FileInputStream QuestScriptFile = new FileInputStream("Quest Script.xlsx"); // 파일 경로로 파일 읽어오기
 				XSSFWorkbook QuestScriptWB = new XSSFWorkbook(QuestScriptFile);
@@ -229,7 +366,37 @@ public class GameManager {
 						}
 					}
 				}
-				npc.setQuestAll(quest); // ItemNpc 객체에 모든 Quest Script 내용 할당하기 
+				
+				// 각 NPC객체에 Quest Script 내용 할당하기 
+				int npc1Index = 0, npc2Index = 0, npc3Index = 0,
+						npc4Index = 0, npc5Index = 0, npc6Index = 0; // 각 NPC별 퀘스트 순서 인덱스
+				
+				for (int index = 0; index < quest.length; index++) {
+					if (index == 0 || index == 1) { // 1층 인간NPC
+						itemNPC[0].setQuest(npc1Index, quest[index]);
+						++npc1Index;
+					}
+					else if (index == 2 || index == 3) { // 2층 몬스터NPC
+						itemNPC[1].setQuest(npc2Index, quest[index]);
+						++npc2Index;
+					}
+					else if (index == 4 || index == 5) { // 2층 인간NPC(1)
+						itemNPC[2].setQuest(npc3Index, quest[index]);
+						++npc3Index;
+					}
+					else if (index == 6 || index == 7) { // 2층 인간NPC(2)
+						itemNPC[3].setQuest(npc4Index, quest[index]);
+						++npc4Index;
+					}
+					else if (index == 8) { // 3층 몬스터NPC(1)
+						itemNPC[4].setQuest(npc5Index, quest[index]);
+						++npc5Index;
+					}
+					else if (index == 9 || index == 10) { // 3층 몬스터NPC(2)
+						itemNPC[5].setQuest(npc6Index, quest[index]);
+						++npc6Index;
+					}
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

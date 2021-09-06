@@ -16,9 +16,13 @@ public class Item { // 모든 아이템에 대한 기본 아이템 클래스
 		this.value = value;
 	}
 	
-	// getter 메소드
-	String getName() {
+	// getter & setter 메소드
+	public String getName() {
 		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	public String getDescription() {
@@ -36,5 +40,4 @@ public class Item { // 모든 아이템에 대한 기본 아이템 클래스
 		
 		return info;
 	}
-	
 }

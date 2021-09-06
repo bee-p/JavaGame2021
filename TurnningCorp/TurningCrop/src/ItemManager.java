@@ -1,7 +1,4 @@
 
-// ItemManager 클래스 삭제하기,
-// npc/enemy/item => map클래스로 이동
-
 import java.util.Random;
 
 public class ItemManager { // Item 내용 초기화 
@@ -17,6 +14,7 @@ public class ItemManager { // Item 내용 초기화
 	
 	// 생성자
 	public ItemManager() {
+		makeItem();
 	}
 	
 	// 아이템 생성
@@ -42,7 +40,7 @@ public class ItemManager { // Item 내용 초기화
 	public void makeItem() {
 		// 쉽배악 초기화
 		for (int idx = 0; idx < 9; idx++) {
-			easyDevilLanguage[idx] = new Item("쉽게 배우는 악마어" + idx + 1 + "권", "몬스터의 언어가 적힌 책이다.", 0);
+			easyDevilLanguage[idx] = new Item("쉽게 배우는 악마어 제" + idx + 1 + "권", "몬스터의 언어가 적힌 책이다.", 0);
 		}
 		
 		// 회로선 초기화
