@@ -16,7 +16,8 @@ public class Player {
 		private String[] titleArray = {"평범한사원", "똑똑한사원", "용감한인간", "악마왕퇴마사", "명망있는사장"};
 		private int currentIndex = 0;
 		private ItemPair[] inventory; //인벤토리-아이템저장
-		private Quest[] questArray = new Quest[15]; //퀘스트배열-퀘스트저장
+		private Quest[] questArray; //퀘스트배열-퀘스트저장
+		private int questArrayLength;
 		private int inventoryLength;
 		private int inventoryIndex;
 		private boolean isBattle; //배틀 중인지 여부
@@ -48,11 +49,10 @@ public class Player {
 			
 			this.title = titleArray[currentIndex];
 			this.rank = rankArray[currentIndex];
+			this.questArray = new Quest[15];
 		}
 		
 		//getter & setter
-		
-		
 		public int getPosID()
 		{
 			return posID;
@@ -103,6 +103,12 @@ public class Player {
 		public void setQuestArray(Quest[] questArray) {
 			this.questArray = questArray;
 		}
+		public int getQuestArrayLength() {
+			return questArrayLength;
+		}
+		public void setQuestArrayLength(int questArrayLength) {
+			this.questArrayLength = questArrayLength;
+		}
 		public int getInventoryLength() {
 			return inventoryLength;
 		}
@@ -121,7 +127,11 @@ public class Player {
 		public void setIsBattle(boolean isBattle) {
 			this.isBattle = isBattle;
 		}
-		String getName()
+		public String getName()
+		{
+			return name;
+		}
+		public String getFullName()
 		{
 			return title + " " + name;
 		}
