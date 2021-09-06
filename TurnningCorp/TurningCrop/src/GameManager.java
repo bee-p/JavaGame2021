@@ -1,11 +1,17 @@
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
@@ -13,13 +19,146 @@ public class GameManager {
 //	private ItemManager itemManager;
 //	private Random random;
 	
-	
 	// -------------------------------------------------------------------------------- \\
-	
-	
-	public static void main(String args[]) {
+	//saveFile
+	public static void saveNewPlayerInfo(Player player, String playerName)
+	{
+		//파일입력
+		XSSFWorkbook xssfWb = null; //엑셀 파일 초기화
+		XSSFSheet xssfSheet = null; //엑셀 시트 초기화
+		XSSFRow xssfRow = null; //행 초기화
+		XSSFCell xssfCell = null; //셀 초기화
 		
+		xssfWb = new XSSFWorkbook();
+		xssfSheet = xssfWb.createSheet(playerName);
+		int rowNum = 0; //행의 개수
+		
+		//기본 틀 설정
+		XSSFCellStyle tableCellStyle = xssfWb.createCellStyle(); //스타일 설정
+		tableCellStyle.setBorderBottom(BorderStyle.THICK); //아랫선 두껍게
+		
+		xssfRow = xssfSheet.createRow(rowNum); //0번째 행
+		
+		xssfCell = xssfRow.createCell((short)0); //cell만들기
+		xssfCell.setCellStyle(tableCellStyle); //스타일적용
+		xssfCell.setCellValue("Name"); //데이터
+		xssfCell = xssfRow.createCell((short)1);
+		xssfCell.setCellStyle(tableCellStyle);
+		xssfCell.setCellValue("Hp");
+		xssfCell = xssfRow.createCell((short)2);
+		xssfCell.setCellStyle(tableCellStyle);
+		xssfCell.setCellValue("AttackPower");
+		xssfCell = xssfRow.createCell((short)3);
+		xssfCell.setCellStyle(tableCellStyle); 
+		xssfCell.setCellValue("DefensivePower"); 
+		xssfCell = xssfRow.createCell((short)4);
+		xssfCell.setCellStyle(tableCellStyle);
+		xssfCell.setCellValue("Reputation"); 
+		xssfCell = xssfRow.createCell((short)5);
+		xssfCell.setCellStyle(tableCellStyle); 
+		xssfCell.setCellValue("CurrentIndex"); 
+		xssfCell = xssfRow.createCell((short)6);
+		xssfCell.setCellStyle(tableCellStyle); 
+		xssfCell.setCellValue("Inventory Item Name");
+		xssfCell = xssfRow.createCell((short)7); 
+		xssfCell.setCellStyle(tableCellStyle);
+		xssfCell.setCellValue("Inventory Item Number");
+		xssfCell = xssfRow.createCell((short)8); 
+		xssfCell.setCellStyle(tableCellStyle);
+		xssfCell.setCellValue("PosID");
+		xssfCell = xssfRow.createCell((short)9);
+		xssfCell.setCellStyle(tableCellStyle); 
+		xssfCell.setCellValue("Quest Name");
+		xssfCell = xssfRow.createCell((short)10);
+		xssfCell.setCellStyle(tableCellStyle); 
+		xssfCell.setCellValue("Quest Condition");
+		xssfCell = xssfRow.createCell((short)11);
+		xssfCell.setCellStyle(tableCellStyle); 
+		xssfCell.setCellValue("Quest Complete");
+		
+		xssfRow = xssfSheet.createRow(rowNum++); //다음번째 행
+		xssfCell = xssfRow.createCell((short)0);
+		xssfCell.setCellValue(player.getName()); //데이터
+		xssfCell = xssfRow.createCell((short)1);
+		xssfCell.setCellValue(player.getHp());
+		xssfCell = xssfRow.createCell((short)2);
+		xssfCell.setCellValue(player.getAttackPower());
+		xssfCell = xssfRow.createCell((short)3);
+		xssfCell.setCellValue(player.getDefensivePower());
+		xssfCell = xssfRow.createCell((short)4);
+		xssfCell.setCellValue(player.getReputation());
+		xssfCell = xssfRow.createCell((short)5);
+		xssfCell.setCellValue(player.getCurrentIndex());
+		xssfCell = xssfRow.createCell((short)6);
+		int inventoryLength = player.getInventoryLength();
+		for(int i=0; i<inventoryLength; i++)
+		{
+			xssfCell.setCellValue(player.getInventory()[i].item.getName());
+			xssfRow = xssfSheet.createRow(rowNum++);
+		}
+		xssfCell = xssfRow.createCell((short)7);
+		for(int i=0; i<inventoryLength; i++)
+		{
+			xssfCell.setCellValue(player.getInventory()[i].count);
+			xssfRow = xssfSheet.createRow(rowNum++);
+		}
+		xssfCell = xssfRow.createCell((short)8);
+		xssfCell.setCellValue(player.getPosID());
+		xssfCell = xssfRow.createCell((short)9);
+		int questArrayLength = player.getQuestArrayLength();
+		for(int i=0; i<questArrayLength; i++)
+		{
+			xssfCell.setCellValue(player.getQuestArray()[i].getQuestName());
+			xssfRow = xssfSheet.createRow(rowNum++);
+		}
+		xssfCell = xssfRow.createCell((short)10);
+		for(int i=0; i<questArrayLength; i++)
+		{
+			xssfCell.setCellValue(player.getQuestArray()[i].getCondition());
+			xssfRow = xssfSheet.createRow(rowNum++);
+		}
+		xssfCell = xssfRow.createCell((short)11);
+		for(int i=0; i<questArrayLength; i++)
+		{
+			xssfCell.setCellValue(player.getQuestArray()[i].getCompletion());
+			xssfRow = xssfSheet.createRow(rowNum++);
+		}
+		
+		//파일생성
+		File file;
+		try {
+			String path = "";
+			file = new File(path + "/saveFile.xlsx"); // 저장경로/파일이름.xlsx
+			
+			FileOutputStream fos = new FileOutputStream(file); 
+			xssfWb.write(fos);
+			fos.close(); //엑셀 파일 생성 성공
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace(); //엑셀 파일 생성 실패
+		}
+		
+	}
+	
+	public static int findSheet(FileInputStream fis, String playerName) throws IOException
+	{
+		XSSFWorkbook Wb = new XSSFWorkbook(fis);
+		int sheetsNum = Wb.getNumberOfSheets(); //파일의 시트 총 개수
+		for(int i=0; i<sheetsNum; i++)
+		{
+			if(Wb.getSheetName(i).equals(playerName)) //시트 이름이 같은 것 찾기
+			{
+				return i; //해당 인덱스 반환
+			}
+		}
+		return -1; //찾는 시트가 존재하지 않음
+	}
+	
+	public static void main(String args[], BorderStyle BorderStyle) throws FileNotFoundException {
 		// **아이템은 맵에서 생성하기
+		//saveFile 저장할 때 플레이어가 가진 아이템 정보가 필요함.
+		Item item;
 		Player player;
 		Map maps[][] = new Map[4][5];
 		// 5층, 5개의 방(로비 + 방 3개 + 화장실)로 대부분 구성되어있으나
@@ -34,7 +173,7 @@ public class GameManager {
 		
 		
 		// 플레이어 정보 생성 및 초기화
-		player = new Player();
+		player = new Player("이름", 100, 100, 100, 0, 0, 100, 0);
 		player.setPosID(10);		// 1층 로비로 위치 초기화
 		
 		// 맵 정보 생성 및 초기화
@@ -101,6 +240,7 @@ public class GameManager {
 		int num = 0;											// 선택지 저장
 		
 		
+		
 		// 게임 시작
 		while(true)
 		{	
@@ -113,21 +253,183 @@ public class GameManager {
 			System.out.println("3. 종료");
 			
 			num = scan.nextInt();
+			scan.next();
 			
 			if (num == 1 || num == 2)	// 게임 시작 선택
 			{
 				if (num == 1)		// 새 게임
 				{
 					// 1. 로컬에 새 파일(새 게임 데이터) 저장
+					System.out.print("플레이어의 이름은? : ");
+					String playerName = scan.nextLine();
+					player.setName(playerName); //이름 설정
+					saveNewPlayerInfo(player, playerName); //파일 생성
 					
 					// 2. 인트로 스크립트 출력
+					System.out.println("안녕하십니까 " + player.getFullName() + "님? 어서오세요.");
 					// 기본 데이터들은 사전에(게임 시작 전에) 생성했다는 가정 하에 진행
 				}
 				else if (num == 2)	// 게임 이어하기
 				{
 					// 로컬에 저장된 게임 데이터 불러오기
+					System.out.print("이어서 할 플레이어의 이름을 입력하세요. : ");
+					String playerName = scan.nextLine();
+					int sheetNum = 0;
+					FileInputStream fis;
+					try {
+						fis = new FileInputStream("saveFile.xlsx"); //파일 읽어오기
+						XSSFWorkbook Wb = new XSSFWorkbook(fis);
+						//이어서 할 플레이어의 정보가 저장된 해당 시트 찾기
+						sheetNum = findSheet(fis, playerName); 
+						
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					if(sheetNum == -1) //해당 시트가 존재하지 않음
+					{
+						System.out.println("해당 플레이어 정보는 존재하지 않습니다.");
+						continue; //메인 메뉴로 돌아가기
+					}
+					else //해당 시트를 찾음
+					{
+						XSSFWorkbook Wb = new XSSFWorkbook(fis);
+						XSSFSheet sheet = Wb.getSheetAt(sheetNum); //sheet변수에 해당 sheet 저장
+						
+						//플레이어 객체에 정보 옮기기
+						int rowIndex = 1;
+						int cellIndex = 0;
+						
+						//Name
+						XSSFRow row = sheet.getRow(rowIndex);
+						XSSFCell cell = row.getCell(cellIndex); //cell변수에 해당 cell 저장
+						player.setName(cell.getStringCellValue());
+						
+						//HP
+						cellIndex++;
+						cell = row.getCell(cellIndex);
+						player.setHp((int)cell.getNumericCellValue());
+						
+						//AttackPower
+						cellIndex++;
+						cell = row.getCell(cellIndex);
+						player.setAttackPower((int)cell.getNumericCellValue());
+						
+						//DefensivePower
+						cellIndex++;
+						cell = row.getCell(cellIndex);
+						player.setDefensivePower((int)cell.getNumericCellValue());
+						
+						//Reputation
+						cellIndex++;
+						cell = row.getCell(cellIndex);
+						player.setReputation((int)cell.getNumericCellValue());
+						
+						//CurrentIndex
+						cellIndex++;
+						cell = row.getCell(cellIndex);
+						player.setCurrentIndex((int)cell.getNumericCellValue());
+						
+						//inventory item name
+						cellIndex++;
+						int rowsNum = sheet.getPhysicalNumberOfRows(); //시트 당 행의 개수
+						int inventoryIndex = 0;
+						for(rowIndex=1; rowIndex<rowsNum; rowIndex++)
+						{
+							row = sheet.getRow(rowIndex);
+							cell = row.getCell(cellIndex);
+							if(cell != null) //셀 내용이 있는 경우
+							{
+								player.getInventory()[inventoryIndex].item.setName(cell.getStringCellValue()); //인벤토리에 저장
+								inventoryIndex++;
+							}
+							else //셀 값이 비어있을 경우
+							{
+								continue;
+							}
+						}
+						
+						//inventory item count
+						cellIndex++;
+						inventoryIndex = 0;
+						for(rowIndex=1; rowIndex<rowsNum; rowIndex++)
+						{
+							row = sheet.getRow(rowIndex);
+							cell = row.getCell(cellIndex);
+							if(cell != null) //셀 내용이 있는 경우
+							{
+								player.getInventory()[inventoryIndex].count=(int)cell.getNumericCellValue(); //인벤토리에 저장
+								inventoryIndex++;
+							}
+							else //셀 값이 비어있을 경우
+							{
+								continue;
+							}
+						}
+						
+						//posID
+						cellIndex++;
+						cell = row.getCell(cellIndex);
+						player.setPosID((int)cell.getNumericCellValue());
+						
+						//Quest Name
+						cellIndex++;
+						int questIndex = 0;
+						int questArrayLength = player.getQuestArrayLength();
+						for(rowIndex=1; rowIndex<questArrayLength; rowIndex++)
+						{
+							row = sheet.getRow(rowIndex);
+							cell = row.getCell(cellIndex);
+							if(cell != null) //셀 내용이 있는 경우
+							{
+								player.getQuestArray()[questIndex].setQuestName(cell.getStringCellValue());
+								questIndex++;
+							}
+							else //셀 값이 비어있을 경우
+							{
+								continue;
+							}
+						}
+						
+						//Quest Condition
+						cellIndex++;
+						questIndex = 0;
+						for(rowIndex=1; rowIndex<questArrayLength; rowIndex++)
+						{
+							row = sheet.getRow(rowIndex);
+							cell = row.getCell(cellIndex);
+							if(cell != null) //셀 내용이 있는 경우
+							{
+								player.getQuestArray()[questIndex].setCondition(cell.getBooleanCellValue());
+								questIndex++;
+							}
+							else //셀 값이 비어있을 경우
+							{
+								continue;
+							}
+						}
+						
+						//Quest Complete
+						cellIndex++;
+						questIndex = 0;
+						for(rowIndex=1; rowIndex<questArrayLength; rowIndex++)
+						{
+							row = sheet.getRow(rowIndex);
+							cell = row.getCell(cellIndex);
+							if(cell != null) //셀 내용이 있는 경우
+							{
+								player.getQuestArray()[questIndex].setCompletion(cell.getBooleanCellValue());
+								questIndex++;
+							}
+							else //셀 값이 비어있을 경우
+							{
+								continue;
+							}
+						}
+						
+						System.out.println("해당 데이터를 모두 불러오는데 성공했습니다.");
+					}
+					
 				}
-				
 				
 				// 본격적인 게임 진행
 				// goTitle이 true가 되면 반복문 탈출,
