@@ -432,7 +432,7 @@ public class GameManager {
 		}
 		
 		// 	각 객체 정보 파일로 불러오기(읽어오기)
-		// ItemNPC 객체의 setQuestAll()함수로 플레이어의 인벤토리에 들어갈 퀘스트 정보 저장
+		// ItemNPC의 퀘스트 정보 저장 (플레이어의 인벤토리에 작성되는 퀘스트 스크립트)
 		try {
 				FileInputStream QuestScriptFile = new FileInputStream("Quest Script.xlsx"); // 파일 경로로 파일 읽어오기
 				XSSFWorkbook QuestScriptWB = new XSSFWorkbook(QuestScriptFile);
