@@ -311,8 +311,6 @@ public class GameManager {
 		ItemNPC[] itemNPC = new ItemNPC[6]; // 객체 배열로 수정완료!
 		SkillNPC skillNPC = new SkillNPC();	// 스킬NPC는 한 명이므로 하나만 생성함
 		
-		//File endingFiles[] = new File[3]; // **엑셀로 파일의 데이터 가져오기&저장하기
-		
 		// 플레이어 정보 생성 및 초기화
 		player = new Player("이름", 100, 100, 100, 0, 0, 100, 0);
 		player.setPosID(10);		// 1층 로비로 위치 초기화
@@ -691,11 +689,46 @@ public class GameManager {
 			skillNPCQSindex++;
 		}
 		
+		
+		//EndingScript 
+		XSSFSheet[] endingArray = new XSSFSheet[3]; //endingScript 저장할 Sheet배열.
+													 //Bad-Normal-True Ending 순서로 저장.
+		int endingArrayIndex = 0; //엔딩 스크립트 시트 배열의 인덱스
+		
+		//EndingScript 엑셀 파일 읽어오기
+		FileInputStream endingScriptFis;
+		XSSFWorkbook endingWb;
+		int endingSheetIndex = 0; //endingScript엑셀 파일의 시트 인덱스
+		
+		try 
+		{
+			endingScriptFis = new FileInputStream("EndingScript.xlsx");
+			endingWb = new XSSFWorkbook(endingScriptFis);
+			
+			int endingArrayLength = endingArray.length; //엔딩 스크립트 시트 배열의 길이
+			for(int endingFileIndex = 0; endingFileIndex<endingArrayLength; endingFileIndex++)
+			{
+				endingArray[endingArrayIndex] = endingWb.getSheetAt(endingSheetIndex);
+				endingArrayIndex++;
+			}
+			
+			//파일 닫기
+			endingScriptFis.close();
+			endingWb.close();
+			
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		
 		// 플레이시 필요한 객체 생성
 		PlayEvent playEvent = new PlayEvent(maps, player);		// 이벤트 객체 생성
 		Scanner scan = new Scanner(System.in);					// 스캐너 객체 생성
 		int num = 0;											// 선택지 저장
-				
+		
+		
 		// 게임 시작
 		while(true)
 		{	
@@ -997,7 +1030,7 @@ public class GameManager {
 						
 						// 5층 엔딩
 						case 50:
-							playEvent.playFloor5();
+							playEvent.playFloor5(endingArray);
 							break;
 					}
 				}
