@@ -303,7 +303,6 @@ public class GameManager {
 		final int ROOM = 5; // 방
 		Player player;
 		Map maps[][] = new Map[FLOOR][ROOM];
-		
 		// 5층, 5개의 방(로비 + 방 3개 + 화장실)로 대부분 구성되어있으나
 		// 5층은 엔딩 진행의 역할만 수행하므로 5층을 제외한 1~4층을 활동 범위로 잡아
 		// Map 객체 배열을 [4][5]의 이차원 배열로 설정함
@@ -343,7 +342,9 @@ public class GameManager {
 				
 				// mapObject에 층별로 오브젝트 이름&설명 저장
 				switch (objectRow.getCell(0).getStringCellValue()) {
-					case "1": { // 각행의 0열에 저장된 값이 1이라면 (1층)
+					case "11" :
+					case "12" :
+					case "14" : { // 각행의 0열에 저장된 값이 1이라면 (1층)
 						XSSFCell objectName = objectRow.getCell(2); // 해당 row의 cell에서 name가져오기 (셀 인덱스2)
 						mapObject[0][objectIndex1].setObjectName(objectName.getStringCellValue()); // 오브젝트 이름 저장
 					
@@ -351,7 +352,8 @@ public class GameManager {
 						mapObject[0][objectIndex1].setDescription(objectDescription.getStringCellValue()); // 오브젝트 설명 저장
 						objectIndex1++;
 					} break;
-					case "2": { // 각행의 0열에 저장된 값이 2라면 (2층)
+					case "21" :
+					case "22" : { // 각행의 0열에 저장된 값이 2라면 (2층)
 						XSSFCell objectName = objectRow.getCell(2); // 해당 row의 cell에서 name가져오기 (셀 인덱스2)
 						mapObject[1][objectIndex2].setObjectName(objectName.getStringCellValue()); // 오브젝트 이름 저장
 					
@@ -359,7 +361,9 @@ public class GameManager {
 						mapObject[1][objectIndex2].setDescription(objectDescription.getStringCellValue()); // 오브젝트 설명 저장
 						objectIndex2++;
 					} break;
-					case "3": { // 각행의 0열에 저장된 값이 3이라면 (3층)
+					case "31" :
+					case "32" :
+					case "33" : { // 각행의 0열에 저장된 값이 3이라면 (3층)
 						XSSFCell objectName = objectRow.getCell(2); // 해당 row의 cell에서 name가져오기 (셀 인덱스2)
 						mapObject[2][objectIndex3].setObjectName(objectName.getStringCellValue()); // 오브젝트 이름 저장
 					
@@ -367,7 +371,9 @@ public class GameManager {
 						mapObject[2][objectIndex3].setDescription(objectDescription.getStringCellValue()); // 오브젝트 설명 저장
 						objectIndex3++;
 					} break;
-					case "4": {
+					case "41" :
+					case "42" :
+					case "43" : { // 각행의 0열에 저장된 값이 4라면 (4층)
 						XSSFCell objectName = objectRow.getCell(2); // 해당 row의 cell에서 name가져오기 (셀 인덱스2)
 						mapObject[3][objectIndex4].setObjectName(objectName.getStringCellValue()); // 오브젝트 이름 저장
 					
@@ -376,13 +382,16 @@ public class GameManager {
 						objectIndex4++;
 					} break;
 				}
+			}
+			
+			// mapObject에 층별 오브젝트에 속해있는 item 이름&설명 저장
+			// 이때, 쉽게배우는 악마어, 일기장, 회로선 등 itemManager에 있는 아이템들은 mapObject에 저장X
+			// PlayEvent클래스에서 ItemManager 객체 변수를 만든 뒤, getItem()함수를 사용하여 아이템 생성하기!
+			for (rowNum = 1; rowNum <= objectRows; rowNum++) {
+				XSSFRow objectRow = ObjectScriptSheet.getRow(rowNum); // object row
+				for (int rowNum2 = 1; rowNum2 <= itemRows; rowNum2++) { // 제목 건너뛰기
+					XSSFRow itemRow = ItemScriptSheet.getRow(rowNum); // item row
 				
-				// mapObject에 층별 오브젝트에 속해있는 item 이름&설명 저장
-				// 이때, 쉽게배우는 악마어, 일기장, 회로선 등 itemManager에 있는 아이템들은 mapObject에 저장X
-				// PlayEvent클래스에서 ItemManager 객체 변수를 만든 뒤, getItem()함수를 사용하여 아이템 생성하기!
-				for (rowNum = 1; rowNum <= itemRows; rowNum++) { // 제목 건너뛰기
-					XSSFRow itemRow = ItemScriptSheet.getRow(rowNum); // row
-					
 					// 만약 오브젝트 스크립트의 코드와 아이템 스크립트의 코드가 같다면
 					if (objectRow.getCell(1).getStringCellValue().equals(itemRow.getCell(1).getStringCellValue())) {
 						XSSFCell objectName = objectRow.getCell(2); // 오브젝트 이름 추출
@@ -411,22 +420,22 @@ public class GameManager {
 							}
 						}
 					}
-						
 				}
-				
-				// maps배열에 층별로 mapObject배열 넣기
-				for (rowNum = 1; rowNum <= objectRows; rowNum++) {
-					for (int i = 0; i < FLOOR; i++) {
-						int floorCode = (FLOOR + 1) * 10;
-						for (int j = 1; j < ROOM -1; j++) {
-							++floorCode;
-							int mapIndex = 0;
-							for (int z = 0; z < OBJECTNUM; z++) {
-								// Object Script에 저장되어 있는 Floor값과 floorCode 비교
-								if (objectRow.getCell(0).getNumericCellValue() == floorCode) {
-									maps[i][j].setObject(mapObject[i][z], mapIndex);
-									++mapIndex;
-								}
+			}
+			
+			// maps배열에 층별로 mapObject배열 넣기
+			for (rowNum = 1; rowNum <= objectRows; rowNum++) {
+				XSSFRow objectRow = ObjectScriptSheet.getRow(rowNum); // object row
+				for (int i = 0; i < FLOOR; i++) {
+					int floorCode = (FLOOR + 1) * 10;
+					for (int j = 1; j < ROOM; j++) {
+						++floorCode;
+						int mapIndex = 0;
+						for (int z = 0; z < OBJECTNUM; z++) {
+							// Object Script에 저장되어 있는 Floor값과 floorCode 비교
+							if (objectRow.getCell(0).getNumericCellValue() == floorCode) {
+								maps[i][j].setObject(mapObject[i][z], mapIndex);
+								++mapIndex;
 							}
 						}
 					}

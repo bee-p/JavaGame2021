@@ -37,6 +37,8 @@ public class Item { // 모든 아이템에 대한 기본 아이템 클래스
 		return value;
 	}
 	
+	// 포션을 제외한 일기장, 쉽배악 등의 아이템은 value값으로 획득 여부를 판별
+	// 0 : 미획득, 1 : 획득
 	public void setValue(int value) {
 		this.value = value;
 	}
