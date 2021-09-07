@@ -691,25 +691,51 @@ public class GameManager {
 		
 		
 		//EndingScript 
-		XSSFSheet[] endingArray = new XSSFSheet[3]; //endingScript 저장할 Sheet배열.
-													 //Bad-Normal-True Ending 순서로 저장.
-		int endingArrayIndex = 0; //엔딩 스크립트 시트 배열의 인덱스
+		final int endingNum = 3; //엔딩개수
+		String[][] endingArray = new String[endingNum][]; //endingScript 저장할 String배열. Bad-Normal-True Ending 순서로 저장.
 		
 		//EndingScript 엑셀 파일 읽어오기
 		FileInputStream endingScriptFis;
 		XSSFWorkbook endingWb;
-		int endingSheetIndex = 0; //endingScript엑셀 파일의 시트 인덱스
+		XSSFSheet endingSheet;
+		XSSFRow endingRow;
+		XSSFCell endingCell;
+		
+		int sheetIndex; //EndingScript 엑셀 파일의 시트 인덱스
+		int rowIndex; //EndingScript 엑셀 파일의 행 인덱스
+		
+		int endingSortIndex = 0; //엔딩 종류 인덱스 => 0은 BAD / 1은 NORMAL / 2는 True
+		int endingSentenceIndex = 0; //엔딩 문장 인덱스
 		
 		try 
 		{
 			endingScriptFis = new FileInputStream("EndingScript.xlsx");
 			endingWb = new XSSFWorkbook(endingScriptFis);
 			
-			int endingArrayLength = endingArray.length; //엔딩 스크립트 시트 배열의 길이
-			for(int endingFileIndex = 0; endingFileIndex<endingArrayLength; endingFileIndex++)
+			String dialogue = ""; //대사 저장하는 변수
+
+			int sheetNum = endingWb.getNumberOfSheets(); //엑셀 파일에 있는 시트의 총 개수
+			int rowNum; //엑셀 파일에 있는 시트 당 행의 총 개수를 저장하는 변수
+			int cellNum; //엑셀 파일에 있는 행 당 셀의 총 개수를 저장하는 변수
+			for(sheetIndex=0; sheetIndex<sheetNum; sheetIndex++)
 			{
-				endingArray[endingArrayIndex] = endingWb.getSheetAt(endingSheetIndex);
-				endingArrayIndex++;
+				endingSheet = endingWb.getSheetAt(sheetIndex); //시트 지정
+				rowNum = endingSheet.getPhysicalNumberOfRows(); //시트 당 행의 총 개수
+				
+				for(rowIndex = 0; rowIndex<rowNum; rowIndex++)
+				{
+					endingRow = endingSheet.getRow(rowIndex); //행 지정
+					endingCell = endingRow.getCell(0); //셀 지정 - 셀 인덱스는 항상 0
+					
+					if(endingCell != null) //셀이 비어있지 않다면
+					{
+						dialogue = endingCell.getStringCellValue(); //셀 String으로 읽어오기
+						//배열에 엔딩 스크립트 저장하기			
+						endingArray[endingSortIndex][endingSentenceIndex] = dialogue;
+						endingSentenceIndex++; //다음 대사로 넘어감 = 행 바뀜
+					}
+				}
+				endingSortIndex++; //엔딩 종류 바뀜 = 시트 바뀜
 			}
 			
 			//파일 닫기
