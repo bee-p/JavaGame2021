@@ -19,9 +19,9 @@ public abstract class NPC {
 	{
 		return questScripts;
 	}
-	public void setQuestScripts(String[] questScripts)
+	public void setQuestScripts(int index, String questScripts)
 	{
-		this.questScripts = questScripts;
+		this.questScripts[index] = questScripts;
 	}
    
 	public int getQuestScriptCount()

@@ -453,7 +453,7 @@ public class GameManager {
 		try {
 				QuestScriptFile = new FileInputStream("Quest Script.xlsx"); // 파일 경로로 파일 읽어오기
 				QuestScriptWB = new XSSFWorkbook(QuestScriptFile);
-				Quest[] quest = new Quest[6]; // Quest Script 저장할 quest 배열 변수
+				Quest[] quest = new Quest[11]; // Quest Script 저장할 quest 배열 변수
 				
 				int rownum = 0; // 행 인덱스
 				int cellnum = 0; // 열 인덱스
@@ -538,6 +538,158 @@ public class GameManager {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		
+		//ItemNPC Script(ItemNPC 대화 스크립트)
+		FileInputStream itemNPCScriptFis;
+		XSSFWorkbook itemNPCWb;
+		String[] tempIQScripts = new String[22]; //스크립트 임시로 저장해 둘 String배열
+		int tempIQIndex = 0; //임시 String배열의 인덱스
+		
+		try {
+			//엑셀 파일 읽어오기
+			itemNPCScriptFis = new FileInputStream("ItemNPCScript.xlsx");
+			itemNPCWb = new XSSFWorkbook(itemNPCScriptFis);
+			XSSFSheet itemNPCSheet = itemNPCWb.getSheetAt(0); //0번째 시트 읽어오기
+			XSSFRow itemNPCRow;
+			XSSFCell itemNPCCell;
+			
+			int rowNum = 0; // 행 인덱스
+			int cellNum = 0; // 열 인덱스
+			
+			int rows = itemNPCSheet.getPhysicalNumberOfRows(); // sheet 당 row의 총 수
+			int cells; //각 row 당 cell들의 총 수를 저장할 변수
+			
+			//Cell마다 읽어서 임시 String배열에 저장
+			for(rowNum = 1; rowNum < rows; rowNum++)
+			{
+				itemNPCRow = itemNPCSheet.getRow(rowNum);
+				
+				if(itemNPCRow != null) //row가 비어있지 않으면
+				{
+					cells = itemNPCRow.getPhysicalNumberOfCells(); //각 row 당 cell들의 총 수
+					for(cellNum = 1; cellNum < cells; cellNum++)
+					{
+						itemNPCCell = itemNPCRow.getCell(cellNum);
+						
+						if(itemNPCCell != null) //셀에 내용이 들어 있으면 임시 배열에 저장
+						{
+							//전부 String이라 String으로 읽어오기		
+							tempIQScripts[tempIQIndex] = itemNPCCell.getStringCellValue(); 
+							tempIQIndex++;
+						}
+						else //셀이 비어있으면 패스
+						{
+							continue;
+						}
+						
+					}
+				}
+			}
+			
+			itemNPCScriptFis.close();
+			itemNPCWb.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// 임시 배열에 있는 내용을 해당 NPC마다 순서대로 부여하기
+		int itemNPCIndex = 0; // 아이템NPC 배열의 인덱스
+		int tempIQLength = tempIQScripts.length; // 임시 배열의 길이
+		int itemNPCQSIndex = 0; // 아이템NPC가 가지고 있는 QuestScripts배열의 인덱스
+
+		for (tempIQIndex = 0; tempIQIndex < tempIQLength; tempIQIndex++) 
+		{
+			switch (tempIQIndex) 
+			{
+			case 0: case 1: case 2: case 3: // 1층 인간 NPC
+				itemNPC[itemNPCIndex].setQuestScripts(itemNPCQSIndex, tempIQScripts[tempIQIndex]);
+				break;
+			case 4: case 5: case 6: case 7: // 2층 몬스터 NPC
+				itemNPC[itemNPCIndex].setQuestScripts(itemNPCQSIndex, tempIQScripts[tempIQIndex]);
+				break;
+			case 8: case 9: case 10: case 11: // 2층 인간 NPC(1)
+				itemNPC[itemNPCIndex].setQuestScripts(itemNPCQSIndex, tempIQScripts[tempIQIndex]);
+				break;
+			case 12: case 13: case 14: case 15: // 2층 인간 NPC(2)
+				itemNPC[itemNPCIndex].setQuestScripts(itemNPCQSIndex, tempIQScripts[tempIQIndex]);
+				break;
+			case 16: case 17: // 3층 몬스터 NPC(1)
+				itemNPC[itemNPCIndex].setQuestScripts(itemNPCQSIndex, tempIQScripts[tempIQIndex]);
+				break;
+			case 18: case 19: case 20: case 22: // 3층 몬스터 NPC(2)
+				itemNPC[itemNPCIndex].setQuestScripts(itemNPCQSIndex, tempIQScripts[tempIQIndex]);
+				break;
+			}
+			itemNPCIndex++; // 다음 itemNPC로 넘어감
+			itemNPCQSIndex++; // 해당 itemNPC의 QuestScripts[]의 인덱스
+		}
+		
+		//SkillNPC Script(SkillNPC 대화 스크립트)
+		FileInputStream skillNPCScriptFis;
+		XSSFWorkbook skillNPCWb;
+		String[] tempSQScripts = new String[10]; //스크립트 임시로 저장해 둘 String배열
+		int tempSQIndex = 0; //임시 String배열의 인덱스
+		
+		try
+		{
+			//SkillNPC Script 엑셀 파일 읽어오기
+			skillNPCScriptFis = new FileInputStream("SkillNPCScript.xlsx"); 
+			skillNPCWb = new XSSFWorkbook(skillNPCScriptFis);
+			XSSFSheet skillNPCSheet = skillNPCWb.getSheetAt(0); //0번째 시트 읽어오기
+			XSSFRow skillNPCRow;
+			XSSFCell skiNPCCell;
+			
+			int rowNum = 0; // 행 인덱스
+			int cellNum = 0; // 열 인덱스
+			
+			int rows = skillNPCSheet.getPhysicalNumberOfRows(); // sheet 당 row의 총 수
+			int cells; //각 row 당 cell들의 총 수를 저장할 변수
+			
+			//Cell마다 읽어서 임시 String배열에 저장
+			for(rowNum = 1; rowNum < rows; rowNum++)
+			{
+				skillNPCRow = skillNPCSheet.getRow(rowNum);
+				
+				if(skillNPCRow != null) //row가 비어있지 않으면
+				{
+					cells = skillNPCRow.getPhysicalNumberOfCells(); //각 row 당 cell들의 총 수
+					for(cellNum = 1; cellNum < cells; cellNum++)
+					{
+						skiNPCCell = skillNPCRow.getCell(cellNum);
+						
+						if(skiNPCCell != null) //셀에 내용이 들어 있으면 임시 배열에 저장
+						{
+							//전부 String이라 String으로 읽어오기		
+							tempSQScripts[tempSQIndex] = skiNPCCell.getStringCellValue(); 
+							tempSQIndex++;
+						}
+						else //셀이 비어있으면 패스
+						{
+							continue;
+						}
+						
+					}
+				}
+			
+			}
+			skillNPCScriptFis.close();
+			skillNPCWb.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+				
+		//SkillNPC의 QuestScripts배열에 순서대로 Script 부여하기
+		int tempSQLength = tempSQScripts.length; //임시 배열의 길이
+		int skillNPCQSindex = 0; //스킬 NPC가 가지고 있는 QuestScripts 배열의 인덱스
+		
+		for(tempSQIndex=0; tempSQIndex<tempSQLength; tempSQIndex++)
+		{
+			skillNPC.setQuestScripts(skillNPCQSindex, tempSQScripts[tempSQIndex]); 
+			skillNPCQSindex++;
+		}
 		
 		// 플레이시 필요한 객체 생성
 		PlayEvent playEvent = new PlayEvent(maps, player);		// 이벤트 객체 생성
