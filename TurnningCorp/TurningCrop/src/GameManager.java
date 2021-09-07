@@ -12,9 +12,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 public class GameManager {	
-//	private ItemManager itemManager;
+//	private ItemManager itemManager = new ItemManager();
 //	private Random random;
-	
 	// -------------------------------------------------------------------------------- \\
 	//saveFile
 	public static void saveNewPlayerInfo(Player player, String playerName)
@@ -293,17 +292,19 @@ public class GameManager {
 	}
 	
 	public static void main(String args[], BorderStyle BorderStyle) throws FileNotFoundException {
-		// **아이템은 맵에서 생성하기
 		//saveFile 저장할 때 플레이어가 가진 아이템 정보가 필요함.
+		final int FLOOR = 4; // 층
+		final int ROOM = 5; // 방
 		Item item;
 		Player player;
-		Map maps[][] = new Map[4][5];
+		Map maps[][] = new Map[FLOOR][ROOM];
+		
 		// 5층, 5개의 방(로비 + 방 3개 + 화장실)로 대부분 구성되어있으나
 		// 5층은 엔딩 진행의 역할만 수행하므로 5층을 제외한 1~4층을 활동 범위로 잡아
 		// Map 객체 배열을 [4][5]의 이차원 배열로 설정함
 		// 5층의 경우는 playEvent.playFloor5() 메소드만을 통해 엔딩 이벤트 진행함
 		
-		ItemNPC[] itemNPC = new ItemNPC[6]; 		// 객체 배열로 수정 완료
+		ItemNPC[] itemNPC = new ItemNPC[6]; // 객체 배열로 수정완료!
 		SkillNPC skillNPC = new SkillNPC();	// 스킬NPC는 한 명이므로 하나만 생성함
 		
 		File endingFiles[] = new File[3]; // **엑셀로 파일의 데이터 가져오기&저장하기
@@ -314,8 +315,121 @@ public class GameManager {
 		player.setPosID(10);		// 1층 로비로 위치 초기화
 		
 		// 맵 정보 생성 및 초기화
-		
-		
+		// 각 맵마다 존재하는 사물, 아이템 정보를 엑셀에서 가져와 저장하기
+		try {
+			FileInputStream Objectfis = new FileInputStream("Object Script.xlsx"); // 사물 , 아이템 스크립트
+			XSSFWorkbook ObjectWB = new XSSFWorkbook(Objectfis);
+			final int OBJECTNUM = 15;
+			MapObject[][] mapObject = new MapObject[FLOOR][OBJECTNUM]; // 사물을 저장할 mapObject 변수, [층][사물 개수]
+			
+			int rowNum = 0; // 행 인덱스
+			int cellNum = 0; // 열 인덱스
+			int objectIndex1 = 0, objectIndex2 = 0, objectIndex3 = 0, objectIndex4 = 0; // 사물 배열 인덱스
+			int itemIndex = 0; // 사물에 속한 아이템 배열 인덱스
+			
+			XSSFSheet ObjectScriptSheet = ObjectWB.getSheetAt(0); // Object Script 시트 가져오기
+			XSSFSheet ItemScriptSheet = ObjectWB.getSheetAt(1); // Item Script 시트 가져오기
+			
+			int objectRows = ObjectScriptSheet.getPhysicalNumberOfRows(); // 오브젝트 시트의 row수 저장
+			int itemRows = ItemScriptSheet.getPhysicalNumberOfRows(); // 아이템 시트의 row수 저장
+			
+			for (rowNum = 1; rowNum <= objectRows; rowNum++) { // 제목 건너뛰기
+				XSSFRow objectRow = ObjectScriptSheet.getRow(rowNum); // row
+				
+				// mapObject에 층별로 오브젝트 이름&설명 저장
+				switch (objectRow.getCell(0).getStringCellValue()) {
+					case "1": { // 각행의 0열에 저장된 값이 1이라면 (1층)
+						XSSFCell objectName = objectRow.getCell(2); // 해당 row의 cell에서 name가져오기 (셀 인덱스2)
+						mapObject[0][objectIndex1].setObjectName(objectName.getStringCellValue()); // 오브젝트 이름 저장
+					
+						XSSFCell objectDescription = objectRow.getCell(3); // description 가져오기 (셀 인덱스3)
+						mapObject[0][objectIndex1].setDescription(objectDescription.getStringCellValue()); // 오브젝트 설명 저장
+						objectIndex1++;
+					} break;
+					case "2": { // 각행의 0열에 저장된 값이 2라면 (2층)
+						XSSFCell objectName = objectRow.getCell(2); // 해당 row의 cell에서 name가져오기 (셀 인덱스2)
+						mapObject[1][objectIndex2].setObjectName(objectName.getStringCellValue()); // 오브젝트 이름 저장
+					
+						XSSFCell objectDescription = objectRow.getCell(3); // description 가져오기 (셀 인덱스3)
+						mapObject[1][objectIndex2].setDescription(objectDescription.getStringCellValue()); // 오브젝트 설명 저장
+						objectIndex2++;
+					} break;
+					case "3": { // 각행의 0열에 저장된 값이 3이라면 (3층)
+						XSSFCell objectName = objectRow.getCell(2); // 해당 row의 cell에서 name가져오기 (셀 인덱스2)
+						mapObject[2][objectIndex3].setObjectName(objectName.getStringCellValue()); // 오브젝트 이름 저장
+					
+						XSSFCell objectDescription = objectRow.getCell(3); // description 가져오기 (셀 인덱스3)
+						mapObject[2][objectIndex3].setDescription(objectDescription.getStringCellValue()); // 오브젝트 설명 저장
+						objectIndex3++;
+					} break;
+					case "4": {
+						XSSFCell objectName = objectRow.getCell(2); // 해당 row의 cell에서 name가져오기 (셀 인덱스2)
+						mapObject[3][objectIndex4].setObjectName(objectName.getStringCellValue()); // 오브젝트 이름 저장
+					
+						XSSFCell objectDescription = objectRow.getCell(3); // description 가져오기 (셀 인덱스3)
+						mapObject[3][objectIndex4].setDescription(objectDescription.getStringCellValue()); // 오브젝트 설명 저장
+						objectIndex4++;
+					} break;
+				}
+				
+				// mapObject에 층별 오브젝트에 속해있는 item 이름&설명 저장
+				// 이때, 쉽게배우는 악마어, 일기장, 회로선 등 itemManager에 있는 아이템들은 mapObject에 저장X
+				// PlayEvent클래스에서 ItemManager 객체 변수를 만든 뒤, getItem()함수를 사용하여 아이템 생성하기!
+				for (rowNum = 1; rowNum <= itemRows; rowNum++) { // 제목 건너뛰기
+					XSSFRow itemRow = ItemScriptSheet.getRow(rowNum); // row
+					
+					// 만약 오브젝트 스크립트의 코드와 아이템 스크립트의 코드가 같다면
+					if (objectRow.getCell(1).getStringCellValue().equals(itemRow.getCell(1).getStringCellValue())) {
+						XSSFCell objectName = objectRow.getCell(2); // 오브젝트 이름 추출
+						
+						// mapObject배열에서 해당 이름을 가진 오브젝트 인덱스를 찾아서, item 이름&설명 저장
+						for (int i = 0; i < FLOOR; i++) {
+							for (int j = 0; j < OBJECTNUM; j++) {
+								if (mapObject[i][j].getObjectName().equals(objectName.getStringCellValue())) {
+									XSSFCell itemName = itemRow.getCell(2); // 아이템 이름 추출
+									XSSFCell itemDescription = itemRow.getCell(3); // 아이템 설명 추출
+									
+									Item scriptItem = new Item(); // 아이템 변수
+									scriptItem.setName(itemName.getStringCellValue()); // 아이템 이름 저장
+									scriptItem.setDescription(itemDescription.getStringCellValue()); // 아이템 설명 저장
+									scriptItem.setValue(0);
+									
+									// 해당 mapObject 인덱스에 저장되어 있는 아이템 개수 찾기
+									itemIndex = mapObject[i][j].getAllItem().length;
+									if (itemIndex == 0) { // 아이템이 없다면
+										mapObject[i][j].setItem(scriptItem, itemIndex);
+									}
+									else if (itemIndex >= 1) { // 아이템이 1개 이상이라면
+										mapObject[i][j].setItem(scriptItem, itemIndex + 1);
+									}
+								}
+							}
+						}
+					}
+						
+				}
+				
+				// maps배열에 층별로 mapObject배열 넣기
+				for (rowNum = 1; rowNum <= objectRows; rowNum++) {
+					for (int i = 0; i < FLOOR; i++) {
+						int floorCode = (FLOOR + 1) * 10;
+						for (int j = 1; j < ROOM -1; j++) {
+							++floorCode;
+							int mapIndex = 0;
+							for (int z = 0; z < OBJECTNUM; z++) {
+								// Object Script에 저장되어 있는 Floor값과 floorCode 비교
+								if (objectRow.getCell(0).getNumericCellValue() == floorCode) {
+									maps[i][j].setObject(mapObject[i][z], mapIndex);
+									++mapIndex;
+								}
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		// 	각 객체 정보 파일로 불러오기(읽어오기)
 		// ItemNPC 객체의 setQuestAll()함수로 플레이어의 인벤토리에 들어갈 퀘스트 정보 저장
@@ -405,9 +519,7 @@ public class GameManager {
 		PlayEvent playEvent = new PlayEvent(maps, player);		// 이벤트 객체 생성
 		Scanner scan = new Scanner(System.in);					// 스캐너 객체 생성
 		int num = 0;											// 선택지 저장
-		
-		
-		
+				
 		// 게임 시작
 		while(true)
 		{	
@@ -730,46 +842,4 @@ public class GameManager {
 //		    //플레이중
 //		}
 	}
-	
-	
-	// -------------------------------------------------------------------------------- \\
-	
-	
-//	private boolean isPlay = true;
-//	
-//	public GameManager() {
-//		random = new Random();
-//	}
-//	
-//	public void startGame() {
-//		intro(); // 게임 인트로
-//		for (; isPlay;) {
-//			play();
-//		}
-//	}
-//	
-//	// 플레이어의 정보 생성
-//	private void intro() {
-//		player = new Player("감자"); // 플레이어 생성
-//		player.saveInventory(itemManager.getItem(0)); // 초기 아이템 인벤토리에 저장
-//	}
-//	
-//	private void play() {
-//		// 게임 플레이~~
-//		// switch-case문으로 map의 어떤 목적지에 달성했다면 클리어! or 사물보기..? => 이건 map에서 하는건가
-//	}
-//	
-//	private void checkPlay(int num) {
-//		// 1. 이동, 2. 플레이어 정보 보기, 3. 인벤토리, 4. 아이템 사용, 5. 아이템 정보 보기, 6. 게임 종료 => 퀘스트 보기...?
-//	}
-	
-//	// 평상시에 아이템 사용
-//	private void useItem(Player player) {
-//		
-//	}
-//	
-//	// 배틀시 아이템 사용
-//	private void useItem(Player player, BattleManager battle) {
-//		
-//	}
 }

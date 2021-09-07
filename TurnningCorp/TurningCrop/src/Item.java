@@ -29,8 +29,16 @@ public class Item { // 모든 아이템에 대한 기본 아이템 클래스
 		return description;
 	}
 	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 	public int getValue() {
 		return value;
+	}
+	
+	public void setValue(int value) {
+		this.value = value;
 	}
 	
 	// 아이템 정보 내보내는 메소드
