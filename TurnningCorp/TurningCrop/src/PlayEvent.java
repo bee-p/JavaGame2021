@@ -27,6 +27,9 @@ public class PlayEvent {
 	private Map[][] map;
 	private Player player;
 	
+	// ItemManager 객체
+	// 쉽배악, 일기장을 불러오기 위해 활용
+	ItemManager im = new ItemManager();
 	
 	// 생성자
 	PlayEvent()
@@ -329,8 +332,8 @@ public class PlayEvent {
 					
 					if (num == 1)		// 책상 위 조사
 					{
-						// 이미 아이템을 가져갔는지 검사(일기장)
-						if (player.searchItem(mapObject.getItem(0).getName()))
+						// 이미 아이템을 가져갔는지 검사(일기장_1)
+						if (player.searchItem(im.getDiary(0).getName()))
 						{
 							// 아이템을 이미 가져갔다면 다시 책상 위/책상 아래 선택지로 이동
 							System.out.println("책상 위에 더이상 특이한 건 보이지 않는다.");
@@ -340,7 +343,7 @@ public class PlayEvent {
 						// 아이템을 가져가지 않았다면 기존 진행 그대로..
 						
 						// 책상 위에는 일기장이 있다.
-						System.out.println("책상 위에는 " + mapObject.getItem(0).getName() + "이 있다.");
+						System.out.println("책상 위에는 " + im.getDiary(0).getName() + "이 있다.");
 						System.out.println("가져갈까?");
 						System.out.println("1. 가져가자.");
 						System.out.println("2. 가져가지 말자.");
@@ -349,10 +352,10 @@ public class PlayEvent {
 						
 						if (num == 1)
 						{
-							// 플레이어 인벤토리에 아이템 저장
-							player.saveInventory(mapObject.getItem(0));
+							// 플레이어 인벤토리에 일기장 저장
+							player.saveInventory(im.getDiary(0));
 							
-							System.out.println(mapObject.getItem(0).getName() + "을 가져갔다.");
+							System.out.println(im.getDiary(0).getName() + "을 가져갔다.");
 						}
 						else if (num == 2)
 						{
@@ -372,13 +375,13 @@ public class PlayEvent {
 							System.out.print("책상 서랍 안에는 ");
 							
 							// 해당 아이템을 갖고 갔는지 검사(쉽배악1)
-							if (player.searchItem(mapObject.getItem(1).getName()))
+							if (player.searchItem(im.getEasyDevilLanguage(0).getName()))
 							{
 								System.out.println("더이상 아무 것도 없다.");
 							}
 							else	// 아직 가져가지 않았다면
 							{	
-								System.out.println(mapObject.getItem(1).getName() + "이 있다.");
+								System.out.println(im.getEasyDevilLanguage(0).getName() + "이 있다.");
 								System.out.println("가져갈까?");
 								System.out.println("1. 가져가자.");
 								System.out.println("2. 가져가지 말자.");
@@ -388,9 +391,9 @@ public class PlayEvent {
 								if (num == 1)		// 가져가자
 								{
 									// 플레이어 인벤토리에 아이템 저장
-									player.saveInventory(mapObject.getItem(1));
+									player.saveInventory(im.getEasyDevilLanguage(0));
 									
-									System.out.println(mapObject.getItem(1).getName() + "을 가져갔다.");
+									System.out.println(im.getEasyDevilLanguage(0).getName() + "을 가져갔다.");
 								}
 								else if (num == 2)	// 가져가지 말자
 								{
@@ -527,39 +530,7 @@ public class PlayEvent {
 				
 				if (num == 1)		// 서랍 열기
 				{
-					// 모르는 열쇠를 가져갔다면
-					if (player.searchItem(mapObject.getItem(0).getName()))
-					{
-						System.out.println("아무 것도 들어있지 않다. 평소에 무언가를 좀 넣어둘 걸 그랬나보다.");
-					}
-					// 아직 가져가지 않았다면
-					else
-					{	
-						// 모르는 열쇠가 들어있다.
-						System.out.println(mapObject.getItem(0).getName() + "가 들어있다. 이게 뭐지?");
-						System.out.println("가져가볼까?");
-						System.out.println("1. 가져가자.");
-						System.out.println("2. 냅두자.");
-						
-						num = scan.nextInt();
-						
-						if (num == 1)		// 가져가자
-						{
-							// 플레이어 인벤토리에 아이템 저장
-							player.saveInventory(mapObject.getItem(0));
-							
-							System.out.println(mapObject.getItem(0).getName() + "를 챙겼다.");
-						}
-						else if (num == 2)	// 냅두자
-						{
-							System.out.println("냅두기로 했다.");
-							System.out.println("다른 책상이나 둘러보자.");
-						}
-						else				// 오기입
-						{
-							System.out.println("그런 선택지는 없다.");
-						}
-					}
+					System.out.println("아무 것도 들어있지 않다. 평소에 무언가를 좀 넣어둘 걸 그랬나보다.");
 				}
 				else if (num == 2)		// 서랍 열지 않기
 				{
@@ -691,7 +662,7 @@ public class PlayEvent {
 	}
 	
 	// 1층 경비실(방3) 이벤트 함수
-	public void playFloor1_3(SkillNPC npc)
+	public void playFloor1_3()
 	{
 		// 1. 배틀....확률 돌리기
 		
@@ -719,10 +690,17 @@ public class PlayEvent {
 			if (num == 1)			// 진급 여부 확인 & 등급/스킬 업데이트
 			{
 				// 퀘스트(등급) 완료 단계에 따른 NPC의 스크립트 출력
-				System.out.println(npc.playQuestScript(npc.playQuest(player)));
+				System.out.println(map[0][3].getNpc().playQuestScript(map[0][3].getNpc().playQuest(player)));
+				
+				// 만일 마지막 퀘스트를 완료한 후라면
+				// (퀘스트 스크립트의 인덱스가 마지막 완료 멘트만 출력하고 있는 상태라면)
+				if (map[0][3].getNpc().getQuestScriptCount() + 1 == map[0][3].getNpc().getQuestScripts().length - 1)
+				{
+					continue;
+				}
 				
 				// 만약 진급에 성공했다면 (현재 퀘스트를 완료했다면)
-				if (npc.getQuest(npc.getQuestCount()).getCompletion())
+				if (map[0][3].getNpc().getQuest(map[0][3].getNpc().getQuestCount()).getCompletion())
 				{
 					// 플레이어의 랭크 업
 					player.upgradeReputation();
@@ -1279,9 +1257,9 @@ public class PlayEvent {
 						
 						if (num == 1)		//바탕화면을 살펴볼 경우
 						{
-							// 이미 아이템(쉽배악)을 가져갔는지 검사
+							// 이미 아이템(쉽배악4)을 가져갔는지 검사
 							// 아이템을 이미 가져갔다면 
-							if (player.searchItem(mapObject.getItem(0).getName()))
+							if (player.searchItem(im.getEasyDevilLanguage(3).getName()))
 							{
 								System.out.println("바탕화면에 더 이상 특별한 건 보이지 않는다.");
 								continue;
@@ -1290,14 +1268,14 @@ public class PlayEvent {
 							else {
 								System.out.println("바탕화면을 살펴보자.\n바로가기와 폴더들 사이 SBA_4.pdf라는 파일이 있다.");
 								System.out.println("파일을 열어보자 '쉽게 배우는 악마어'라는 제목의 문서가 보인다.");
-								player.saveInventory(mapObject.getItem(0));	//아이템(쉽배악)획득
+								player.saveInventory(im.getEasyDevilLanguage(3));	//아이템(쉽배악4)획득
 							}
 						}
 						else if (num == 2)	//휴지통을 살펴볼 경우
 						{
-							// 이미 아이템(쉽배악)을 가져갔는지 검사
+							// 이미 아이템(쉽배악5)을 가져갔는지 검사
 							// 아이템을 이미 가져갔다면 
-							if (player.searchItem(mapObject.getItem(1).getName()))
+							if (player.searchItem(im.getEasyDevilLanguage(4).getName()))
 							{
 								System.out.println("휴지통에 더 이상 특별한 건 보이지 않는다.");
 								continue;
@@ -1306,7 +1284,7 @@ public class PlayEvent {
 							else {
 								System.out.println("휴지통을 살펴보자.\n휴지통을 누르자 SBA_5.pdf라는 파일이 남아 있는게 보인다.");
 								System.out.println("복구하자 '쉽게 배우는 악마어'라는 제목의 문서가 열렸다.");
-								player.saveInventory(mapObject.getItem(1));	//아이템(쉽배악)획득
+								player.saveInventory(im.getEasyDevilLanguage(4));	//아이템(쉽배악5)획득
 							}
 						}
 						else if (num == 3)	//뻐꾸기 파일을 살펴볼 경우
@@ -1355,9 +1333,9 @@ public class PlayEvent {
 					
 					if (password == 13458)
 					{
-						// 이미 아이템(일기장)을 가져갔는지 검사
+						// 이미 아이템(일기장_2)을 가져갔는지 검사
 						// 아이템을 이미 가져갔다면 
-						if (player.searchItem(mapObject.getItem(0).getName()))
+						if (player.searchItem(im.getDiary(1).getName()))
 						{
 							System.out.println("서랍장에 더 이상 특별한 건 보이지 않는다.");
 							continue;
@@ -1366,7 +1344,7 @@ public class PlayEvent {
 						else {
 							System.out.println("서랍장이 열렸다.\n열어보자 안에 놓여 있는 작은 노트가 보인다.");
 							System.out.println("일기장이다.");
-							player.saveInventory(mapObject.getItem(0));	//아이템(일기장) 획득
+							player.saveInventory(im.getDiary(1));	//아이템(일기장_2) 획득
 						}
 					}
 					else
@@ -1418,9 +1396,9 @@ public class PlayEvent {
 				
 				if (num == 1)		//확인할 경우
 				{	
-					// 이미 아이템(일기장)을 가져갔는지 검사
+					// 이미 아이템(일기장_3)을 가져갔는지 검사
 					// 아이템을 이미 가져갔다면 
-					if (player.searchItem(mapObject.getItem(0).getName()))
+					if (player.searchItem(im.getDiary(2).getName()))
 					{
 						System.out.println("휴지통에 더 이상 특별한 건 보이지 않는다.");
 						continue;
@@ -1429,7 +1407,7 @@ public class PlayEvent {
 					else {
 						System.out.println("휴지통을 더 뒤져보자 작은 책이 나왔다.");
 						System.out.println("일기장이다.");
-						player.saveInventory(mapObject.getItem(0));	//아이템(일기장) 획득
+						player.saveInventory(im.getDiary(2));	//아이템(일기장_3) 획득
 					}
 				}
 				else if (num == 2)	//확인하지 않을 경우
@@ -1739,7 +1717,7 @@ public class PlayEvent {
 					if (num == 6)	// 서랍 조사
 					{
 						// 쉽배악6을 이미 흭득했다면
-						if (player.searchItem(mapObject.getItem(5).getName()))
+						if (player.searchItem(im.getEasyDevilLanguage(5).getName()))
 						{
 							System.out.println("이제 아무 것도 들어있지 않다.");
 							
@@ -1757,7 +1735,7 @@ public class PlayEvent {
 						if (num == 1)		// 가져가기
 						{
 							// 인벤토리에 쉽배악6 저장
-							player.saveInventory(mapObject.getItem(5));
+							player.saveInventory(im.getEasyDevilLanguage(5));
 							
 							System.out.println("쉽게 배우는 악마어6을 챙겼다.");
 						}
@@ -1810,12 +1788,15 @@ public class PlayEvent {
 						
 						if (num == 1)		// 확인하기
 						{
-							// 일기장이 들어있다.
-							System.out.println(mapObject.getItem(3).getName() + "이 들어있다.");
+							// 일기장(4)이 들어있다.
+							System.out.println(im.getDiary(3).getName() + "이 들어있다.");
 							// 일기장의 설명 출력
-							System.out.println(mapObject.getItem(3).getDescription());
+							System.out.println(im.getDiary(3).getDescription());
 							
 							// 이후 일기장을 출력해서 들고 가는 것인지, 그냥 USB를 들고가는 형태인지 질문 필요
+							
+							// 일단 임시로 플레이어 인벤토리에 일기장 저장함
+							player.saveInventory(im.getDiary(3));
 						}
 						else if (num == 2)	// 확인 안 하기
 						{
@@ -1917,8 +1898,8 @@ public class PlayEvent {
 				}
 				else if (num == 3)			// 금고 조사
 				{
-					// 일기장을 이미 가져갔다면
-					if (player.searchItem(mapObject.getItem(2).getName()))
+					// 일기장(5)을 이미 가져갔다면
+					if (player.searchItem(im.getDiary(4).getName()))
 					{
 						System.out.println("금고는 열려있는 채로 놓여있다.");
 						System.out.println("안에는 더이상 아무 것도 존재하지 않는다.");
@@ -1938,7 +1919,8 @@ public class PlayEvent {
 					{
 						System.out.println("(철컥)");
 						System.out.println("문이 열렸다!");
-						System.out.println("그 안에는 " + mapObject.getItem(2).getName() + "이 있었다.");
+						// 그 안에는 일기장이 있었다.
+						System.out.println("그 안에는 " + im.getDiary(4).getName() + "이 있었다.");
 						
 						System.out.println("가져갈까?");
 						System.out.println("1. 가져가자.");
@@ -1948,10 +1930,10 @@ public class PlayEvent {
 						
 						if (num == 1)			// 가져가기
 						{
-							// 인벤토리에 일기장 저장
-							player.saveInventory(mapObject.getItem(2));
+							// 인벤토리에 일기장(5) 저장
+							player.saveInventory(im.getDiary(4));
 							
-							System.out.println(mapObject.getItem(2).getName() + "을 챙겼다.");
+							System.out.println(im.getDiary(4).getName() + "을 챙겼다.");
 						}
 						else if (num == 2)		// 냅두기
 						{
@@ -1975,7 +1957,7 @@ public class PlayEvent {
 	// 3층 기술실(방3) 이벤트 함수
 	public void playFloor3_3()
 	{
-		// 1. 배틀....확률 돌리기(NPC몬스터 등장?)
+		// 1. 배틀....(NPC보스몬스터 등장?)
 		
 		// 2. 기술실 스크립트 출력...
 		System.out.println("기술실이다.");
@@ -2002,7 +1984,7 @@ public class PlayEvent {
 					System.out.println((i + 1) + ". " + mapObject.getItem(i));
 				
 				// 노트(쉽게 배우는 악마어7)를 아직 가져가지 않았다면
-				if (!player.searchItem(mapObject.getItem(2).getName()))
+				if (!player.searchItem(im.getEasyDevilLanguage(6).getName()))
 				{
 					// 원본 선택지 출력(3. 노트)
 					System.out.println("3. " + mapObject.getItem(2).getName());
@@ -2018,8 +2000,8 @@ public class PlayEvent {
 				}
 				else if (num == 3)			// [아이템]노트 선택
 				{
-					// 만일 이미 가져간 상태라면
-					if (player.searchItem(mapObject.getItem(2).getName()))
+					// 만일 쉽배악7을 이미 가져간 상태라면
+					if (player.searchItem(im.getEasyDevilLanguage(6).getName()))
 					{
 						System.out.println("그런 건 존재하지 않는다.");
 						continue;
@@ -2036,7 +2018,7 @@ public class PlayEvent {
 					if (num == 1)		// 가져가기
 					{
 						// 노트(쉽배악7) 인벤토리에 저장
-						player.saveInventory(mapObject.getItem(2));
+						player.saveInventory(im.getEasyDevilLanguage(6));
 						
 						System.out.println("내 가방에 바로 넣었다.");
 						System.out.println("자세한 내용은 나중에 가방을 열어 확인해 보자.");
@@ -2058,15 +2040,169 @@ public class PlayEvent {
 			}
 			else if (num == 2)	// [사물]성분 분석 기기 선택
 			{
-				// NPC몬스터를 처리했을 경우
-				// 성분 분석 기기만 존재
+				// NPC로 변환 성공했을 경우 판단 (어떻게...?)
+				if (map[2][3].getEnemy(0) == null)
+				{
+					System.out.println("한 쪽에는 몬스터..가 서 있고, 한 쪽에는 성분 분석 기기가 있다.");
+					System.out.println("어디를 먼저 살펴볼까?");
+					
+					System.out.println("1. 몬스터..쪽을 먼저 보자.");
+					System.out.println("2. 성분 분석 기기를 보러가자.");
+					
+					num = scan.nextInt();
+					
+					if (num == 1)		// 몬스터NPC 선택
+					{
+						// 퀘스트(등급) 완료 단계에 따른 NPC의 스크립트 출력
+						System.out.println(map[2][3].getNpc().playQuestScript(map[2][3].getNpc().playQuest(player)));
+						
+						// 만일 마지막 퀘스트를 완료한 후라면
+						// (퀘스트 스크립트의 인덱스가 마지막 완료 멘트만 출력하고 있는 상태라면)
+						if (map[2][3].getNpc().getQuestScriptCount() + 1 == map[2][3].getNpc().getQuestScripts().length - 1)
+						{
+							continue;
+						}
+						
+						// 현재 퀘스트를 완료했다면
+						if (map[2][3].getNpc().getQuest(map[2][3].getNpc().getQuestCount()).getCompletion())
+						{
+							// 플레이어에게 보상 전달(인벤토리에 보상 아이템 저장)
+							player.saveInventory(map[2][3].getNpc().getQuest(map[2][3].getNpc().getQuestCount()).getReward());
+						}
+					}
+					else if (num == 2)	// [사물]성분 분석 기기 선택
+					{
+						System.out.println("무언가를 분석할 수 있을 것 같다.");
+						
+						// 분석 기구 사용법을 갖고 있지 않을 경우
+						if (player.searchItem("분석 기구 사용법"))
+						{
+							System.out.println("그런데 사용하는 방법을 잘 모르겠다.");
+							System.out.println("섣불리 건들지 말자.");
+							
+							continue;
+						}
+						
+						// 갖고 있을 경우 - 정상진행
+						System.out.println("어떤 것을 분석해 볼까?");
+						// player의 인벤토리 출력
+						player.showInventory();
+						System.out.print("* 분석하고 싶은 것의 이름을 정확하게 적자. : ");
+						
+						String answer = scan.next();
+						
+						if (answer.equals("수상한 가루") || answer.equals("수상한 빵"))
+						{
+							System.out.println("U 성분이 검출됐다.");
+						}
+						else	// 그 외 답안
+						{
+							System.out.println("그건 분석할 수 없다.");
+						}
+					}
+					else				// 오기입
+					{
+						System.out.println("똑바로 선택을 하는 것이 좋아보인다.");
+					}
+					
+					continue;
+				}
 				
-				// NPC몬스터를 처리하지 않고 NPC로 변환 성공했을 경우..
-				// 성분 분석 기기 or NPC로 선택지 나누기
+				// NPC보스몬스터를 처치했을 경우(NPC로 변환되지 못했을 경우)
+				System.out.println("무언가를 분석할 수 있을 것 같다.");
+				
+				// 분석 기구 사용법을 갖고 있지 않을 경우
+				if (player.searchItem("분석 기구 사용법"))
+				{
+					System.out.println("그런데 사용하는 방법을 잘 모르겠다.");
+					System.out.println("섣불리 건들지 말자.");
+					
+					continue;
+				}
+				
+				// 갖고 있을 경우 - 정상진행
+				System.out.println("어떤 것을 분석해 볼까?");
+				// player의 인벤토리 출력
+				player.showInventory();
+				System.out.print("* 분석하고 싶은 것의 이름을 정확하게 적자. : ");
+				
+				String answer = scan.next();
+				
+				if (answer.equals("수상한 가루") || answer.equals("수상한 빵"))
+				{
+					System.out.println("U 성분이 검출됐다.");
+				}
+				else	// 그 외 답안
+				{
+					System.out.println("그건 분석할 수 없다.");
+				}
 			}
 			else if (num == 3)	// [사물]선반 선택
 			{
+				System.out.println("어떤 것을 살펴볼까?");
+				// 1. 유리병~ 3. 저울 출력
+				for (int i = 0; i < mapObject.getAllItem().length - 1; i++)
+					System.out.println((i + 1) + ". " + mapObject.getItem(i));
+				// 4. 제조기 출력(제조기는 사물에 들어가지 않으므로 따로 출력함)
+				System.out.println("4. 제조기");
 				
+				num = scan.nextInt();
+				
+				if (num >= 1 && num <= 3)	// [아이템]유리병 ~ 저울 조사
+				{
+					// 해당 아이템 설명 출력
+					System.out.println(mapObject.getItem(num - 1).getDescription());
+				}
+				else if (num == 4)			// 제조기 조사
+				{
+					// 이미 제조한 후인지 검사(수상한 가루를 들고 있는지 검사)
+					if (player.searchItem(mapObject.getItem(3).getName()))
+					{
+						System.out.println("여기에 더이상 볼 일은 없다.");
+						continue;
+					}
+					
+					// 아직 제조를 안 했을 경우,, 정상 진행
+					System.out.println("도대체 회사에 이런 게 왜 있는건지 모르겠다.");
+					System.out.println("여기 방송국 아니었나?");
+					System.out.println("제조기 위에는 A 성분이 20g 올려져 있다.");
+					System.out.println("여기에 한 번 D 성분을 더 넣어 볼까?");
+					System.out.print("* 몇 그램을 넣을지 숫자로만 적자. : ");
+					
+					num = scan.nextInt();
+					
+					if (num == 40)		// 정답 입력 (D성분 - 40g)
+					{
+						System.out.println("마지막으로 H 성분을 더 넣어볼 수 있을 것 같다.");
+						System.out.println("얼마나 넣을까?");
+						System.out.print("* 몇 그램을 넣을지 숫자로만 적자. : ");
+						
+						num = scan.nextInt();
+						
+						if (num == 30)		// 정답 입력 (H성분 - 30g)
+						{
+							System.out.println("수상한 가루가 만들어졌다!");
+							System.out.println("혹시 모르니까 들고 가보자.");
+							
+							// 인벤토리에 수상한 가루 넣기
+							player.saveInventory(mapObject.getItem(3));
+						}
+						else				// 오답 입력
+						{
+							System.out.println("뭔가.. 잘못된 선택을 한 것 같다.");
+							System.out.println("처음부터 다시 생각해보자.");
+						}
+					}
+					else				// 그 외 오답
+					{
+						System.out.println("넣기 직전에 잘못된 선택인 것 같은 직감이 들었다.");
+						System.out.println("처음부터 다시 생각해보자.");
+					}
+				}
+				else						// 오기입
+				{
+					System.out.println("그런 건 없다.");
+				}
 			}
 		}
 	}
@@ -2279,9 +2415,9 @@ public class PlayEvent {
 							
 							if (password == 340823)	//비밀번호를 맞게 입력할 경우
 							{
-								// 아이템(쉽배악)을 가져갔는지 검사
+								// 아이템(쉽배악8)을 가져갔는지 검사
 								// 아이템을 이미 가져갔다면 
-								if (player.searchItem(mapObject.getItem(0).getName()))
+								if (player.searchItem(im.getEasyDevilLanguage(7).getName()))
 								{
 									System.out.println("핸드폰에 더 이상 특별한 건 보이지 않는다.");
 									continue;
@@ -2291,7 +2427,7 @@ public class PlayEvent {
 									System.out.println("비밀번호가 풀렸다! 생일이 비밀번호라니, 참 단순한 사람이네.");
 									System.out.println("홈 화면에 <Easy to Learn-...> 이라는 바로가기 아이콘이 보인다.");
 									System.out.println("해당 아이콘을 누르자, <쉽게 배우는 악마어> 라는 제목의 문서가 화면에 떠올랐다.");
-									player.saveInventory(mapObject.getItem(0));	//아이템(쉽배악)획득
+									player.saveInventory(im.getEasyDevilLanguage(7));	//아이템(쉽배악8)획득
 								}
 							}
 							else					//잘못된 비밀번호를 입력했을 경우
@@ -2812,9 +2948,9 @@ public class PlayEvent {
 						{
 							if (buttonNum == 3)		//순서가 맞을 경우 (4번째)
 							{
-								//아이템(쉽배악) 가져갔는지 확인
+								//아이템(쉽배악9) 가져갔는지 확인
 								//가져갔을 경우
-								if (player.searchItem(mapObject.getItem(0).getName()))
+								if (player.searchItem(im.getEasyDevilLanguage(8).getName()))
 								{
 									System.out.println("흰 버튼을 눌렀다.\n세트장의 모든 조명이 꺼졌지만 단상 아래에는 더 이상 아무것도 나타나지 않았다.");
 									buttonNum = 0;
@@ -2826,9 +2962,9 @@ public class PlayEvent {
 									//순서 올바르게 입력 -> 쉽배악 획득
 									System.out.println("흰 버튼을 눌렀다.\n덜컹 하는 소리와 함께 모든 조명이 꺼지며 단상 아래에서 무언가 떨어졌다.");
 									buttonNum = 0;
-									player.saveInventory(mapObject.getItem(0));
-									//쉽배악을 챙겼다.
-									System.out.println("단상 아래를 살펴보니 책 한 권이 떨어져 있다.\n" + mapObject.getItem(0).getName() + "을 챙겼다.");
+									player.saveInventory(im.getEasyDevilLanguage(8));
+									//쉽배악9를 챙겼다.
+									System.out.println("단상 아래를 살펴보니 책 한 권이 떨어져 있다.\n" + im.getEasyDevilLanguage(8).getName() + "을 챙겼다.");
 								}
 							}
 							else if (buttonNum == 0)	//첫 번째로 물을 튼 경우
@@ -2934,11 +3070,12 @@ public class PlayEvent {
 	
 	
 	// 5층 이벤트 함수(엔딩)
-	public void playFloor5()
+	public void playFloor5(String[][] endingArray)
 	{
 		// 엔딩화면
 		// 	=> 1. 배드엔딩: 회로선을 다 모으지 못한 경우
 		//	=> 2. 노말엔딩: 회로선까지 다 모아서 사장을 성불
+							// 플레이어가 들고 있는 회로선의 개수를 체크하는 방향도 좋을듯
 		// 	=> 3. 진엔딩: 평판도를 다 올려서 사장식에 오름
 		// 	===> 엔딩 판별은 각 아이템별로 포인트를 부여하여, 일정 포인트를 얻으면 엔딩 보기 가능
 		// 	===> 포인트는 맵에서 아이템 포인트 더해주면 됨.
@@ -2948,11 +3085,11 @@ public class PlayEvent {
 //						// 파일에서 불러오기(읽기)
 //					}
 //					else if(happyEndingPoint == 3){
-//						//해피엔딩
+//						// 노말엔딩
 //						// 파일에서 불러오기
 //					}
 //					else{
-//						//노말 엔딩
+//						// 배드 엔딩
 //						// 파일에서 불러오기
 //					}
 	}

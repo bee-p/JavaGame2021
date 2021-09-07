@@ -17,6 +17,26 @@ public class ItemManager { // Item 내용 초기화
 		makeItem();
 	}
 	
+	// getter 메소드
+	public Item getEasyDevilLanguage(int index)		// 단일 쉽배악 가져오기
+	{
+		return easyDevilLanguage[index];
+	}
+	public Item[] getAllEasyDevilLanguage()			// 모든 쉽배악 가져오기
+	{
+		return easyDevilLanguage;
+	}
+	
+	public Item getDiary(int index)				// 단일 일기장 가져오기
+	{
+		return diary[index];
+	}
+	public Item[] getAllDiary()					// 모든 일기장 가져오기
+	{
+		return diary;
+	}
+	
+	
 	// 아이템 생성
 	private Item itemInitialize(int num) {
 		Item item = new Item();
