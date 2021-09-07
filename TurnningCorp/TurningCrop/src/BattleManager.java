@@ -23,7 +23,7 @@ public class BattleManager {
 	//적을 공격
 	void attackEnemy(int enemyNum) {
 		Enemy enemy = enemys[enemyNum];
-		enemy.beAttacked(player.attackPower);
+		enemy.beAttacked(player.getAttackPower());
 		
 		//적이 분노 성질을 갖고 있다면 분노발동 연산
 		if(enemy instanceof RageEnemy) {
@@ -53,8 +53,8 @@ public class BattleManager {
 						}
 						else if(skill instanceof DebuffSkill) {
 							//플레이어 방어력/공격력 갱신 함수 필요
-							player.defensivePower = ((DebuffSkill) skill).DefenseDebuff(player.defensivePower);
-							player.attackPower = ((DebuffSkill) skill).AttackDebuff(player.attackPower);
+							player.setDefensivePower(((DebuffSkill) skill).DefenseDebuff(player.getDefensivePower()));
+							player.setAttackPower(((DebuffSkill) skill).AttackDebuff(player.getAttackPower()));
 						}
 					}
 				} else {
@@ -85,10 +85,10 @@ public class BattleManager {
 	//대화하기
 	void interaction(int enemyNum, int skillCode) {
 		Enemy enemy = enemys[enemyNum];
-		player.saveInventory(enemy.interaction(skillCode, player.currentIndex));
+		player.saveInventory(enemy.interaction(skillCode, player.getCurrentIndex()));
 		if(skillCode == 2) {
 			//플레이어의 평판도를 올리는 함수 필요
-			player.reputation += enemy.reputation;
+			player.setReputation(player.getReputation()+enemy.reputation);
 		}
 		//적 삭제
 		for(int i = enemyNum;i<enemyCount-1;i++) {
@@ -119,7 +119,7 @@ public class BattleManager {
 	
 	//배틀 종료 여부(어떤 행동 이후 반드시 이 함수 사용
 	boolean battleEndCheck() {
-		if(player.hp <= 0 || enemyCount == 0)
+		if(player.getHp() <= 0 || enemyCount == 0)
 			isBattle = false;
 		
 		return isBattle;
