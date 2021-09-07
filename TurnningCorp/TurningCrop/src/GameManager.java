@@ -1,11 +1,9 @@
 
 import java.io.*;
-import java.util.Random;
 import java.util.Scanner;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -127,6 +125,7 @@ public class GameManager {
 			
 			FileOutputStream fos = new FileOutputStream(file); 
 			xssfWb.write(fos);
+			xssfWb.close();
 			fos.close(); //엑셀 파일 생성 성공
 		}
 		catch(IOException e)
@@ -144,21 +143,27 @@ public class GameManager {
 		{
 			if(Wb.getSheetName(i).equals(playerName)) //시트 이름이 같은 것 찾기
 			{
+				Wb.close();
 				return i; //해당 인덱스 반환
 			}
 		}
+		
+		Wb.close();
 		return -1; //찾는 시트가 존재하지 않음
+		
+		
 	}
 	
 	// 출입기에서 사원증을 사용할 경우, 현재까지 진행된 player의 객체 정보, 인벤토리, 퀘스트 저장
 	// 현재 진행 중인 플레이어 시트 확인 필요
 	// playerName Sheet에 정보 저장
 	public static void useEmployeeCard(Player player) {
+		XSSFWorkbook Wb;
 		
 		int sheetNum = 0;
 		try {
 			FileInputStream fis = new FileInputStream("saveFile.xlsx"); // 파일 읽어오기
-			XSSFWorkbook Wb = new XSSFWorkbook(fis);
+			Wb = new XSSFWorkbook(fis);
 			// 진행하고 있던 계정 정보가 저장된 시트 찾기
 			sheetNum = findSheet(fis, player.getName());
 			
@@ -283,6 +288,7 @@ public class GameManager {
 			// 진행 중이던 시트에 새로운 값 저장시키기
 			FileOutputStream fos = new FileOutputStream("saveFile.xlsx");
 			Wb.write(fos);
+			Wb.close();
 			fos.close(); //엑셀 파일 생성 성공
 			// System.out.println("엑셀 시트 갱신 성공");
 			
@@ -291,11 +297,10 @@ public class GameManager {
 		}
 	}
 	
-	public static void main(String args[], BorderStyle BorderStyle) throws FileNotFoundException {
-		//saveFile 저장할 때 플레이어가 가진 아이템 정보가 필요함.
+	public static void main(String args[], BorderStyle BorderStyle) throws IOException {
+		
 		final int FLOOR = 4; // 층
 		final int ROOM = 5; // 방
-		Item item;
 		Player player;
 		Map maps[][] = new Map[FLOOR][ROOM];
 		
@@ -307,8 +312,7 @@ public class GameManager {
 		ItemNPC[] itemNPC = new ItemNPC[6]; // 객체 배열로 수정완료!
 		SkillNPC skillNPC = new SkillNPC();	// 스킬NPC는 한 명이므로 하나만 생성함
 		
-		File endingFiles[] = new File[3]; // **엑셀로 파일의 데이터 가져오기&저장하기
-		
+		//File endingFiles[] = new File[3]; // **엑셀로 파일의 데이터 가져오기&저장하기
 		
 		// 플레이어 정보 생성 및 초기화
 		player = new Player("이름", 100, 100, 100, 0, 0, 100, 0);
@@ -323,12 +327,13 @@ public class GameManager {
 			MapObject[][] mapObject = new MapObject[FLOOR][OBJECTNUM]; // 사물을 저장할 mapObject 변수, [층][사물 개수]
 			
 			int rowNum = 0; // 행 인덱스
-			int cellNum = 0; // 열 인덱스
 			int objectIndex1 = 0, objectIndex2 = 0, objectIndex3 = 0, objectIndex4 = 0; // 사물 배열 인덱스
 			int itemIndex = 0; // 사물에 속한 아이템 배열 인덱스
 			
 			XSSFSheet ObjectScriptSheet = ObjectWB.getSheetAt(0); // Object Script 시트 가져오기
 			XSSFSheet ItemScriptSheet = ObjectWB.getSheetAt(1); // Item Script 시트 가져오기
+			
+			ObjectWB.close();
 			
 			int objectRows = ObjectScriptSheet.getPhysicalNumberOfRows(); // 오브젝트 시트의 row수 저장
 			int itemRows = ItemScriptSheet.getPhysicalNumberOfRows(); // 아이템 시트의 row수 저장
@@ -427,15 +432,18 @@ public class GameManager {
 					}
 				}
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		// 	각 객체 정보 파일로 불러오기(읽어오기)
 		// ItemNPC의 퀘스트 정보 저장 (플레이어의 인벤토리에 작성되는 퀘스트 스크립트)
+		FileInputStream QuestScriptFile;
+		XSSFWorkbook QuestScriptWB;
 		try {
-				FileInputStream QuestScriptFile = new FileInputStream("Quest Script.xlsx"); // 파일 경로로 파일 읽어오기
-				XSSFWorkbook QuestScriptWB = new XSSFWorkbook(QuestScriptFile);
+				QuestScriptFile = new FileInputStream("Quest Script.xlsx"); // 파일 경로로 파일 읽어오기
+				QuestScriptWB = new XSSFWorkbook(QuestScriptFile);
 				Quest[] quest = new Quest[6]; // Quest Script 저장할 quest 배열 변수
 				
 				int rownum = 0; // 행 인덱스
@@ -447,8 +455,10 @@ public class GameManager {
 				int rows = QuestScriptSheet.getPhysicalNumberOfRows(); // 사용자가 입력한 엑셀 row수 가져오기
 				for (rownum = 1; rownum < rows; rownum++) {
 					XSSFRow row = QuestScriptSheet.getRow(rownum); // row
+					
 					if (row != null) {
 						int cells = row.getPhysicalNumberOfCells(); // 해당 row에서 사용자가 입력한 cell수 가져오기
+						
 						for (cellnum = 1; cellnum <= cells; cellnum++) {
 							XSSFCell cell = row.getCell(cellnum); // 사용자가 입력한 cell값 가져오기
 							
@@ -473,6 +483,8 @@ public class GameManager {
 								case ERROR:
 									description = cell.getErrorCellValue() + "";
 									break;
+								default:
+									break;
 								}
 							}
 							quest[questIndex].setDescription(description);
@@ -480,6 +492,9 @@ public class GameManager {
 						}
 					}
 				}
+				
+				QuestScriptWB.close(); //workbook닫기
+				QuestScriptFile.close(); //file닫기
 				
 				// 각 NPC객체에 Quest Script 내용 할당하기 
 				int npc1Index = 0, npc2Index = 0, npc3Index = 0,
@@ -553,13 +568,17 @@ public class GameManager {
 					// 로컬에 저장된 게임 데이터 불러오기
 					System.out.print("이어서 할 플레이어의 이름을 입력하세요. : ");
 					String playerName = scan.nextLine();
+					scan.close();
+					
 					int sheetNum = 0;
-					FileInputStream fis;
+					FileInputStream fis = null;
 					try {
 						fis = new FileInputStream("saveFile.xlsx"); //파일 읽어오기
 						XSSFWorkbook Wb = new XSSFWorkbook(fis);
 						//이어서 할 플레이어의 정보가 저장된 해당 시트 찾기
 						sheetNum = findSheet(fis, playerName); 
+						
+						Wb.close();
 						
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -573,6 +592,7 @@ public class GameManager {
 					{
 						XSSFWorkbook Wb = new XSSFWorkbook(fis);
 						XSSFSheet sheet = Wb.getSheetAt(sheetNum); //sheet변수에 해당 sheet 저장
+						Wb.close();
 						
 						//플레이어 객체에 정보 옮기기
 						int rowIndex = 1;
@@ -706,6 +726,7 @@ public class GameManager {
 						}
 						
 						System.out.println("해당 데이터를 모두 불러오는데 성공했습니다.");
+						
 					}
 					
 				}
