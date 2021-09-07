@@ -662,7 +662,7 @@ public class PlayEvent {
 	}
 	
 	// 1층 경비실(방3) 이벤트 함수
-	public void playFloor1_3()
+	public void playFloor1_3(SkillNPC npc)
 	{
 		// 1. 배틀....확률 돌리기
 		
@@ -690,17 +690,17 @@ public class PlayEvent {
 			if (num == 1)			// 진급 여부 확인 & 등급/스킬 업데이트
 			{
 				// 퀘스트(등급) 완료 단계에 따른 NPC의 스크립트 출력
-				System.out.println(map[0][3].getNpc().playQuestScript(map[0][3].getNpc().playQuest(player)));
+				System.out.println(npc.playQuestScript(npc.playQuest(player)));
 				
 				// 만일 마지막 퀘스트를 완료한 후라면
 				// (퀘스트 스크립트의 인덱스가 마지막 완료 멘트만 출력하고 있는 상태라면)
-				if (map[0][3].getNpc().getQuestScriptCount() + 1 == map[0][3].getNpc().getQuestScripts().length - 1)
+				if (npc.getQuestScriptCount() + 1 == npc.getQuestScripts().length - 1)
 				{
 					continue;
 				}
 				
 				// 만약 진급에 성공했다면 (현재 퀘스트를 완료했다면)
-				if (map[0][3].getNpc().getQuest(map[0][3].getNpc().getQuestCount()).getCompletion())
+				if (npc.getQuest(npc.getQuestCount()).getCompletion())
 				{
 					// 플레이어의 랭크 업
 					player.upgradeReputation();
