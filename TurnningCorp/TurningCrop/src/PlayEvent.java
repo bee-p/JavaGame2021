@@ -2840,7 +2840,59 @@ public class PlayEvent {
 				}
 				else if (num == 3)	//어댑터를 살펴볼 경우
 				{
+					System.out.println("음향 부스의 안쪽에 무언가를 꽂을 수 있는 어댑터가 놓여 있다.");
+					System.out.println("어댑터와 연결되어있는 선은 위쪽으로 연결되어 있다. 위층의 장비와 연결된 것 같다.");
+					System.out.println("꽂을 수 있는 부분은 총 세 개인데... 자세히 살펴볼까?");
 					
+					System.out.println("1. 살펴본다.");
+					System.out.println("2. 살펴보지 않는다.");
+					
+					num = scan.nextInt();
+					
+					int lineCouunt = 0;
+					
+					if (num == 1)		//읽어볼 경우
+					{
+						System.out.println("무언가 여기에 꽂을 만한 것이... ");
+						
+						//획득한 회로선 개수 카운트
+						for (int i = 0; i < 4; i++) {
+							if (electricLine[i].getValue == 1)
+							{
+								lineCount++;
+							}
+						}
+						
+						if (lineCount == 0)			//획득한 회로선이 없다면 
+						{
+							System.out.println("지금은 갖고 있지 않는 것 같다.");
+						}
+						else if (lineCount == 1 || lineCount == 2)	//획득한 회로선이 1개거나 2개라면
+						{
+							System.out.println("전에 얻은 회로선 "+ lineCount + "개를 꽂아보았다.");
+							System.out.println("딱 맞게 들어가는 걸 보니, 회로선을 꽂는 것이 맞는 것 같다.");
+							System.out.println("하지만 아무런 반응도 없다...");
+							System.out.println("나머지 " + (3-lineCount) + "칸에도 회로선을 꽂아야 할 것 같다. 회로선을 더 찾아보자.");
+						}
+						else if (lineCount == 3)	//획득한 회로선이 3개라면
+						{
+							System.out.println("전에 얻은 회로선 3개를 하나씩 꽂아보았다.");
+							System.out.println("맞게 꽂은 건지, 어댑터 끝쪽의 조명에 파란불이 들어왔다.");
+						}
+						else
+						{
+							//오류처리
+						}
+					}
+					else if (num == 2)	//읽어보지 않을 경우
+					{
+						System.out.println("굳이 자세히 살펴 볼 필요는 없어 보인다.");
+						System.out.println("어댑터는 이제 그만 살펴보자.");
+					}
+					else				//오기입
+					{
+						System.out.println("확실하게 결정하자.");
+					}
 				}
 				else if (num == 4)	//모니터를 살펴볼 경우
 				{
