@@ -29,7 +29,7 @@ public class PlayEvent {
 	
 	// ItemManager 객체
 	// 쉽배악, 일기장을 불러오기 위해 활용
-	ItemManager im = new ItemManager();
+	private ItemManager im = new ItemManager();
 	
 	// 생성자
 	PlayEvent()
@@ -196,7 +196,7 @@ public class PlayEvent {
 		while(true)
 		{
 			// 1. 로비 스크립트 출력
-			// 로비다! (스크립트 수정 필요)
+			System.out.println("1층 로비다. 무엇을 할까?");
 			
 			// 2. 선택지 출력
 			System.out.println("1. 출입기에 사원증을 찍자.");	// 저장
@@ -222,11 +222,13 @@ public class PlayEvent {
 			}
 			else if (num == 3)		// 다른 방으로 이동
 			{
-				// 영업부, 카페, 경비실이 보인다. 어디로 들어갈까?
+				System.out.println("영업부, 카페, 경비실이 보인다. 어디로 들어갈까?");
+				
 				System.out.println("1. 영업부로 들어가자.");
 				System.out.println("2. 카페로 들어가자.");
 				System.out.println("3. 경비실로 들어가자.");
-				System.out.println("4. 생각이 달라졌다.");		// 다시 로비 선택지 출력
+				System.out.println("4. 화장실에 들어가자.");
+				System.out.println("5. 생각이 달라졌다.");		// 다시 로비 선택지 출력
 				
 				num = scan.nextInt();
 				
@@ -245,7 +247,12 @@ public class PlayEvent {
 					player.setPosID(13);
 					break;
 				}
-				else if (num == 4)	// 다른 방으로 가지 않기(로비 스크립트/선택지 다시 출력)
+				else if (num == 4)	// 화장실 들어가기
+				{
+					player.setPosID(14);
+					break;
+				}
+				else if (num == 5)	// 다른 방으로 가지 않기(로비 스크립트/선택지 다시 출력)
 				{
 					continue;
 				}
@@ -729,7 +736,6 @@ public class PlayEvent {
 	{
 		// 화장실 스크립트 출력...
 		System.out.println("화장실에 들어왔다.");
-		System.out.println("~");
 		
 		
 		while(true)
@@ -751,7 +757,6 @@ public class PlayEvent {
 				System.out.println("* hp: " + player.getHp());
 				System.out.println("* 공격력: " + player.getAttackPower());
 				System.out.println("* 방어력: " + player.getDefensivePower());
-				// 공격력과 방어력의 이름을 좀 더 뭔가... 자연스럽게 바꾸고 싶은데 생각이 안 남(고민중)
 				System.out.println("* 평판도: " + player.getReputation());
 			}
 			else if (num == 2)	// 바닥 보기
@@ -1588,9 +1593,9 @@ public class PlayEvent {
 				{
 					continue;
 				}
-				else
+				else				// 그 외 오기입 처리
 				{
-					// 그 외 오기입 처리
+					System.out.println("대체 어디로 가고 싶은 건가?");
 				}
 			}
 			else if (num == 4)		// 다른 층으로 이동(엘리베이터 탑승)
@@ -1598,9 +1603,9 @@ public class PlayEvent {
 				moveFloor();
 				break;
 			}
-			else
+			else					// 그 외 오기입 처리
 			{
-				// 그 외 오기입 처리
+				System.out.println("그 선택, 잘못된 것 같은데.");
 			}
 		}
 	}
@@ -1612,8 +1617,8 @@ public class PlayEvent {
 		
 		// 2. 개발실1 스크립트 출력...
 		System.out.println("개발실1이다.");
-		System.out.println("~");
-		System.out.println("~");
+		System.out.println("어딘가에서 올라오는 쾨쾨한 냄새가 코를 찔렀다.");
+		System.out.println("이런 곳에 오래 있다간 내 옷에도 냄새가 밸 것 같다. 얼른 확인하고 나가자.");
 		
 		while(true)
 		{
@@ -1819,8 +1824,8 @@ public class PlayEvent {
 		
 		// 2. 개발실2 스크립트 출력...
 		System.out.println("개발실2다.");
-		System.out.println("~");
-		System.out.println("~");
+		System.out.println("책과, 종이와, 종이를 생산하는 것들만 잔뜩 있어 자칫 어수선해질 수도 있었겠지만");
+		System.out.println("생각보다 꽤나 정갈하다. 그렇다고 엄청 깨끗하다는 건 아니다.");
 		
 		while(true)
 		{
@@ -1837,7 +1842,7 @@ public class PlayEvent {
 			// -> 정상 진행
 			if (num == 1)		// 책상 조사
 			{
-				System.out.println("책상 위에는 여러 물건들이 널려 있다.");
+				System.out.println("책상 위에는 여러 물건들이 정돈되어 있다.");
 				System.out.println("어떤 것부터 볼까?");
 				// 1. 볼펜 ~ 4. 달력
 				for (int i = 0; i < mapObject.getAllItem().length; i++)
@@ -1961,8 +1966,9 @@ public class PlayEvent {
 		
 		// 2. 기술실 스크립트 출력...
 		System.out.println("기술실이다.");
-		System.out.println("~");
-		System.out.println("~");
+		System.out.println("낯선 공기가 방 안을 맴돈다.");
+		System.out.println("아무리 이 회사에 다니면서 1층밖에 못 다녀봤다지만 이렇게 익숙하지 않은 곳은 처음이다.");
+		System.out.println("처음 온 곳이라 어색할 게 당연한 일인데 왠지 모르게 이질감이 드는 이유는 뭘까.");
 		
 		while(true)
 		{
@@ -2212,7 +2218,6 @@ public class PlayEvent {
 	{
 		// 화장실 스크립트 출력...
 		System.out.println("화장실에 들어왔다.");
-		System.out.println("~");
 		
 		
 		while(true)
@@ -2849,7 +2854,7 @@ public class PlayEvent {
 					
 					num = scan.nextInt();
 					
-					int lineCouunt = 0;
+					int lineCount = 0;
 					
 					if (num == 1)		//읽어볼 경우
 					{
