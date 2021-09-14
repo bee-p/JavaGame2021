@@ -755,7 +755,7 @@ public class GameManager {
 		int num = 0;											// 선택지 저장
 		
 		
-		// 게임 시작
+		// --------------------------- 게임 시작 --------------------------- \\
 		while(true)
 		{	
 			playEvent.setGoTitle(false);	// 타이틀 이동 판별 초기화
@@ -774,19 +774,45 @@ public class GameManager {
 				if (num == 1)		// 새 게임
 				{
 					// 1. 로컬에 새 파일(새 게임 데이터) 저장
-					System.out.print("플레이어의 이름은? : ");
+					System.out.print("* 플레이어의 이름은? : ");
 					String playerName = scan.nextLine();
 					player.setName(playerName); //이름 설정
 					saveNewPlayerInfo(player, playerName); //파일 생성
 					
+					System.out.println("* 게임을 시작합니다.");
+					
 					// 2. 인트로 스크립트 출력
-					System.out.println("안녕하십니까 " + player.getFullName() + "님? 어서오세요.");
+					System.out.println("오늘은 금요일. 퇴근을 하고 집에서 휴식을 즐기는 중이다.");
+					System.out.println("하루는 항상 고되지만, 우리 회사만의 장점이 있다면 절대로 야근을 하지 않는다는 점이다.");
+					System.out.println("...절대로 안 하는 걸로 알고 있었다.");
+					System.out.println("상사가 내게 전화를 걸기 전까지는.");
+					System.out.println("하하..");
+					System.out.println("도대체 금요일 밤에 추가 작업을 시키는 이유가 뭔지 좀 묻고 싶다.");
+					System.out.println("게다가 그 작업을 하려면 저번달 회의록을 참고해서 해야한댄다.");
+					System.out.println("왜 그건 서류로 밖에 안 남아있는지 모르겠지만,");
+					System.out.println("상사 말에 따르면 그 회의록은 꼭대기 층에 있는 사장님의 방에 있다고 한다.");
+					System.out.println("뭐 급하다고 하니까 지금 얼른 출발하려고 한다. 별 수 있나.");
+					
+					// 딜레이
+					System.out.println("* * *");
+					// 딜레이
+					
+					System.out.println("회사 앞에 도착했다.");
+					System.out.println("< Turning.corp >.");
+					System.out.println("나름 이 곳에선 잘 나가는 방송국이다.");
+					System.out.println("복지도 좋고, 연봉도 나름 쏠쏠하고, 그야말로 완벽한 회사라 할 수 있다.");
+					System.out.println("그러나 완벽한 만큼 회사 내에 작은 소문도 돌고 있긴 했었다.");
+					System.out.println("밤이 되면 귀신들이 나오기 때문에 야근을 안 시키는 거라나 뭐라나.");
+					System.out.println("물론 나는 그런 소문들을 믿진 않았지만, 지금 그 생각이 나는 건 대체 왜일까.");
+					System.out.println("어쨌거나 난 얼른 추가 작업을 완수해야한다. 최대한 빨리 서류를 가져오기나 하자.");
+					System.out.println("(문 열리는 소리)");
+					
 					// 기본 데이터들은 사전에(게임 시작 전에) 생성했다는 가정 하에 진행
 				}
 				else if (num == 2)	// 게임 이어하기
 				{
 					// 로컬에 저장된 게임 데이터 불러오기
-					System.out.print("이어서 할 플레이어의 이름을 입력하세요. : ");
+					System.out.print("* 이어서 할 플레이어의 이름을 입력하세요. : ");
 					String playerName = scan.nextLine();
 					scan.close();
 					
@@ -805,7 +831,7 @@ public class GameManager {
 					}
 					if(sheetNum == -1) //해당 시트가 존재하지 않음
 					{
-						System.out.println("해당 플레이어 정보는 존재하지 않습니다.");
+						System.out.println("* 해당 플레이어 정보는 존재하지 않습니다.");
 						continue; //메인 메뉴로 돌아가기
 					}
 					else //해당 시트를 찾음
@@ -945,7 +971,7 @@ public class GameManager {
 							}
 						}
 						
-						System.out.println("해당 데이터를 모두 불러오는데 성공했습니다.");
+						System.out.println("* 해당 데이터를 모두 불러오는데 성공했습니다.");
 						
 					}
 					
@@ -1073,14 +1099,5 @@ public class GameManager {
 				// 그 외 선택지 오기입
 			}
 		}
-		
-		
-		// 플레이
-		//	=> 플레이어의 위치 파악하기
-		//		==> 맵클래스에서 엘리베이터로 이동했을 떄, 그 값을 전달받아서 위치 파악하기
-//		while(currentFloor >=0 && currentFloor <=3)
-//		{
-//		    //플레이중
-//		}
 	}
 }
