@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Random;
 
 /*
  * object: 방 내부에 있는 대표적 사물들 (부장 책상, 정돈된 책상 ,,,)
@@ -16,11 +17,14 @@ public class PlayEvent {
 	private int num;
 	private MapObject mapObject;
 	
+	// 난수 발생을 위한 랜덤 객체 변수
+	Random random = new Random();
+	
 	// 타이틀 이동 판별
 	private boolean goTitle;
 	
-	// 엔딩 판별할 때 사용하는 포인트 값
-//	private int endingPoint = 0;
+	// 노멀(해피)엔딩 판별할 때 사용하는 값
+	private boolean isNomalEnding = false;
 	
 	// Player, Map 객체
 	// -> GameManager 클래스에서 PlayEvent 객체 생성할 때 집어넣기
@@ -30,6 +34,11 @@ public class PlayEvent {
 	// ItemManager 객체
 	// 쉽배악, 일기장을 불러오기 위해 활용
 	private ItemManager im = new ItemManager();
+	
+	// BattleManager 객체
+	// 배틀 관련 수행을 위해 사용
+	private BattleManager bm = new BattleManager();
+	
 	
 	// 생성자
 	PlayEvent()
@@ -118,7 +127,7 @@ public class PlayEvent {
 	
 	// 사물(object 출력 템플릿)
 	// 해당 오브젝트를 받아와 출력함
-	public void objectPrint(MapObject mapObject)
+	private void objectPrint(MapObject mapObject)
 	{
 		// ex) 부장님의 책상이다.
 		System.out.println(mapObject.getObjectName() + "이다.");
@@ -130,7 +139,7 @@ public class PlayEvent {
 	// 일반 방에 진입했을 때 출력/이벤트 진행(반복 출력) - 로비 제외
 	// true 반환: 해당 방 이벤트 메소드에서 그대로 사물 조사 진행
 	// false 반환: 해당 방 이벤트 메소드의 반복문을 탈출, 로비로 나가게 함
-	public boolean enterRoom(int floor, int roomID)
+	private boolean enterRoom(int floor, int roomID)
 	{
 		// 배열의 인덱스로 활용하기 위해 1 감소
 		floor--;
@@ -187,6 +196,20 @@ public class PlayEvent {
 	}
 	
 	
+	// 배틀 발동 메소드
+	private void battleEvent(Map map)
+	{
+		// 몇 번째 몬스터를 등장시킬 것인지 저장
+		int enemyNum = random.nextInt(map.getAllEnemy().length);
+		
+		// 선택지 목록
+		// 1. 공격하기
+		// 2. 대화하기
+		// 3. 아이템 사용
+		// 4. 도망치기
+	}
+	
+	
 	// ----------------------------------------------------------------- \\
 	
 	
@@ -209,12 +232,14 @@ public class PlayEvent {
 			if (num == 1)			// 저장
 			{
 				// 현재 게임 데이터 로컬에 저장
+				GameManager.useEmployeeCard(player);
 				
 				System.out.println("사원증을 성공적으로 찍었다!\n--저장되었습니다.--");
 			}
 			else if (num == 2)		// 저장 후 타이틀로 나가기
 			{
 				// 1. 현재 데이터 로컬에 저장
+				GameManager.useEmployeeCard(player);
 				
 				// 2. 타이틀로 나가기
 				goTitle = true;
@@ -280,7 +305,12 @@ public class PlayEvent {
 	// 1층 영업부(방1) 이벤트 함수
 	public void playFloor1_1()
 	{
-		// 1. 배틀....확률 돌리기
+		// 1. 배틀 확률 돌리기
+		// 30%의 확률로 배틀 발동
+		if (random.nextInt(100) < 30)
+		{
+			battleEvent(map[0][1]);
+		}
 		
 		// 2. 영업부 스크립트 출력...
 		System.out.println("영업부다.");
@@ -676,17 +706,16 @@ public class PlayEvent {
 		// 2. 경비실 스크립트 출력
 		System.out.println("경비실이다.");
 		System.out.println("잔잔한 어둠 사이로 희미한 모니터 불빛이 새어나오고 있다.");
-		System.out.println("그리고 그 불빛 옆에는.. 한 사람이 앉아있다.");
+		System.out.println("그리고 그 불빛 옆에는 한 사람이 앉아있는 듯하다.");
 		
 		while(true)
 		{
 			// 이 방은 스킬 NPC만 존재하는 방이므로 오브젝트(사물)가 따로 존재하지 않음
 			// 따라서 enterRoom() 메소드를 호출하지 않음
 			
-			// ex) "어서오세요, 평범한 사원 @@님."
-			System.out.println("\"어서오세요, " + player.getName() + "님.\"");
-			System.out.println("\"무엇을 하시겠습니까?\"");
-			System.out.println("\"현재 진급 여부를 확인할 수 있습니다.\"");
+			System.out.println("\"어서오게나, " + player.getTitle() + ".\"");
+			System.out.println("\"어떤 걸 할텐가?\"");
+			System.out.println("\"현재 자네가 진급할 수 있는지도 볼 수 있다네.\"");
 			
 			System.out.println("1. 진급을 확인하자.");		// 플레이어의 등급 & 스킬 업데이트
 			System.out.println("2. 진급이 뭔데?");			// 진급 설명 듣기
@@ -711,13 +740,16 @@ public class PlayEvent {
 				{
 					// 플레이어의 랭크 업
 					player.upgradeReputation();
+					
+					// 플레이어의 타이틀(ex) 평범한 사원) 교체
+					player.setTitle(player.getTitleArray()[player.getCurrentIndex()]);
 				}
 			}
 			else if (num == 2)		// 진급/스킬에 관한 설명 듣기
 			{
 				// 아직 어떻게 설명을 넣어야 깔끔할지 모르겠음,,고민중
 				// 대략 진급을 하면 더 높은 등급의 말하기 스킬을 쓸 수 있다는 의미,,,
-				System.out.println("\" ~~~ \"");
+				System.out.println("\"아직도 진급이 뭔지 모르는 겐가?\"");
 			}
 			else if (num == 3)		// 로비로 나가기
 			{
@@ -726,7 +758,7 @@ public class PlayEvent {
 			}
 			else					// 오기입
 			{
-				System.out.println("\"그런 건 하실 수 없습니다.\"");
+				System.out.println("\"애매한 건 딱 질색이다만.\"");
 			}
 		}
 	}
@@ -748,6 +780,7 @@ public class PlayEvent {
 				break;
 			}
 			
+			// 1. 거울 ~ 3. 가방 보기의 선택지가 enterRoom 메소드에서 출력된다. 
 			
 			// enterRoom의 반환값이 true일 경우
 			// -> 정상 진행
@@ -847,12 +880,14 @@ public class PlayEvent {
 			if (num == 1)			// 저장
 			{
 				// 현재 게임 데이터 로컬에 저장
+				GameManager.useEmployeeCard(player);
 				
 				System.out.println("사원증을 성공적으로 찍었다!\n--저장되었습니다.--");
 			}
 			else if (num == 2)		// 저장 후 타이틀로 나가기
 			{
 				// 1. 현재 데이터 로컬에 저장
+				GameManager.useEmployeeCard(player);
 				
 				// 2. 타이틀로 나가기
 				goTitle = true;
@@ -1546,12 +1581,14 @@ public class PlayEvent {
 			if (num == 1)			// 저장
 			{
 				// 현재 게임 데이터 로컬에 저장
+				GameManager.useEmployeeCard(player);
 				
 				System.out.println("사원증을 성공적으로 찍었다!\n--저장되었습니다.--");
 			}
 			else if (num == 2)		// 저장 후 타이틀로 나가기
 			{
 				// 1. 현재 데이터 로컬에 저장
+				GameManager.useEmployeeCard(player);
 				
 				// 2. 타이틀로 나가기
 				goTitle = true;
@@ -2230,6 +2267,7 @@ public class PlayEvent {
 				break;
 			}
 			
+			// 1. 거울 ~ 3. 가방 보기의 선택지가 enterRoom 메소드에서 출력된다. 
 			
 			// enterRoom의 반환값이 true일 경우
 			// -> 정상 진행
@@ -2257,7 +2295,48 @@ public class PlayEvent {
 				
 				if (num == 1)			// 인벤토리 확인
 				{
-					player.showInventory();
+					while(true)
+					{
+						player.showInventory();
+						
+						System.out.println("무언가 사용하거나 버릴까? 아니면 살펴볼 수도 있고.");
+						System.out.println("1. 그러자.");
+						System.out.println("2. 그닥.");
+						
+						num = scan.nextInt();
+						
+						if (num == 1)		// 인벤토리내 아이템 사용/제거
+						{
+							System.out.println("어떤 아이템을?");
+							
+							String answer = scan.nextLine();
+							
+							// 선택한 아이템이 인벤토리에 없을 경우
+							if (player.searchItem(answer))
+							{
+								System.out.println("그런 건 없다.");
+								System.out.println("다시 찾아보자.");
+								
+								// 인벤토리 출력으로 다시 돌아감
+								continue;
+							}
+							
+							// 선택한 아이템이 쉽배악/일기장/회로선/리모컨일 경우
+							// 살펴보기만 가능..?
+							
+							// 아닐 경우 정상 진행
+						}
+						else if (num == 2)	// 하지 않기 선택
+						{
+							System.out.println("가방을 닫았다.");
+							break;
+						}
+						else				// 오기입
+						{
+							System.out.println("정확히 선택하는 것이 좋아보인다.");
+							System.out.println("다시 살펴보자.");
+						}
+					}
 				}
 				else if (num == 2)		// 퀘스트 확인
 				{
@@ -2295,12 +2374,14 @@ public class PlayEvent {
 			if (num == 1)			// 저장
 			{
 				// 현재 게임 데이터 로컬에 저장
+				GameManager.useEmployeeCard(player);
 				
 				System.out.println("사원증을 성공적으로 찍었다!\n--저장되었습니다.--");
 			}
 			else if (num == 2)		// 저장 후 타이틀로 나가기
 			{
 				// 1. 현재 데이터 로컬에 저장
+				GameManager.useEmployeeCard(player);
 				
 				// 2. 타이틀로 나가기
 				goTitle = true;
@@ -2883,6 +2964,9 @@ public class PlayEvent {
 						{
 							System.out.println("전에 얻은 회로선 3개를 하나씩 꽂아보았다.");
 							System.out.println("맞게 꽂은 건지, 어댑터 끝쪽의 조명에 파란불이 들어왔다.");
+							
+							// 노멀(해피)엔딩판별 true로 변환(회로선 조건 충족)
+							isNomalEnding = true;
 						}
 						else
 						{
@@ -3130,24 +3214,40 @@ public class PlayEvent {
 	public void playFloor5(String[][] endingArray)
 	{
 		// 엔딩화면
-		// 	=> 1. 배드엔딩: 회로선을 다 모으지 못한 경우
-		//	=> 2. 노말엔딩: 회로선까지 다 모아서 사장을 성불
-							// 플레이어가 들고 있는 회로선의 개수를 체크하는 방향도 좋을듯
-		// 	=> 3. 진엔딩: 평판도를 다 올려서 사장식에 오름
-		// 	===> 엔딩 판별은 각 아이템별로 포인트를 부여하여, 일정 포인트를 얻으면 엔딩 보기 가능
-		// 	===> 포인트는 맵에서 아이템 포인트 더해주면 됨.
+		// 	=> 1. 배드엔딩: 노말이나 진엔딩 조건 중 아무것도 충족하지 못한 경우
+		//	=> 2. 노말(해피)엔딩: 회로선까지 다 모아서 작동, 최후에 리모컨까지 갖고 있으면 사장을 성불
+		// 	=> 3. 진엔딩: 평판도를 다 올려서(최상 등급으로 진급) 사장식에 오름
 		
-//					if(player.getCurrentRank() == 'S'){
-//						// 트루엔딩
-//						// 파일에서 불러오기(읽기)
-//					}
-//					else if(happyEndingPoint == 3){
-//						// 노말엔딩
-//						// 파일에서 불러오기
-//					}
-//					else{
-//						// 배드 엔딩
-//						// 파일에서 불러오기
-//					}
+		// 임시 엔딩 구별 변수
+		// 0: 배드엔딩 / 1: 노말(해피)엔딩 / 2: 진엔딩
+		int endingPoint = 0;
+		
+		// 평판도를 끝까지 올려 최상 등급으로 진급했을 경우
+		if (player.getCurrentRank() == 'S')			// 진엔딩
+		{
+			// 진엔딩으로 엔딩 변수 조정
+			endingPoint = 2;
+		}
+		else if (isNomalEnding == true)				// 노멀(해피)엔딩 진입
+		{
+			// 리모컨을 들고 있다면
+			if(player.searchItem("리모컨"))
+			{
+				// 노멀(해피)엔딩으로 엔딩 변수 조정
+				endingPoint = 1;
+			}
+			
+			// 리모컨을 들고 있지 않다면 배드엔딩으로 넘어감
+		}
+		
+		// 엔딩 변수 조정이 이뤄지지 않았을 시에는 배드엔딩으로 출력됨
+		
+		// 엔딩 스크립트 출력
+		for (int i = 0; i < endingArray[endingPoint].length; i++)
+			System.out.println(endingArray[endingPoint][i]);
+		
+		
+		// 타이틀로 나가기
+		goTitle = true;
 	}
 }
