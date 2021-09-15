@@ -540,7 +540,7 @@ public class GameManager {
 		//ItemNPC Script(ItemNPC 대화 스크립트)
 		FileInputStream itemNPCScriptFis;
 		XSSFWorkbook itemNPCWb;
-		String[] tempIQScripts = new String[22]; //스크립트 임시로 저장해 둘 String배열
+		String[] tempIQScripts = new String[28]; //스크립트 임시로 저장해 둘 String배열
 		int tempIQIndex = 0; //임시 String배열의 인덱스
 		
 		try {
@@ -600,22 +600,22 @@ public class GameManager {
 		{
 			switch (tempIQIndex) 
 			{
-			case 0: case 1: case 2: case 3: // 1층 인간 NPC
+			case 0: case 1: case 2: case 3: case 4: // 1층 인간 NPC
 				itemNPC[itemNPCIndex].setQuestScripts(itemNPCQSIndex, tempIQScripts[tempIQIndex]);
 				break;
-			case 4: case 5: case 6: case 7: // 2층 몬스터 NPC
+			case 5: case 6: case 7: case 8: case 9: // 2층 몬스터 NPC
 				itemNPC[itemNPCIndex].setQuestScripts(itemNPCQSIndex, tempIQScripts[tempIQIndex]);
 				break;
-			case 8: case 9: case 10: case 11: // 2층 인간 NPC(1)
+			case 10: case 11: case 12: case 13: case 14: // 2층 인간 NPC(1)
 				itemNPC[itemNPCIndex].setQuestScripts(itemNPCQSIndex, tempIQScripts[tempIQIndex]);
 				break;
-			case 12: case 13: case 14: case 15: // 2층 인간 NPC(2)
+			case 15: case 16: case 17: case 18: case 19: // 2층 인간 NPC(2)
 				itemNPC[itemNPCIndex].setQuestScripts(itemNPCQSIndex, tempIQScripts[tempIQIndex]);
 				break;
-			case 16: case 17: // 3층 몬스터 NPC(1)
+			case 20: case 21: case 22: // 3층 몬스터 NPC(1)
 				itemNPC[itemNPCIndex].setQuestScripts(itemNPCQSIndex, tempIQScripts[tempIQIndex]);
 				break;
-			case 18: case 19: case 20: case 22: // 3층 몬스터 NPC(2)
+			case 23: case 24: case 25: case 26: case 27:// 3층 몬스터 NPC(2)
 				itemNPC[itemNPCIndex].setQuestScripts(itemNPCQSIndex, tempIQScripts[tempIQIndex]);
 				break;
 			}
@@ -841,7 +841,7 @@ public class GameManager {
 						Wb.close();
 						
 						//플레이어 객체에 정보 옮기기
-						int rowIndex = 1;
+						rowIndex = 1;
 						int cellIndex = 0;
 						
 						//Name
