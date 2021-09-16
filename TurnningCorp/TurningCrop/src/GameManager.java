@@ -626,7 +626,7 @@ public class GameManager {
 		//SkillNPC Script(SkillNPC 대화 스크립트)
 		FileInputStream skillNPCScriptFis;
 		XSSFWorkbook skillNPCWb;
-		String[] tempSQScripts = new String[10]; //스크립트 임시로 저장해 둘 String배열
+		String[] tempSQScripts = new String[9]; //스크립트 임시로 저장해 둘 String배열
 		int tempSQIndex = 0; //임시 String배열의 인덱스
 		
 		try
